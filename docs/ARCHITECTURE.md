@@ -74,6 +74,7 @@ AI-Project/
 - 2026-07-30 — Architecture approved by project owner.
 - 2026-07-30 — Foundation approved: added `README.md` to each new major folder (`src/`, `tests/`, `docs/`, `.claude/`) and this architecture document. No product code written, no dependencies installed. `data/` and `notebooks/` intentionally left uncreated.
 - 2026-07-30 — Stack decided: Python 3.11+, `pytest`, `ruff`, `mypy`. `src/CLAUDE.md` and `tests/CLAUDE.md` updated with concrete verification commands. No dependencies installed yet — `requirements.txt` not yet created.
+- 2026-08-01 — Import strategy reviewed: `tests/conftest.py` uses `sys.path.insert` to make `src/` importable, which risks silently shadowing a same-named stdlib/third-party module as `src/` grows. Decision: keep `sys.path` approach for now (coursework scope, only 2 source files) rather than adding `pyproject.toml` + editable install; revisit if/when a name collision becomes a realistic risk.
 
 ## Open items
 
