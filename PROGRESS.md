@@ -40,3 +40,10 @@
   - What changed: Installed Git 2.55.0.3 (`winget install Git.Git`) and ran `git init` — this repo had no version control until now. Set a repo-local (not global) git identity. Added `src/is_even.py` (`is_even(n: int) -> bool`) and `tests/test_is_even.py` (even, odd, zero, negative-even, negative-odd cases), following the explore → plan → code → commit workflow end to end.
   - Verification: `python -m py_compile src/is_even.py` exits 0; `python -m pytest tests/test_is_even.py -v` — 5 passed in 0.04s.
   - Notes: First-ever commits in this repo were split in two: a baseline commit for pre-existing files, then a focused commit for just `is_even.py`/`test_is_even.py`, so the feature commit's diff actually matches its message instead of bundling unrelated history.
+
+- [x] Self-review of `add_numbers`/`is_even` + fix: extract `sys.path` boilerplate to `tests/conftest.py`
+  - Date: 2026-08-01
+  - Session: CC-20260801-9m2x
+  - What changed: Reviewed `src/add_numbers.py`, `src/is_even.py`, and their tests. Found the 4-line `sys.path.insert(...)` block duplicated identically in both test files. User chose (over pyproject.toml's `pythonpath` option) to extract it into `tests/conftest.py`, run once per session rather than per file; removed the duplicated block from `tests/test_add_numbers.py` and `tests/test_is_even.py`. `add()`'s `float` type hint was reviewed and kept as-is (int is a valid float per PEP 484's numeric tower, tests already pass ints correctly).
+  - Verification: `python -m pytest tests/ -v` — 10 passed in 0.04s (all pre-existing tests still pass after the refactor).
+  - Notes: No behavior change, pure test-infrastructure cleanup driven by a self-review.
