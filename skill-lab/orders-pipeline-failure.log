@@ -1,0 +1,43 @@
+2026-08-03T02:00:01Z INFO  [orders-etl] run_id=orders-etl-20260803-0200 starting scheduled load, source=orders_raw.orders, target=warehouse.fact_orders
+2026-08-03T02:00:01Z INFO  [orders-etl] config loaded: batch_size=500, max_retries=3, retry_backoff=exponential(base=5s)
+2026-08-03T02:00:02Z INFO  [orders-etl] extract stage started, source_table=orders_raw.orders, watermark=2026-08-02T02:00:00Z
+2026-08-03T02:00:04Z INFO  [orders-etl] extract stage complete, rows_extracted=1142
+2026-08-03T02:00:04Z INFO  [orders-etl] transform stage started
+2026-08-03T02:00:04Z INFO  [orders-etl] applying column mapping: customer_region -> region (mapping_version=v3)
+2026-08-03T02:00:05Z WARN  [orders-etl] mapping v3 expected enum region in {US-East,US-West,EU-Central,EU-West,APAC}; encountered unmapped value "LATAM-BR" at source row offset 812
+2026-08-03T02:00:05Z WARN  [orders-etl] unmapped region value "LATAM-BR" defaulted to NULL by mapping v3 fallback rule
+2026-08-03T02:00:05Z ERROR [orders-etl] schema validation failed on target column warehouse.fact_orders.region: NOT NULL constraint violated, 37 rows have region=NULL after mapping
+2026-08-03T02:00:05Z ERROR [orders-etl] transform stage failed: SchemaValidationError: column 'region' violates NOT NULL constraint (37 rows)
+2026-08-03T02:00:05Z INFO  [orders-etl] retry 1/3 scheduled, backoff=5s, retry_reason=SchemaValidationError
+2026-08-03T02:00:10Z INFO  [orders-etl] retry 1/3 starting, run_id=orders-etl-20260803-0200-r1
+2026-08-03T02:00:10Z INFO  [orders-etl] extract stage started, source_table=orders_raw.orders, watermark=2026-08-02T02:00:00Z
+2026-08-03T02:00:12Z INFO  [orders-etl] extract stage complete, rows_extracted=1142
+2026-08-03T02:00:12Z INFO  [orders-etl] transform stage started
+2026-08-03T02:00:12Z INFO  [orders-etl] applying column mapping: customer_region -> region (mapping_version=v3)
+2026-08-03T02:00:13Z WARN  [orders-etl] mapping v3 expected enum region in {US-East,US-West,EU-Central,EU-West,APAC}; encountered unmapped value "LATAM-BR" at source row offset 812
+2026-08-03T02:00:13Z WARN  [orders-etl] unmapped region value "LATAM-BR" defaulted to NULL by mapping v3 fallback rule
+2026-08-03T02:00:13Z ERROR [orders-etl] schema validation failed on target column warehouse.fact_orders.region: NOT NULL constraint violated, 37 rows have region=NULL after mapping
+2026-08-03T02:00:13Z ERROR [orders-etl] transform stage failed: SchemaValidationError: column 'region' violates NOT NULL constraint (37 rows)
+2026-08-03T02:00:13Z INFO  [orders-etl] retry 2/3 scheduled, backoff=10s, retry_reason=SchemaValidationError
+2026-08-03T02:00:23Z INFO  [orders-etl] retry 2/3 starting, run_id=orders-etl-20260803-0200-r2
+2026-08-03T02:00:23Z INFO  [orders-etl] extract stage started, source_table=orders_raw.orders, watermark=2026-08-02T02:00:00Z
+2026-08-03T02:00:25Z INFO  [orders-etl] extract stage complete, rows_extracted=1142
+2026-08-03T02:00:25Z INFO  [orders-etl] transform stage started
+2026-08-03T02:00:25Z INFO  [orders-etl] applying column mapping: customer_region -> region (mapping_version=v3)
+2026-08-03T02:00:26Z WARN  [orders-etl] mapping v3 expected enum region in {US-East,US-West,EU-Central,EU-West,APAC}; encountered unmapped value "LATAM-BR" at source row offset 812
+2026-08-03T02:00:26Z WARN  [orders-etl] unmapped region value "LATAM-BR" defaulted to NULL by mapping v3 fallback rule
+2026-08-03T02:00:26Z ERROR [orders-etl] schema validation failed on target column warehouse.fact_orders.region: NOT NULL constraint violated, 37 rows have region=NULL after mapping
+2026-08-03T02:00:26Z ERROR [orders-etl] transform stage failed: SchemaValidationError: column 'region' violates NOT NULL constraint (37 rows)
+2026-08-03T02:00:26Z INFO  [orders-etl] retry 3/3 scheduled, backoff=20s, retry_reason=SchemaValidationError
+2026-08-03T02:00:46Z INFO  [orders-etl] retry 3/3 starting, run_id=orders-etl-20260803-0200-r3
+2026-08-03T02:00:46Z INFO  [orders-etl] extract stage started, source_table=orders_raw.orders, watermark=2026-08-02T02:00:00Z
+2026-08-03T02:00:48Z INFO  [orders-etl] extract stage complete, rows_extracted=1142
+2026-08-03T02:00:48Z INFO  [orders-etl] transform stage started
+2026-08-03T02:00:48Z INFO  [orders-etl] applying column mapping: customer_region -> region (mapping_version=v3)
+2026-08-03T02:00:49Z WARN  [orders-etl] mapping v3 expected enum region in {US-East,US-West,EU-Central,EU-West,APAC}; encountered unmapped value "LATAM-BR" at source row offset 812
+2026-08-03T02:00:49Z WARN  [orders-etl] unmapped region value "LATAM-BR" defaulted to NULL by mapping v3 fallback rule
+2026-08-03T02:00:49Z ERROR [orders-etl] schema validation failed on target column warehouse.fact_orders.region: NOT NULL constraint violated, 37 rows have region=NULL after mapping
+2026-08-03T02:00:49Z ERROR [orders-etl] transform stage failed: SchemaValidationError: column 'region' violates NOT NULL constraint (37 rows)
+2026-08-03T02:00:49Z ERROR [orders-etl] max_retries (3) exhausted, aborting run_id=orders-etl-20260803-0200
+2026-08-03T02:00:49Z ERROR [orders-etl] run failed after 3 retries, final_status=FAILED, rows_loaded=0, duration_ms=48210
+2026-08-03T02:00:50Z INFO  [orders-etl] alert dispatched to #data-eng-alerts: "orders-etl scheduled load FAILED after 3 retries — SchemaValidationError on region column"
