@@ -47,3 +47,10 @@
   - What changed: Reviewed `src/add_numbers.py`, `src/is_even.py`, and their tests. Found the 4-line `sys.path.insert(...)` block duplicated identically in both test files. User chose (over pyproject.toml's `pythonpath` option) to extract it into `tests/conftest.py`, run once per session rather than per file; removed the duplicated block from `tests/test_add_numbers.py` and `tests/test_is_even.py`. `add()`'s `float` type hint was reviewed and kept as-is (int is a valid float per PEP 484's numeric tower, tests already pass ints correctly).
   - Verification: `python -m pytest tests/ -v` — 10 passed in 0.04s (all pre-existing tests still pass after the refactor).
   - Notes: No behavior change, pure test-infrastructure cleanup driven by a self-review.
+
+- [x] Author the `progress-log-entry` Skill
+  - Date: 2026-08-05
+  - Session: CC-20260805-n4qz
+  - What changed: Created `.claude/skills/progress-log-entry/SKILL.md` — a new Skill that formalizes the PROGRESS.md entry-writing process already used throughout this file, with frontmatter (`name`, a trigger/anti-trigger `description`) and a 7-step body (confirm real change, get/mint Session ID, gather concrete evidence, re-read the file's tail before appending, append under the correct section, use the exact entry format, confirm the write).
+  - Verification: File created successfully; the skill appeared automatically in the available-skills list immediately after creation, confirming the frontmatter parsed correctly; invoked via the Skill tool and its body loaded verbatim, confirming it is well-formed and usable. This very entry was produced by following the skill's own steps.
+  - Notes: Requested by the user as a demonstration of authoring a Skill from scratch and invoking it in practice; this entry doubles as that live demonstration.
