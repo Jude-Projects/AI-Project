@@ -1,37 +1,535 @@
 {
   "schema_version": 2,
-  "_how_to_use": "Start with every criterion false — that is the correct starting state, not an unfinished one. false means \"not claimed\": either not done, or done but not yet checked. Set one to true only after you have read the code and confirmed it is genuinely true today. Nothing is lost by leaving a line false; a story sitting at 3 of 5 reports honestly and the portal shows you which two are left. Do not retype the criterion text — flip the boolean beside it.",
+  "project": "AI Data Assistant",
   "totals": {
-    "stories_total": 14,
+    "stories_total": 15,
     "stories_verified": 0,
-    "criteria_total": null,
+    "stories_submitted": 0,
+    "stories_in_progress": 0,
+    "stories_not_started": 15,
+    "criteria_total": 0,
     "criteria_passed": 0,
     "points_awarded": 0
   },
   "stories": [
     {
       "id": "STORY-000",
+      "release": null,
+      "acceptance_total": 5,
       "criteria": [
-        { "text": "Given the Command Center, when it is opened, then every tab is reachable and every card drills down one level.", "passed": true },
-        { "text": "Given sample mode, when any tab is shown, then the sample data is visibly labelled as sample.", "passed": true },
-        { "text": "Given the Command Center, when any tab renders, then .colaberry/plan.json and .colaberry/progress.json are both committed in this repo and every tab reads its content from them at runtime rather than from hard-coded values.", "passed": true },
-        { "text": "Given the Command Center, when any tab is shown, then .colaberry/manifest.json is committed in this repo and every tab shows how old that data is and warns when the age exceeds a week.", "passed": true },
-        { "text": "Trust — no tab shows a number, a connection or a result the project has not actually produced.", "passed": true }
-      ]
+        {
+          "text": "Given the Command Center, when it is opened, then every tab is reachable and every card drills down one level.",
+          "passed": true
+        },
+        {
+          "text": "Given sample mode, when any tab is shown, then the sample data is visibly labelled as sample.",
+          "passed": true
+        },
+        {
+          "text": "Given the Command Center, when any tab renders, then .colaberry/plan.json and .colaberry/progress.json are both committed in this repo and every tab reads its content from them at runtime rather than from hard-coded values.",
+          "passed": true
+        },
+        {
+          "text": "Given the Command Center, when any tab is shown, then .colaberry/manifest.json is committed in this repo and every tab shows how old that data is and warns when the age exceeds a week.",
+          "passed": true
+        },
+        {
+          "text": "Trust — no tab shows a number, a connection or a result the project has not actually produced.",
+          "passed": true
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
     },
-    { "id": "STORY-001", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-002", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-003", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-004", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-005", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-006", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-007", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-008", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-009", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-010", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-011", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-012", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-013", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-014", "verification": { "state": "not_started", "commit": null, "points": 0 } }
-  ]
+    {
+      "id": "STORY-001",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a valid SQL Server connection string, when I connect to the database, then I should be able to execute a basic SQL query.",
+          "passed": false
+        },
+        {
+          "text": "Given an invalid SQL Server connection string, when I attempt to connect, then I should receive an error message indicating the connection failure.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Every query execution must be logged with the user ID and timestamp.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-002",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a CSV file, when I upload it, then the system should detect columns and datatypes.",
+          "passed": false
+        },
+        {
+          "text": "Given a CSV file with duplicates, when I upload it, then the system should identify duplicate records.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All uploads are logged with user details and file metadata.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-003",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a natural language question, when I ask it, then the system should interpret it correctly.",
+          "passed": false
+        },
+        {
+          "text": "Given an ambiguous question, when I ask it, then the system should suggest potential interpretations.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All questions and interpretations are logged for audit.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-004",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given analytical results, when I request a visualization, then the system should display a chart.",
+          "passed": false
+        },
+        {
+          "text": "Given a request for a specific chart type, when I request it, then the system should display the correct type.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All visualizations are logged with user details.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-005",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given analytical results, when I request an explanation, then the system should provide a business-friendly summary.",
+          "passed": false
+        },
+        {
+          "text": "Given a complex analysis, when I request an explanation, then the system should simplify the details.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All explanations are logged with user details.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-006",
+      "release": "r2",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given analytical results, when I request a report, then the system should generate a PDF report.",
+          "passed": false
+        },
+        {
+          "text": "Given a request for a specific report format, when I request it, then the system should generate the correct format.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All report generations are logged with user details.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-007",
+      "release": "r2",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a previous question, when I ask a follow-up, then the system should remember the context.",
+          "passed": false
+        },
+        {
+          "text": "Given a new session, when I ask a follow-up, then the system should prompt for context.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All follow-up interactions are logged with user details.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-008",
+      "release": "r3",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a user, when I assign a role, then the user should have access to role-specific features.",
+          "passed": false
+        },
+        {
+          "text": "Given a role change, when I update it, then the user's access should update accordingly.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All role assignments are logged with admin details.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-009",
+      "release": "r3",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a database connection, when I configure it, then the connection should be encrypted.",
+          "passed": false
+        },
+        {
+          "text": "Given an unencrypted connection attempt, when I detect it, then the system should block it.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All connection configurations are logged with user details.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-010",
+      "release": "r4",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given data insights, when I request alerts, then the system should notify me of important changes.",
+          "passed": false
+        },
+        {
+          "text": "Given a recommendation request, when I ask for it, then the system should provide actionable advice.",
+          "passed": false
+        },
+        {
+          "text": "Trust: All alerts and recommendations are logged with user details.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-011",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a user question, when the system interprets it, then it should suggest at least one potential interpretation.",
+          "passed": false
+        },
+        {
+          "text": "Given an ambiguous question, when the system interprets it, then it should suggest multiple interpretations for user selection.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Every interpretation suggestion must be logged with the question and user ID.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-012",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a user question, when the system analyzes data, then it should provide an accurate answer with an explanation.",
+          "passed": false
+        },
+        {
+          "text": "Given a complex question, when the system analyzes data, then it should provide an answer with a detailed explanation of the analysis process.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Every answer provided must be logged with the question, answer, and user ID.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-013",
+      "release": "r2",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a set of data, when I request an executive summary, then the system should provide a concise summary with key KPIs.",
+          "passed": false
+        },
+        {
+          "text": "Given incomplete data, when I request an executive summary, then the system should indicate missing data and provide available KPIs.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Every summary request must be logged with the user ID and timestamp.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-014",
+      "release": "r2",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a database, when I inspect schemas, then I should see the structure and relationships of tables.",
+          "passed": false
+        },
+        {
+          "text": "Given a dataset, when I profile data, then I should see data distribution and quality metrics.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Every schema inspection and data profiling must be logged with the user ID and timestamp.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    }
+  ],
+  "_how_to_use": "Start with every criterion false — that is the correct starting state, not an unfinished one. false means \"not claimed\": either not done, or done but not yet checked. Set one to true only after you have read the code and confirmed it is genuinely true today. Nothing is lost by leaving a line false; a story sitting at 3 of 5 reports honestly and the portal shows you which two are left. Do not retype the criterion text — flip the boolean beside it."
 }

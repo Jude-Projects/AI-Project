@@ -33,7 +33,7 @@ async function loadColaberryData() {
     const prog = progressById.get(story.id);
     return {
       ...story,
-      verification: prog && prog.verification ? prog.verification : { state: "not_started", commit: null, points: 0 },
+      verification: prog && prog.verification ? prog.verification : { state: "not_started", criteria_passed: 0, criteria_total: 0, commit_sha: null, commit_url: null, points_awarded: 0 },
     };
   });
 

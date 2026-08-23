@@ -143,8 +143,13 @@ function pmDetail(container, state, mode, storyId) {
           <tr><th>Due</th><td>${esc(story.due_on)}</td></tr>
           <tr><th>Originally due</th><td>${esc(story.due_baseline_on)} ${slipped ? `<span class="pill warn">slipped</span>` : `<span class="pill grey">no slippage</span>`}</td></tr>
           <tr><th>Status</th><td>${verificationPill(stateVal)}</td></tr>
-          <tr><th>Commit</th><td>${story.verification.commit ? esc(story.verification.commit) : "—"}</td></tr>
-          <tr><th>Points</th><td>${isSample ? "—" : (story.verification.points || 0)}</td></tr>
+          <tr><th>Criteria</th><td>${isSample ? "—" : `${story.verification.criteria_passed || 0} of ${story.verification.criteria_total || 0}`}</td></tr>
+          <tr><th>Commit</th><td>${
+            story.verification.commit_sha
+              ? (story.verification.commit_url ? `<a href="${esc(story.verification.commit_url)}">${esc(story.verification.commit_sha.slice(0, 7))}</a>` : esc(story.verification.commit_sha))
+              : "—"
+          }</td></tr>
+          <tr><th>Points</th><td>${isSample ? "—" : (story.verification.points_awarded || 0)}</td></tr>
         </tbody>
       </table>
     </div>
