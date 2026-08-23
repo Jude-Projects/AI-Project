@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Data Assistant — Command Center</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+  <header class="shell-header">
+    <div class="shell-header-row">
+      <div class="brand">
+        <span class="brand-name">AI Data Assistant</span>
+        <span class="brand-sub">Command Center</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span id="data-stamp" class="data-stamp">Loading data…</span>
+        <div id="mode-toggle" class="mode-toggle"></div>
+      </div>
+    </div>
+    <nav id="tab-nav" class="tabs"></nav>
+  </header>
+
+  <main id="tab-content">
+    <p class="lede">Loading…</p>
+  </main>
+
+  <footer class="shell-footer">
+    Reads <code>.colaberry/plan.json</code>, <code>.colaberry/progress.json</code> and <code>.colaberry/manifest.json</code> at runtime. Nothing on this page is live in the monitoring sense — it reflects the last sync from the portal.
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/tabs/shared.js"></script>
+  <script src="assets/js/tabs/overview.js"></script>
+  <script src="assets/js/tabs/outcomes.js"></script>
+  <script src="assets/js/tabs/users.js"></script>
+  <script src="assets/js/tabs/guardrails.js"></script>
+  <script src="assets/js/tabs/systems.js"></script>
+  <script src="assets/js/tabs/pm.js"></script>
+  <script src="assets/js/tabs/agents.js"></script>
+  <script src="assets/js/tabs/kb.js"></script>
+  <script src="assets/js/tabs/datamodel.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "AI Data Assistant",
+    "descriptor": "An intelligent conversational data analytics platform for non-technical and technical users to connect data sources, ask questions, and receive analytical answers."
+  },
+  "schedule": {
+    "build_start": "2026-08-29",
+    "build_end": "2026-10-01",
+    "demo_day": "2026-10-08",
+    "demo_release_key": "r1"
+  },
+  "derived": {
+    "measures": [],
+    "roles": ["Data Analyst", "user", "business user", "admin", "data engineer", "User"],
+    "guardrails": [
+      { "id": "REQ-015", "statement": "The system must encrypt data connections to SQL Server." }
+    ],
+    "systems": ["SQL Server", "Integrated Authentication", "SQL Authentication"],
+    "owners": [
+      { "role": "Data Analyst", "story_ids": ["STORY-001", "STORY-002", "STORY-006"] },
+      { "role": "Business User", "story_ids": ["STORY-003", "STORY-007", "STORY-010"] },
+      { "role": "Data Visualization Specialist", "story_ids": ["STORY-004"] },
+      { "role": "Business Analyst", "story_ids": ["STORY-005"] },
+      { "role": "System Administrator", "story_ids": ["STORY-008"] },
+      { "role": "Data Engineer", "story_ids": ["STORY-009", "STORY-014"] },
+      { "role": "User", "story_ids": ["STORY-011", "STORY-012"] },
+      { "role": "Executive", "story_ids": ["STORY-013"] }
+    ],
+    "counts": {
+      "agents_by_autonomy": {}
+    }
+  },
+  "requirements": [
+    { "id": "REQ-001", "statement": "The system must allow users to connect to SQL Server databases using secure connection settings.", "kind": "FUNC", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-001"] },
+    { "id": "REQ-002", "statement": "The system must allow users to upload and analyze CSV files.", "kind": "FUNC", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-002"] },
+    { "id": "REQ-003", "statement": "The system must provide a conversational interface for users to ask questions in natural language.", "kind": "FUNC", "priority": "must", "cluster": "conversation", "fulfilled_by": ["STORY-003"] },
+    { "id": "REQ-004", "statement": "The system must interpret user questions and suggest potential interpretations if uncertain.", "kind": "FUNC", "priority": "must", "cluster": "conversation", "fulfilled_by": ["STORY-011"] },
+    { "id": "REQ-005", "statement": "The system must analyze data to provide accurate, explainable answers to user questions.", "kind": "FUNC", "priority": "must", "cluster": "analysis", "fulfilled_by": ["STORY-012"] },
+    { "id": "REQ-006", "statement": "The system must allow users to generate visualizations of analytical results with configurable parameters.", "kind": "FUNC", "priority": "must", "cluster": "analysis", "fulfilled_by": ["STORY-004"] },
+    { "id": "REQ-007", "statement": "The system must generate reports based on analytical results.", "kind": "FUNC", "priority": "must", "cluster": "reporting", "fulfilled_by": ["STORY-006"] },
+    { "id": "REQ-008", "statement": "The system must allow users to ask follow-up questions without repeating previous context.", "kind": "FUNC", "priority": "must", "cluster": "conversation", "fulfilled_by": ["STORY-007"] },
+    { "id": "REQ-009", "statement": "The system must support user roles including Business Users, Data Analysts, Data Engineers, and Executives.", "kind": "FUNC", "priority": "must", "cluster": "roles", "fulfilled_by": ["STORY-008"] },
+    { "id": "REQ-010", "statement": "The system must provide business-friendly explanations for analytical results.", "kind": "FUNC", "priority": "must", "cluster": "analysis", "fulfilled_by": ["STORY-005"] },
+    { "id": "REQ-011", "statement": "The system must allow Data Analysts to generate SQL queries from natural language questions.", "kind": "FUNC", "priority": "must", "cluster": "analysis", "fulfilled_by": ["STORY-001"] },
+    { "id": "REQ-012", "statement": "The system must allow Data Engineers to inspect schemas and profile data.", "kind": "FUNC", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-014"] },
+    { "id": "REQ-013", "statement": "The system must provide executive summaries and KPIs for Executives.", "kind": "FUNC", "priority": "must", "cluster": "reporting", "fulfilled_by": ["STORY-013"] },
+    { "id": "REQ-014", "statement": "The system must connect to SQL Server using Windows/Integrated Authentication and SQL Authentication.", "kind": "CONSTRAINT", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-001"] },
+    { "id": "REQ-015", "statement": "The system must encrypt data connections to SQL Server.", "kind": "SAFE", "priority": "must", "cluster": "security", "fulfilled_by": ["STORY-009"] },
+    { "id": "REQ-016", "statement": "The system must detect and handle null values and duplicate records in CSV uploads.", "kind": "FUNC", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-002"] },
+    { "id": "REQ-017", "statement": "The system must provide alerts and recommendations based on data analysis.", "kind": "FUNC", "priority": "should", "cluster": "analysis", "fulfilled_by": ["STORY-010"] },
+    { "id": "REQ-018", "statement": "The system must allow users to download reports and dashboards.", "kind": "FUNC", "priority": "should", "cluster": "reporting", "fulfilled_by": [] }
+  ],
+  "stories": [
+    { "id": "STORY-001", "title": "Establish Initial Data Connection and Query Execution", "narrative": "As a Data Analyst, I want to connect to a SQL Server database and execute an initial query so that I can begin working with real data.", "release": "r0", "due_on": "2026-08-29", "due_baseline_on": "2026-08-29", "owner": "Data Analyst" },
+    { "id": "STORY-002", "title": "Upload and Analyze CSV Files", "narrative": "As a Data Analyst, I want to upload a CSV file and have it analyzed so that I can work with data outside of a database.", "release": "r0", "due_on": "2026-09-01", "due_baseline_on": "2026-09-01", "owner": "Data Analyst" },
+    { "id": "STORY-003", "title": "Ask Questions in Natural Language", "narrative": "As a business user, I want to ask questions about my data in natural language so that I don't need to know SQL.", "release": "r0", "due_on": "2026-09-03", "due_baseline_on": "2026-09-03", "owner": "Business User" },
+    { "id": "STORY-004", "title": "Visualize Analytical Results", "narrative": "As a user, I want to generate visualizations of analytical results with configurable parameters so that I can see patterns in the data.", "release": "r1", "due_on": "2026-09-05", "due_baseline_on": "2026-09-05", "owner": "Data Visualization Specialist" },
+    { "id": "STORY-005", "title": "Provide Business-Friendly Explanations", "narrative": "As a business user, I want analytical results explained in plain language so that I can understand them without technical background.", "release": "r1", "due_on": "2026-09-07", "due_baseline_on": "2026-09-07", "owner": "Business Analyst" },
+    { "id": "STORY-011", "title": "Interpret User Questions and Suggest Interpretations", "narrative": "As a User, I want the system to suggest interpretations of my question when it's uncertain so that I get the answer I actually meant.", "release": "r1", "due_on": "2026-09-08", "due_baseline_on": "2026-09-08", "owner": "User" },
+    { "id": "STORY-012", "title": "Analyze Data and Provide Explainable Answers", "narrative": "As a User, I want the system to analyze data and explain how it reached its answer so that I can trust the result.", "release": "r1", "due_on": "2026-09-10", "due_baseline_on": "2026-09-10", "owner": "User" },
+    { "id": "STORY-006", "title": "Generate Reports from Analytical Results", "narrative": "As a Data Analyst, I want to generate a report from analytical results so that I can share findings with others.", "release": "r2", "due_on": "2026-09-12", "due_baseline_on": "2026-09-12", "owner": "Data Analyst" },
+    { "id": "STORY-007", "title": "Allow Follow-Up Questions", "narrative": "As a business user, I want to ask follow-up questions without repeating context so that the conversation feels natural.", "release": "r2", "due_on": "2026-09-14", "due_baseline_on": "2026-09-14", "owner": "Business User" },
+    { "id": "STORY-013", "title": "Provide Executive Summaries and KPIs", "narrative": "As a User, I want a summary of KPIs from the data so that I can make decisions quickly.", "release": "r2", "due_on": "2026-09-15", "due_baseline_on": "2026-09-15", "owner": "Executive" },
+    { "id": "STORY-014", "title": "Inspect Schemas and Profile Data", "narrative": "As a data engineer, I want to inspect schemas and profile data so that I can assess data quality before it's used.", "release": "r2", "due_on": "2026-09-17", "due_baseline_on": "2026-09-17", "owner": "Data Engineer" },
+    { "id": "STORY-008", "title": "Support Multiple User Roles", "narrative": "As an admin, I want to assign roles including Business User, Data Analyst, Data Engineer, and Executive so that access matches responsibility.", "release": "r3", "due_on": "2026-09-21", "due_baseline_on": "2026-09-21", "owner": "System Administrator" },
+    { "id": "STORY-009", "title": "Secure Data Connections", "narrative": "As a data engineer, I want data connections to SQL Server encrypted so that data in transit is protected.", "release": "r3", "due_on": "2026-09-24", "due_baseline_on": "2026-09-24", "owner": "Data Engineer" },
+    { "id": "STORY-010", "title": "Provide Alerts and Recommendations", "narrative": "As a business user, I want alerts and recommendations based on data analysis so that I can act on important changes.", "release": "r4", "due_on": "2026-10-01", "due_baseline_on": "2026-10-01", "owner": "Business User" }
+  ],
+  "releases": [
+    { "key": "r0", "name": "Initial Data Connection and Query", "starts_on": "2026-08-29", "ends_on": "2026-09-03", "story_ids": ["STORY-001", "STORY-002", "STORY-003"], "is_demo_target": false },
+    { "key": "r1", "name": "Enhanced Data Analysis and Visualization", "starts_on": "2026-09-05", "ends_on": "2026-09-10", "story_ids": ["STORY-004", "STORY-005", "STORY-011", "STORY-012"], "is_demo_target": true },
+    { "key": "r2", "name": "User Experience and Reporting", "starts_on": "2026-09-12", "ends_on": "2026-09-17", "story_ids": ["STORY-006", "STORY-007", "STORY-013", "STORY-014"], "is_demo_target": false },
+    { "key": "r3", "name": "Advanced User Roles and Security", "starts_on": "2026-09-21", "ends_on": "2026-09-24", "story_ids": ["STORY-008", "STORY-009"], "is_demo_target": false },
+    { "key": "r4", "name": "Alerts and Recommendations", "starts_on": "2026-10-01", "ends_on": "2026-10-01", "story_ids": ["STORY-010"], "is_demo_target": false }
+  ],
+  "agents": []
+}
