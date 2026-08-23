@@ -105,3 +105,12 @@
   - What changed: Per user instruction, overwrote `.colaberry/profile.json` with the real seed content (`disclosure: "private"`, `headline`/`summary`/`challenge`: `null`, empty `highlight_story_ids`/`links`/`include`), replacing my earlier guessed placeholder shape. Deleted `.colaberry/profile.seed.json` (`git rm`) now that its content lives at the canonical path.
   - Verification: `python -c "json.load(...)"` on the new `profile.json` — parses. `git status` confirms `profile.seed.json` removed and `profile.json` modified, nothing else touched.
   - Notes: No site code changes needed — no tab reads `state.profile` yet, so this was a pure data file swap.
+
+## STORY-001
+
+- [x] Establish Initial Data Connection and Query Execution
+  - Date: 2026-08-23
+  - Session: CC-20260822-p4k9
+  - What changed: Built `src/sql_connection.py` as a paced, one-step-at-a-time walking skeleton per the story's own brief: `connect(connection_string)` opens a `pyodbc` connection; `execute_query(conn, query, user_id)` runs a query and logs `{event, user_id, query, timestamp}` as JSON before executing (REQ-011/the Trust line); `connect()` also enforces REQ-015 by rejecting any connection string without `Encrypt=yes` (case-insensitive key/value parse) before ever calling `pyodbc.connect()`. Added `requirements.txt` (first real dependency — `pyodbc`) and `tests/test_sql_connection.py` (8 tests: happy path for both functions, `connect()`'s invalid-connection-string failure path, `execute_query()`'s SQL-syntax-error failure path, the Trust log assertion, and 3 tests for the REQ-015 encryption gate — missing/explicit-no rejected, case-insensitive `yes` accepted).
+  - Verification: `python -m py_compile src/sql_connection.py` — clean. `pytest tests/` — 18 passed (10 pre-existing + 8 new), all failure/rejection paths asserted via `pytest.raises`, not just happy-path.
+  - Notes: All three acceptance lines from the story brief pass, plus the REQ-015 guardrail the brief specifically flagged for this story. Everything is mock-verified only — no real SQL Server was available in this environment (flagged and confirmed with the user up front), so the true end-to-end happy path against a live server, and REQ-014's two auth modes specifically, remain unverified. Worked as a paced co-pilot per the story brief's explicit instruction: one change proposed at a time, user confirmed each before it was made.
