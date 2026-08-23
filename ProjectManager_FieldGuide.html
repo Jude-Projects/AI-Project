@@ -1,0 +1,1950 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Project Manager Field Guide | Colaberry</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Project Manager Field Guide for the Colaberry Enterprise AI Leadership Accelerator â€” the 20% of project management needed to direct, evaluate, and approve AI-generated project plans, illustrated end-to-end with the ClaimSight AI insurance claims platform." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   COLABERRY DESIGN TOKENS -- fixed brand values, do not alter
+   ============================================================ */
+:root{
+  --cherry:#FB2832; --berry:#367895; --leaf:#5BA63C; --amber:#E8920C;
+  --text:#1A1A1A; --muted:#6B6B6B; --border:#E4E4E3;
+  --surface:#FFFFFF; --surface-2:#F8F8F7;
+  --shadow: 0 1px 2px rgba(26,26,26,.06), 0 4px 14px rgba(26,26,26,.06);
+  --radius: 10px;
+  --font-sans: 'Roboto', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  --nav-w: 292px;
+  color-scheme: light;
+}
+:root[data-theme="dark"]{
+  --cherry:#FF5960; --berry:#5EA9C4; --leaf:#8AC759; --amber:#E8920C;
+  --text:#F2F2F1; --muted:#A3A3A2; --border:#333331;
+  --surface:#161616; --surface-2:#0F0F0F;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 18px rgba(0,0,0,.45);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --cherry:#FF5960; --berry:#5EA9C4; --leaf:#8AC759; --amber:#E8920C;
+    --text:#F2F2F1; --muted:#A3A3A2; --border:#333331;
+    --surface:#161616; --surface-2:#0F0F0F;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 18px rgba(0,0,0,.45);
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-sans);
+  color:var(--text);
+  background:var(--surface-2);
+  -webkit-font-smoothing:antialiased;
+  font-size:15px;
+  line-height:1.6;
+}
+h1,h2,h3,h4,h5{
+  font-family:var(--font-sans);
+  color:var(--berry);
+  font-weight:700;
+  line-height:1.25;
+  margin:0 0 .5em 0;
+}
+h1{font-size:1.9rem;font-weight:900;}
+h2{font-size:1.45rem; padding-bottom:.35em; border-bottom:2px solid var(--border);}
+h3{font-size:1.14rem;}
+h4{font-size:.98rem; color:var(--text); text-transform:uppercase; letter-spacing:.03em; font-size:.82rem; color:var(--muted); font-weight:700;}
+p{margin:.4em 0 .9em 0;}
+a{color:var(--berry);}
+code, .mono{font-family:var(--font-mono);}
+small.mono, .tag, .badge{font-family:var(--font-mono);}
+ul,ol{padding-left:1.35em;}
+li{margin:.25em 0;}
+hr{border:none;border-top:1px solid var(--border); margin:1.5em 0;}
+img.logo{height:38px;display:block;}
+button{font-family:var(--font-sans); cursor:pointer;}
+
+/* ---------- Skip / focus ---------- */
+a:focus-visible, button:focus-visible, input:focus-visible{
+  outline:2px solid var(--berry); outline-offset:2px;
+}
+.skip-link{position:absolute; left:-999px; top:0; background:var(--cherry); color:#fff; padding:.6em 1em; border-radius:0 0 8px 0; z-index:999;}
+.skip-link:focus{left:0;}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.topbar{
+  position:sticky; top:0; z-index:60;
+  display:flex; align-items:center; gap:16px;
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:10px 20px; box-shadow:var(--shadow);
+}
+.topbar .brandblock{display:flex; align-items:center; gap:12px; min-width:250px;}
+.topbar .brandtext{display:flex; flex-direction:column; line-height:1.1;}
+.topbar .brandtext strong{font-size:.98rem; color:var(--text);}
+.topbar .brandtext span{font-size:.72rem; color:var(--muted); font-family:var(--font-mono);}
+.topbar .searchwrap{flex:1; max-width:640px; position:relative;}
+.topbar input[type="search"]{
+  width:100%; padding:10px 14px 10px 38px; border-radius:999px;
+  border:1px solid var(--border); background:var(--surface-2); color:var(--text);
+  font-size:.92rem;
+}
+.topbar .searchwrap svg{position:absolute; left:13px; top:50%; transform:translateY(-50%); opacity:.55;}
+.topbar .searchresults{
+  position:absolute; top:calc(100% + 6px); left:0; right:0; background:var(--surface);
+  border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow);
+  max-height:60vh; overflow:auto; display:none; z-index:70;
+}
+.topbar .searchresults.open{display:block;}
+.searchresults .sr-item{display:block; padding:10px 14px; border-bottom:1px solid var(--border); text-decoration:none; color:var(--text);}
+.searchresults .sr-item:last-child{border-bottom:none;}
+.searchresults .sr-item:hover, .searchresults .sr-item.active{background:var(--surface-2);}
+.searchresults .sr-item .sr-sec{font-size:.72rem; color:var(--berry); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.03em;}
+.searchresults .sr-item .sr-title{font-weight:700; font-size:.9rem;}
+.searchresults .sr-item .sr-snip{font-size:.8rem; color:var(--muted);}
+.searchresults .sr-empty{padding:14px; color:var(--muted); font-size:.86rem;}
+mark{background:rgba(232,146,12,.35); color:inherit; border-radius:2px;}
+.topbar .actions{display:flex; align-items:center; gap:8px;}
+.iconbtn{
+  border:1px solid var(--border); background:var(--surface); color:var(--text);
+  border-radius:8px; padding:8px 12px; font-size:.82rem; font-weight:500;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.iconbtn:hover{border-color:var(--berry); color:var(--berry);}
+
+/* ============================================================
+   SHELL / LAYOUT
+   ============================================================ */
+.shell{display:flex; align-items:flex-start; max-width:1560px; margin:0 auto;}
+.sidenav{
+  width:var(--nav-w); flex:0 0 var(--nav-w);
+  position:sticky; top:60px; align-self:flex-start;
+  height:calc(100vh - 60px); overflow-y:auto;
+  border-right:1px solid var(--border); background:var(--surface);
+  padding:18px 14px 60px 14px;
+}
+.sidenav .navfilter{
+  width:100%; padding:7px 10px; margin-bottom:14px; border-radius:7px;
+  border:1px solid var(--border); background:var(--surface-2); color:var(--text); font-size:.82rem;
+}
+.navgroup{margin-bottom:6px;}
+.navgroup > .navgrouptitle{
+  font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);
+  font-weight:700; padding:12px 10px 6px 10px; font-family:var(--font-mono);
+}
+.navlink{
+  display:block; padding:7px 10px; border-radius:7px; text-decoration:none;
+  color:var(--text); font-size:.86rem; border-left:3px solid transparent;
+}
+.navlink:hover{background:var(--surface-2);}
+.navlink.active{background:rgba(54,120,149,.1); border-left-color:var(--berry); color:var(--berry); font-weight:700;}
+.navlink.doclink{font-family:var(--font-mono); font-size:.78rem;}
+.navlink .navnum{color:var(--muted); font-family:var(--font-mono); margin-right:6px; font-size:.76rem;}
+
+.content{flex:1; min-width:0; padding:28px 40px 120px 40px;}
+.content section{scroll-margin-top:72px;}
+
+/* ============================================================
+   HERO / INTRO
+   ============================================================ */
+.hero{
+  background:linear-gradient(135deg, var(--berry) 0%, #2a5a70 100%);
+  color:#fff; border-radius:16px; padding:40px 44px; margin-bottom:30px;
+  position:relative; overflow:hidden;
+}
+.hero::after{content:""; position:absolute; right:-60px; top:-60px; width:260px; height:260px; border-radius:50%; background:rgba(255,255,255,.06);}
+.hero h1{color:#fff; font-size:2.05rem; margin-bottom:.3em;}
+.hero p{color:rgba(255,255,255,.92); max-width:66ch; font-size:1.02rem;}
+.hero .herotags{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;}
+.herotags span{
+  background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3);
+  padding:5px 12px; border-radius:999px; font-size:.78rem; font-family:var(--font-mono);
+}
+
+/* ============================================================
+   CARDS / CALLOUTS / TABLES
+   ============================================================ */
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:22px 24px; margin:18px 0; box-shadow:var(--shadow);
+}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+.grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+@media (max-width:900px){.grid2,.grid3,.grid4{grid-template-columns:1fr;}}
+
+.callout{
+  border-left:4px solid var(--berry); background:var(--surface); border-radius:0 8px 8px 0;
+  padding:14px 18px; margin:16px 0; border:1px solid var(--border); border-left-width:4px;
+}
+.callout.tip{border-left-color:var(--leaf);}
+.callout.warn{border-left-color:var(--amber);}
+.callout.critical{border-left-color:var(--cherry);}
+.callout .co-label{font-family:var(--font-mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--berry); display:block; margin-bottom:4px;}
+.callout.tip .co-label{color:var(--leaf);}
+.callout.warn .co-label{color:var(--amber);}
+.callout.critical .co-label{color:var(--cherry);}
+
+table{width:100%; border-collapse:collapse; margin:14px 0; font-size:.88rem;}
+th,td{padding:9px 12px; border:1px solid var(--border); text-align:left; vertical-align:top;}
+thead th{background:var(--berry); color:#fff; font-weight:700; font-size:.78rem; text-transform:uppercase; letter-spacing:.03em;}
+tbody tr:nth-child(even){background:var(--surface-2);}
+td.mono, th.mono{font-family:var(--font-mono); font-size:.82rem;}
+.tblwrap{overflow-x:auto;}
+
+.badge{display:inline-block; padding:2px 9px; border-radius:999px; font-size:.72rem; font-weight:700; font-family:var(--font-mono);}
+.badge.must{background:rgba(251,40,50,.12); color:var(--cherry);}
+.badge.should{background:rgba(232,146,12,.14); color:var(--amber);}
+.badge.good{background:rgba(91,166,60,.14); color:var(--leaf);}
+.badge.info{background:rgba(54,120,149,.13); color:var(--berry);}
+.badge.high{background:rgba(251,40,50,.12); color:var(--cherry);}
+.badge.med{background:rgba(232,146,12,.14); color:var(--amber);}
+.badge.low{background:rgba(91,166,60,.14); color:var(--leaf);}
+
+.status-dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px;}
+.status-dot.good{background:var(--leaf);}
+.status-dot.warn{background:var(--amber);}
+.status-dot.crit{background:var(--cherry);}
+
+/* RACI letter chips */
+.raci{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:6px; font-family:var(--font-mono); font-weight:700; font-size:.78rem;}
+.raci.r{background:rgba(54,120,149,.15); color:var(--berry);}
+.raci.a{background:rgba(251,40,50,.14); color:var(--cherry); border:1.5px solid var(--cherry);}
+.raci.c{background:rgba(232,146,12,.15); color:var(--amber);}
+.raci.i{background:var(--surface-2); color:var(--muted); border:1px solid var(--border);}
+
+/* ============================================================
+   KPI TILES
+   ============================================================ */
+.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0;}
+@media (max-width:1100px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+.kpi-tile{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 18px;
+  box-shadow:var(--shadow);
+}
+.kpi-tile .kpi-label{font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; font-family:var(--font-mono);}
+.kpi-tile .kpi-value{font-size:1.65rem; font-weight:900; color:var(--text); margin:.15em 0;}
+.kpi-tile .kpi-delta{font-size:.8rem; font-weight:700; display:inline-flex; align-items:center; gap:4px;}
+.kpi-tile .kpi-delta.good{color:var(--leaf);}
+.kpi-tile .kpi-delta.bad{color:var(--cherry);}
+.kpi-tile .kpi-delta.warn{color:var(--amber);}
+
+/* ============================================================
+   DIAGRAMS / CHARTS
+   ============================================================ */
+.diagram-wrap{
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:18px; margin:16px 0; overflow-x:auto; box-shadow:var(--shadow);
+}
+.diagram-wrap svg{display:block; margin:0 auto; max-width:100%; height:auto;}
+.diagram-cap{font-size:.8rem; color:var(--muted); margin-top:10px; text-align:center;}
+.svg-box{fill:var(--surface); stroke:var(--berry); stroke-width:1.6;}
+.svg-box-crit{fill:var(--surface); stroke:var(--cherry); stroke-width:2.2;}
+.svg-box-alt{fill:var(--surface-2); stroke:var(--muted); stroke-width:1.3; stroke-dasharray:4 3;}
+.svg-box-ext{fill:var(--surface-2); stroke:var(--muted); stroke-width:1.4;}
+.svg-title{font-family:'Roboto',sans-serif; font-weight:700; fill:var(--text); font-size:13px;}
+.svg-sub{font-family:'Roboto Mono',monospace; fill:var(--muted); font-size:10px;}
+.svg-line{stroke:var(--muted); stroke-width:1.4; fill:none;}
+.svg-line-crit{stroke:var(--cherry); stroke-width:2.4; fill:none;}
+.svg-label{font-family:'Roboto',sans-serif; fill:var(--muted); font-size:10.5px;}
+.svg-boundary{fill:none; stroke:var(--berry); stroke-width:1.4; stroke-dasharray:6 4;}
+.svg-actor{fill:var(--surface-2); stroke:var(--berry); stroke-width:1.5;}
+.chart-axis{stroke:var(--border); stroke-width:1;}
+.chart-gridline{stroke:var(--border); stroke-width:1; stroke-dasharray:2 3;}
+.chart-label{font-family:'Roboto Mono',monospace; fill:var(--muted); font-size:10.5px;}
+.chart-value{font-family:'Roboto',sans-serif; fill:var(--text); font-size:11.5px; font-weight:700;}
+.bar-berry{fill:var(--berry);}
+.bar-berry:hover{fill:var(--cherry);}
+.bar-leaf{fill:var(--leaf);}
+.bar-cherry{fill:var(--cherry);}
+.bar-muted{fill:#9AA6AB;}
+:root[data-theme="dark"] .bar-muted{fill:#5b6266;}
+
+/* ============================================================
+   DOCUMENT CARD -- printable deliverable look
+   ============================================================ */
+.doc{
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  margin:22px 0 46px 0; box-shadow:var(--shadow); overflow:hidden;
+}
+.doc-toolbar{
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  background:var(--surface-2); border-bottom:1px solid var(--border); padding:10px 20px;
+}
+.doc-toolbar .dt-title{font-family:var(--font-mono); font-size:.76rem; color:var(--muted);}
+.doc-toolbar .dt-btns{display:flex; gap:8px; flex-wrap:wrap;}
+.btn{
+  border-radius:8px; padding:8px 14px; font-size:.8rem; font-weight:700; border:1px solid transparent;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.btn-primary{background:var(--cherry); color:#fff;}
+.btn-primary:hover{background:#e0212a;}
+.btn-outline{background:var(--surface); border-color:var(--border); color:var(--text);}
+.btn-outline:hover{border-color:var(--berry); color:var(--berry);}
+
+.doc-cover{
+  padding:46px 50px 34px 50px; background:linear-gradient(180deg, var(--surface-2), var(--surface));
+  border-bottom:1px solid var(--border);
+}
+.doc-cover .cover-logo{height:34px; margin-bottom:26px;}
+.doc-cover .cover-kicker{font-family:var(--font-mono); color:var(--cherry); font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; font-weight:700;}
+.doc-cover h2{border:none; color:var(--text); font-size:1.85rem; margin:.2em 0 .1em 0; padding:0;}
+.doc-cover .cover-sub{color:var(--muted); font-size:1rem; max-width:70ch;}
+.doc-control{
+  display:grid; grid-template-columns:repeat(5,1fr); gap:0; border:1px solid var(--border); border-radius:10px;
+  overflow:hidden; margin-top:24px;
+}
+.doc-control div{padding:10px 14px; border-right:1px solid var(--border); background:var(--surface);}
+.doc-control div:last-child{border-right:none;}
+.doc-control .dc-label{display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-family:var(--font-mono); margin-bottom:3px;}
+.doc-control .dc-value{font-weight:700; font-size:.86rem;}
+.doc-body{padding:8px 50px 40px 50px;}
+.doc-body h2{margin-top:1.6em;}
+.doc-body h2:first-child{margin-top:.2em;}
+.doc-toc{background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin:18px 0;}
+.doc-toc .toc-label{font-family:var(--font-mono); font-size:.72rem; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:8px; display:block;}
+.doc-toc ol{margin:0; columns:2; column-gap:30px;}
+.doc-toc li{font-size:.86rem; break-inside:avoid;}
+.doc-toc a{text-decoration:none;}
+
+.signoff{
+  margin:34px 50px 0 50px; border-top:2px solid var(--border); padding-top:20px;
+}
+.signoff-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+.signoff-cell{border:1px solid var(--border); border-radius:10px; padding:14px 16px; background:var(--surface-2);}
+.signoff-cell .so-role{font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:var(--berry); font-weight:700;}
+.signoff-cell .so-name{font-weight:700; margin-top:6px;}
+.signoff-cell .so-line{font-size:.8rem; color:var(--muted); margin-top:10px; border-top:1px dashed var(--border); padding-top:8px;}
+.doc-footer{
+  margin-top:26px; padding:16px 50px; border-top:1px solid var(--border); background:var(--surface-2);
+  display:flex; justify-content:space-between; font-size:.75rem; color:var(--muted); font-family:var(--font-mono);
+}
+
+/* Q&A / FAQ */
+.faq{border:1px solid var(--border); border-radius:10px; margin:10px 0; overflow:hidden; background:var(--surface);}
+.faq summary{padding:12px 16px; font-weight:700; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;}
+.faq summary::-webkit-details-marker{display:none;}
+.faq summary::after{content:"+"; color:var(--berry); font-size:1.2rem; font-weight:400;}
+.faq[open] summary::after{content:"\2013";}
+.faq .faq-a{padding:0 16px 16px 16px; color:var(--text); font-size:.9rem;}
+
+/* checklist */
+.checklist{list-style:none; padding:0; margin:14px 0;}
+.checklist li{
+  padding:10px 14px 10px 40px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px;
+  position:relative; background:var(--surface); font-size:.88rem;
+}
+.checklist li::before{
+  content:""; position:absolute; left:12px; top:12px; width:16px; height:16px; border-radius:4px;
+  border:2px solid var(--berry);
+}
+
+/* ============================================================
+   ASK ASSISTANT (floating)
+   ============================================================ */
+.ask-fab{
+  position:fixed; right:26px; bottom:26px; z-index:80;
+  background:var(--cherry); color:#fff; border:none; border-radius:999px;
+  padding:14px 20px; font-weight:700; font-size:.88rem; box-shadow:0 6px 22px rgba(251,40,50,.4);
+  display:flex; align-items:center; gap:8px;
+}
+.ask-panel{
+  position:fixed; right:26px; bottom:92px; width:400px; max-width:92vw; max-height:70vh;
+  background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow);
+  z-index:80; display:none; flex-direction:column; overflow:hidden;
+}
+.ask-panel.open{display:flex;}
+.ask-panel-head{background:var(--berry); color:#fff; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;}
+.ask-panel-head strong{font-size:.92rem;}
+.ask-panel-head button{background:transparent; border:none; color:#fff; font-size:1.1rem;}
+.ask-panel-body{padding:14px 18px; overflow-y:auto; flex:1;}
+.ask-msg{margin-bottom:14px; font-size:.87rem;}
+.ask-msg.from-user{text-align:right;}
+.ask-msg .bubble{display:inline-block; padding:9px 13px; border-radius:12px; max-width:88%; text-align:left;}
+.ask-msg.from-user .bubble{background:var(--berry); color:#fff; border-bottom-right-radius:3px;}
+.ask-msg.from-bot .bubble{background:var(--surface-2); border:1px solid var(--border); border-bottom-left-radius:3px;}
+.ask-msg .bubble a{color:inherit; font-weight:700;}
+.ask-panel-foot{border-top:1px solid var(--border); padding:10px; display:flex; gap:8px;}
+.ask-panel-foot input{flex:1; border:1px solid var(--border); border-radius:8px; padding:9px 11px; background:var(--surface-2); color:var(--text); font-size:.86rem;}
+.ask-panel-foot button{background:var(--cherry); color:#fff; border:none; border-radius:8px; padding:0 14px; font-weight:700;}
+.ask-suggest{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+.ask-suggest button{background:var(--surface-2); border:1px solid var(--border); border-radius:999px; padding:5px 11px; font-size:.76rem; color:var(--text);}
+.ask-suggest button:hover{border-color:var(--berry); color:var(--berry);}
+
+footer.sitefoot{
+  text-align:center; padding:34px 20px 50px 20px; color:var(--muted); font-size:.78rem; font-family:var(--font-mono);
+  border-top:1px solid var(--border); margin-top:20px;
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media print{
+  .topbar, .sidenav, .ask-fab, .ask-panel, .doc-toolbar, footer.sitefoot, .skip-link{display:none !important;}
+  .shell{display:block;}
+  .content{padding:0; max-width:100%;}
+  body{background:#fff;}
+  .doc{box-shadow:none; border:none; page-break-after:always; margin:0;}
+  .doc.print-hide{display:none !important;}
+  .card, .diagram-wrap{box-shadow:none;}
+  a{color:inherit; text-decoration:none;}
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<header class="topbar">
+  <div class="brandblock">
+    <img class="logo" alt="Colaberry" src="data:image/png;base64,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" />
+    <div class="brandtext">
+      <strong>Project Manager</strong>
+      <span>FIELD GUIDE &middot; Enterprise AI Leadership Accelerator</span>
+    </div>
+  </div>
+  <div class="searchwrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="search" id="global-search" placeholder="Search the guide &mdash; try &quot;critical path&quot;, &quot;RACI&quot;, &quot;burn rate&quot;..." autocomplete="off" />
+    <div class="searchresults" id="search-results"></div>
+  </div>
+  <div class="actions">
+    <button class="iconbtn" id="theme-toggle" title="Toggle dark mode">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      Theme
+    </button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="sidenav" id="sidenav" aria-label="Guide navigation">
+    <input class="navfilter" id="nav-filter" placeholder="Filter topics&hellip;" autocomplete="off" />
+
+    <div class="navgroup">
+      <div class="navgrouptitle">Start Here</div>
+      <a class="navlink" href="#home" data-nav>Welcome &amp; how to use this guide</a>
+      <a class="navlink" href="#initiative" data-nav>The example initiative: ClaimSight AI</a>
+    </div>
+
+    <div class="navgroup">
+      <div class="navgrouptitle">The PM's 20%</div>
+      <a class="navlink" href="#why" data-nav><span class="navnum">2.1</span>Why project management exists</a>
+      <a class="navlink" href="#triangle" data-nav><span class="navnum">2.2</span>The iron triangle</a>
+      <a class="navlink" href="#wbs-teaching" data-nav><span class="navnum">2.3</span>Work Breakdown Structure</a>
+      <a class="navlink" href="#critical-path" data-nav><span class="navnum">2.4</span>Critical path &amp; float</a>
+      <a class="navlink" href="#milestones-gates" data-nav><span class="navnum">2.5</span>Milestones &amp; gates</a>
+      <a class="navlink" href="#raid-teaching" data-nav><span class="navnum">2.6</span>RAID</a>
+      <a class="navlink" href="#raci-teaching" data-nav><span class="navnum">2.7</span>RACI</a>
+      <a class="navlink" href="#agile-waterfall-hybrid" data-nav><span class="navnum">2.8</span>Agile vs waterfall vs hybrid</a>
+      <a class="navlink" href="#velocity-burndown" data-nav><span class="navnum">2.9</span>Velocity &amp; burndown</a>
+      <a class="navlink" href="#status-reporting" data-nav><span class="navnum">2.10</span>Status reporting</a>
+      <a class="navlink" href="#good-vs-bad" data-nav><span class="navnum">2.11</span>Good vs. bad plans</a>
+      <a class="navlink" href="#pm-kpis" data-nav><span class="navnum">2.12</span>KPIs for project health</a>
+      <a class="navlink" href="#review-lens" data-nav><span class="navnum">2.13</span>The architect's review lens</a>
+    </div>
+
+    <div class="navgroup">
+      <div class="navgrouptitle">Deliverables &mdash; ClaimSight AI</div>
+      <a class="navlink doclink" href="#doc-charter" data-nav>01 &middot; Project Charter</a>
+      <a class="navlink doclink" href="#doc-wbs" data-nav>02 &middot; Work Breakdown Structure</a>
+      <a class="navlink doclink" href="#doc-timeline" data-nav>03 &middot; Milestone Timeline / Gantt</a>
+      <a class="navlink doclink" href="#doc-raid" data-nav>04 &middot; RAID Log</a>
+      <a class="navlink doclink" href="#doc-raci" data-nav>05 &middot; RACI Matrix</a>
+      <a class="navlink doclink" href="#doc-sprint" data-nav>06 &middot; Sprint / Iteration Plan</a>
+      <a class="navlink doclink" href="#doc-status" data-nav>07 &middot; Status Report</a>
+      <a class="navlink doclink" href="#doc-budget" data-nav>08 &middot; Budget / Burn</a>
+    </div>
+  </nav>
+
+  <main class="content" id="main">
+
+    <section id="home">
+      <div class="hero">
+        <h1>Project Manager Field Guide</h1>
+        <p>You are becoming an AI Solution Architect inside the Colaberry Enterprise AI Leadership Accelerator. This guide teaches the roughly 20% of project management that lets you <strong>direct, evaluate, and approve</strong> AI-generated project plans with confidence â€” even though an AI agent, not you, will draft most of the schedules, logs, and status reports you will be asked to sign off on.</p>
+        <div class="herotags">
+          <span>Week 3 &middot; Deep Dive</span>
+          <span>Discipline: Project Manager</span>
+          <span>Example industry: Insurance (P&amp;C)</span>
+          <span>Initiative: ClaimSight AI</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>How to use this guide</h3>
+        <p>This is a knowledge base, not a slide deck. Use the left navigation, the search box in the header, or the <strong>Ask</strong> assistant in the bottom-right corner to jump straight to what you need. Every teaching section and every deliverable below is searchable and answerable offline &mdash; there is no external API call anywhere on this page.</p>
+        <div class="grid3">
+          <div><h4>If you have 10 minutes</h4><p style="font-size:.9rem">Read Section 2.1&ndash;2.4 (why PM exists, the triangle, WBS, critical path), then skim the Project Charter and Milestone Timeline.</p></div>
+          <div><h4>If you're about to approve a plan</h4><p style="font-size:.9rem">Go straight to <a href="#review-lens">Section 2.13, the Architect's Review Lens</a> &mdash; it is the checklist this whole guide builds toward.</p></div>
+          <div><h4>If you learn by example</h4><p style="font-size:.9rem">Every deliverable is built around one real-feeling initiative, ClaimSight AI, so you can see how the concepts connect end to end.</p></div>
+        </div>
+      </div>
+
+      <div class="callout tip"><span class="co-label">Companion guide</span>This Field Guide pairs with the <strong>Solution Architecture Field Guide</strong> from Week 2, which covers the same ClaimSight AI initiative from a technical-design lens. The Architecture Gate milestone in this guide's timeline lines up with that guide's Solution Architecture Document approval date &mdash; in a real program, these two views of the same initiative must stay in sync, and reconciling them is exactly the kind of cross-check an AI Solution Architect is expected to make.</div>
+    </section>
+
+    <section id="initiative">
+      <h2>The Example Initiative: ClaimSight AI</h2>
+      <p><strong>Meridian Mutual Insurance</strong>, a mid-size property &amp; casualty carrier, is funding <strong>ClaimSight AI</strong>: an AI-augmented claims intake, triage, and fraud-scoring platform meant to replace slow, manual first-notice-of-loss (FNOL) handling built on top of its 30-year-old ClaimsCore mainframe. The business case, requirements, and executive sponsorship are already approved. This guide picks up where that approval ends: turning a funded initiative into a plan you can defend, track, and sign off on as it runs.</p>
+
+      <div class="kpi-row">
+        <div class="kpi-tile"><div class="kpi-label">Cycle Time Target</div><div class="kpi-value">&lt; 4 hrs</div><div class="kpi-delta good">from 11.2 days baseline</div></div>
+        <div class="kpi-tile"><div class="kpi-label">Fraud Leakage Target</div><div class="kpi-value">&lt; 6.5%</div><div class="kpi-delta good">from 9.4% baseline</div></div>
+        <div class="kpi-tile"><div class="kpi-label">Program Budget (BAC)</div><div class="kpi-value">$5.42M</div><div class="kpi-delta warn">14-month program</div></div>
+        <div class="kpi-tile"><div class="kpi-label">Planned Go-Live</div><div class="kpi-value mono" style="font-size:1.25rem">2027-04-30</div><div class="kpi-delta warn">at risk &mdash; see Status Report</div></div>
+      </div>
+
+      <table>
+        <tbody>
+          <tr><td class="mono" style="width:220px">Executive Sponsor</td><td>Denise Whitfield, EVP Claims Operations &mdash; funds the program and owns the go/no-go decision at each gate</td></tr>
+          <tr><td class="mono">Business Owner</td><td>Marcus Alvarez, VP Engineering &mdash; accountable for the delivered platform meeting the business case</td></tr>
+          <tr><td class="mono">Program Manager</td><td>Priya Natarajan, Senior Program Manager &mdash; owns the plan, the RAID log, and status reporting; author of every document in this guide</td></tr>
+          <tr><td class="mono">Solution Architecture Lead</td><td>J. Okafor &mdash; owns the technical design (see the companion Solution Architecture Field Guide)</td></tr>
+          <tr><td class="mono">Governance body</td><td>Claims &amp; Technology Steering Committee &mdash; approves gates, budget changes, and scope changes</td></tr>
+          <tr><td class="mono">Program duration</td><td>2026-02-02 (kickoff) through 2027-05-28 (hypercare exit), 16 months including a 4-week hypercare period</td></tr>
+        </tbody>
+      </table>
+
+      <p class="callout info" style="border-left-color:var(--berry)"><span class="co-label" style="color:var(--berry)">Scope note</span>Payment and disbursement processing remains inside ClaimsCore and is explicitly out of scope for ClaimSight AI &mdash; see the Charter's scope boundaries. The AI agent that will draft your working documents does not know this by default; the Charter exists partly to tell it, and repeatedly, so scope does not silently expand.</p>
+    </section>
+
+    <section id="why">
+      <h2>2.1 &middot; Why Project Management Exists</h2>
+      <p>Left alone, good engineers build the wrong thing on time, or the right thing too late, or the right thing on time and over budget &mdash; because scope, schedule, cost, and risk are each somebody's job, and without one person accountable for the whole, nobody trades them off on purpose. Project management is the discipline of making those trade-offs <em>explicit and owned</em> instead of accidental.</p>
+      <div class="grid3">
+        <div><h4>Without a PM function</h4><p style="font-size:.9rem">Scope creeps quietly, risks surface as surprises, status is whatever the loudest team says, and "done" is negotiated after the fact.</p></div>
+        <div><h4>With a weak PM function</h4><p style="font-size:.9rem">A schedule exists but nobody protects the critical path; a RAID log exists but risks have no owner; status reports restate activity instead of health.</p></div>
+        <div><h4>With a strong PM function</h4><p style="font-size:.9rem">Trade-offs are visible before they become crises, every commitment has exactly one owner, and the sponsor can make a go/no-go call with real information.</p></div>
+      </div>
+      <div class="callout tip"><span class="co-label">Your job as architect, not PM</span>You will not run the day-to-day schedule. You will be handed AI-generated charters, WBSs, timelines, and status reports and asked: is this plan sound enough to bet a program on? This guide teaches the 20% that lets you answer that in minutes, not days.</div>
+    </section>
+
+    <section id="triangle">
+      <h2>2.2 &middot; The Iron Triangle: Scope, Schedule, Cost</h2>
+      <p>Scope, schedule, and cost are structurally linked through a fixed relationship: quality being the silent fourth variable that erodes when the other three are forced to stay fixed under pressure. Push one corner and at least one other corner has to move &mdash; or quality absorbs the difference invisibly, which is the outcome a good plan is designed to prevent.</p>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 460 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Iron triangle diagram: scope, schedule, and cost at three vertices, quality in the center">
+          <polygon points="230,30 40,290 420,290" fill="none" stroke="var(--berry)" stroke-width="3"/>
+          <circle cx="230" cy="30" r="8" fill="var(--berry)"/>
+          <circle cx="40" cy="290" r="8" fill="var(--berry)"/>
+          <circle cx="420" cy="290" r="8" fill="var(--berry)"/>
+          <text x="230" y="15" text-anchor="middle" class="svg-title">SCOPE</text>
+          <text x="230" y="0" text-anchor="middle" class="svg-sub" style="display:none"></text>
+          <text x="20" y="312" text-anchor="start" class="svg-title">SCHEDULE</text>
+          <text x="440" y="312" text-anchor="end" class="svg-title">COST</text>
+          <text x="230" y="205" text-anchor="middle" class="svg-sub" style="font-size:12px; fill:var(--muted)">QUALITY</text>
+          <text x="230" y="222" text-anchor="middle" class="svg-sub">(erodes silently if the</text>
+          <text x="230" y="236" text-anchor="middle" class="svg-sub">other three are forced fixed)</text>
+        </svg>
+        <div class="diagram-cap">Figure &mdash; The iron triangle. A sound charter names which corner is allowed to flex.</div>
+      </div>
+      <div class="callout warn"><span class="co-label">The rule an AI plan must follow</span>A charter that claims scope, schedule, <em>and</em> cost are all fixed with no stated flex is not disciplined &mdash; it is dishonest, and quality will pay the difference. Approve a charter only if it names which one constraint is allowed to move.</div>
+    </section>
+
+    <section id="wbs-teaching">
+      <h2>2.3 &middot; Work Breakdown Structure (WBS)</h2>
+      <p>A Work Breakdown Structure decomposes total project scope into work packages small enough to estimate, assign, and track &mdash; and, critically, the packages must sum to <strong>exactly 100%</strong> of scope at every level. A WBS is not a task list; it is a hierarchical accounting of scope, the same way a chart of accounts is a hierarchical accounting of money. If the percentages at any level don't sum to 100%, either scope is missing (a silent gap that surfaces late) or scope is double-counted (inflating the budget).</p>
+      <ul class="checklist">
+        <li>Every Level-1 work package has a named owner &mdash; no orphaned scope</li>
+        <li>Level-2 packages under a parent sum back to exactly the parent's percentage</li>
+        <li>Each work package has a stated deliverable or exit criterion, not just a label</li>
+        <li>Work packages are sized to roughly 1&ndash;4 weeks of effort &mdash; small enough to estimate honestly, large enough not to drown in bookkeeping</li>
+      </ul>
+      <div class="callout tip"><span class="co-label">Reviewer's check</span>Ask an AI-generated WBS to show its percentages summing to 100% at both levels before you accept it &mdash; see Deliverable 02 for a worked example that does this explicitly.</div>
+    </section>
+
+    <section id="critical-path">
+      <h2>2.4 &middot; Critical Path &amp; Float</h2>
+      <p>The <strong>critical path</strong> is the longest chain of dependent work packages from start to finish &mdash; it determines the earliest possible completion date, and any slip anywhere on it slips the whole program day for day. Work packages <em>not</em> on the critical path have <strong>float</strong> (or slack): room to slip without moving the end date, up to the size of their float buffer.</p>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Simple critical path example: A to B to D is critical, A to C to D has float">
+          <defs><marker id="arrow-cp-teach" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#6B6B6B"/></marker></defs>
+          <rect x="20" y="90" width="90" height="46" rx="8" class="svg-box-crit"/><text x="65" y="118" text-anchor="middle" class="svg-title">A</text>
+          <rect x="200" y="20" width="90" height="46" rx="8" class="svg-box-crit"/><text x="245" y="48" text-anchor="middle" class="svg-title">B</text>
+          <rect x="200" y="160" width="90" height="46" rx="8" class="svg-box"/><text x="245" y="188" text-anchor="middle" class="svg-title">C</text>
+          <rect x="420" y="90" width="90" height="46" rx="8" class="svg-box-crit"/><text x="465" y="118" text-anchor="middle" class="svg-title">D</text>
+          <line x1="110" y1="105" x2="200" y2="55" class="svg-line-crit" marker-end="url(#arrow-cp-teach)"/>
+          <line x1="110" y1="120" x2="200" y2="180" class="svg-line" marker-end="url(#arrow-cp-teach)"/>
+          <line x1="290" y1="50" x2="420" y2="105" class="svg-line-crit" marker-end="url(#arrow-cp-teach)"/>
+          <line x1="290" y1="185" x2="420" y2="125" class="svg-line" marker-end="url(#arrow-cp-teach)"/>
+          <text x="530" y="80" class="svg-label" style="fill:var(--cherry)">critical: A&rarr;B&rarr;D</text>
+          <text x="530" y="200" class="svg-label">float: A&rarr;C&rarr;D</text>
+        </svg>
+        <div class="diagram-cap">Figure &mdash; A&rarr;B&rarr;D is longer than A&rarr;C&rarr;D, so it is critical; the C path has float equal to the time difference.</div>
+      </div>
+      <div class="callout critical"><span class="co-label">The most common AI-plan defect</span>A generated timeline that never names its critical path, or draws every bar the same color, has not actually been analyzed &mdash; it's a calendar with boxes on it. Reject it until the critical path is named explicitly and protected with buffer.</div>
+    </section>
+
+    <section id="milestones-gates">
+      <h2>2.5 &middot; Milestones &amp; Gates</h2>
+      <p>A <strong>milestone</strong> marks a point in time with zero duration &mdash; a fact becomes true (a document is approved, an environment is live). A <strong>gate</strong> is a milestone with teeth: the next phase cannot start until named <strong>exit criteria</strong> are met and a named approver signs off. Gates are where governance actually happens; without them, phases blur together and nobody can point to when scope was locked.</p>
+      <table>
+        <thead><tr><th>Weak milestone</th><th>Real gate</th></tr></thead>
+        <tbody>
+          <tr><td>"Architecture phase complete &mdash; 2026-08-05"</td><td>"Architecture Gate: Solution Architecture Document approved in writing by the Steering Committee, all NFRs have a measurement method, no High-severity architecture risk is unowned &mdash; target 2026-08-05"</td></tr>
+          <tr><td>"Testing done"</td><td>"SIT Exit: 100% of P0/P1 defects closed, zero open Sev-1, performance NFRs verified under load &mdash; sign-off by QA Lead"</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="raid-teaching">
+      <h2>2.6 &middot; RAID: Risks, Assumptions, Issues, Dependencies</h2>
+      <p>A RAID log is where a plan admits what it doesn't control. The four categories are easy to blur but mean different things:</p>
+      <div class="grid2">
+        <div class="card"><h4>Risk</h4><p style="font-size:.9rem">Something that <em>might</em> happen and would hurt the program if it did. Needs likelihood, impact, and a mitigation.</p></div>
+        <div class="card"><h4>Assumption</h4><p style="font-size:.9rem">Something taken as true without proof, that the plan depends on. If it turns out false, re-plan.</p></div>
+        <div class="card"><h4>Issue</h4><p style="font-size:.9rem">A risk that already happened &mdash; it's real now, not hypothetical, and needs resolution, not mitigation.</p></div>
+        <div class="card"><h4>Dependency</h4><p style="font-size:.9rem">Something the program needs from outside its own control &mdash; another team, a vendor, a regulator &mdash; by a specific date.</p></div>
+      </div>
+      <div class="callout warn"><span class="co-label">Reviewer's check</span>Every single row must have exactly one owner and a date &mdash; raised date at minimum, target/due date wherever it applies. A RAID row with no owner is not tracked, it's decoration. See Deliverable 04 for a worked example.</div>
+    </section>
+
+    <section id="raci-teaching">
+      <h2>2.7 &middot; RACI: One Accountable Per Activity</h2>
+      <p>RACI assigns four roles per activity: <strong>R</strong>esponsible (does the work, can be shared), <strong>A</strong>ccountable (answers for the outcome &mdash; <em>exactly one person, always</em>), <strong>C</strong>onsulted (gives input beforehand, two-way), <strong>I</strong>nformed (told afterward, one-way). The single rule that matters most: if a row has zero or two-or-more Accountable owners, the activity has no real owner, no matter how many people are marked Responsible.</p>
+      <div class="grid2">
+        <div class="raci r" style="width:auto;display:inline-flex;padding:4px 10px;margin-bottom:6px">R &mdash; Responsible</div>
+        <div class="raci a" style="width:auto;display:inline-flex;padding:4px 10px;margin-bottom:6px">A &mdash; Accountable (exactly one)</div>
+        <div class="raci c" style="width:auto;display:inline-flex;padding:4px 10px;margin-bottom:6px">C &mdash; Consulted</div>
+        <div class="raci i" style="width:auto;display:inline-flex;padding:4px 10px;margin-bottom:6px">I &mdash; Informed</div>
+      </div>
+      <div class="callout critical"><span class="co-label">Reviewer's check</span>Scan every row of an AI-generated RACI for exactly one "A". Two Accountables means a fight is coming; zero means nobody will answer for it when it slips. See Deliverable 05.</div>
+    </section>
+
+    <section id="agile-waterfall-hybrid">
+      <h2>2.8 &middot; Agile vs. Waterfall vs. Hybrid</h2>
+      <table>
+        <thead><tr><th>Model</th><th>How it sequences work</th><th>Best fit</th><th>Watch for</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Waterfall</td><td>Sequential phases (requirements &rarr; design &rarr; build &rarr; test &rarr; deploy), gated approvals between them</td><td>Regulated, fixed-scope, hardware-coupled, or contractually fixed-price work</td><td>Late discovery of problems &mdash; testing happens only after everything is built</td></tr>
+          <tr><td class="mono">Agile / Scrum</td><td>Short, time-boxed increments (sprints) against a prioritized, changeable backlog</td><td>Software with evolving requirements, fast feedback available</td><td>Needs real product ownership and a stable team &mdash; weak without both</td></tr>
+          <tr><td class="mono">Hybrid</td><td>Waterfall-style gates between major phases; Scrum sprints inside each phase's execution</td><td>Enterprise programs with regulatory gates <em>and</em> evolving technical implementation &mdash; e.g. ClaimSight AI</td><td>Gate cadence and sprint cadence can drift out of sync if nobody reconciles them</td></tr>
+        </tbody>
+      </table>
+      <p>ClaimSight AI runs Hybrid: the Steering Committee governs through fixed gates (Architecture, Foundation Complete, SIT, UAT, Go-Live), while the engineering squads inside each phase run two-week Scrum sprints against a backlog. See Deliverable 06 for a live sprint plan.</p>
+    </section>
+
+    <section id="velocity-burndown">
+      <h2>2.9 &middot; Velocity &amp; Burndown</h2>
+      <p><strong>Velocity</strong> is the average amount of work, in story points, a team actually completes per sprint &mdash; measured from history, never from a target. It is used to size how much a team should <em>commit</em> to next sprint, not to judge team performance or compare teams to each other (point scales aren't standardized across teams). A <strong>burndown chart</strong> plots remaining work against time within one sprint: an ideal straight-line pace versus the team's actual progress, making it visible early if a sprint is drifting.</p>
+      <div class="callout tip"><span class="co-label">Estimates carry buffer</span>A sprint committed at exactly the trailing average velocity, with no reserve for the unknown item, is optimistic by construction. See Deliverable 06 for a sprint commitment that's deliberately under the team's velocity range.</div>
+    </section>
+
+    <section id="status-reporting">
+      <h2>2.10 &middot; Status Reporting &amp; RAG Health</h2>
+      <p>A status report exists to let a sponsor make a decision in under two minutes. <strong>RAG</strong> (Red/Amber/Green) health against baseline &mdash; not against last week's report &mdash; is the mechanism: Green means on track to baseline, Amber means a defined variance exists with an active, funded recovery plan, Red means the baseline is broken and needs an executive decision now.</p>
+      <ul class="checklist">
+        <li>RAG is measured against the original baseline, not a quietly re-baselined target</li>
+        <li>Every Amber or Red has a stated cause, not just a color</li>
+        <li>"Decisions needed" is a named section, not buried in narrative prose</li>
+        <li>Progress is stated as % of scope complete (earned value), not % of time elapsed</li>
+      </ul>
+    </section>
+
+    <section id="good-vs-bad">
+      <h2>2.11 &middot; Good vs. Bad Plans</h2>
+      <table>
+        <thead><tr><th>Signal</th><th>Bad plan</th><th>Good plan</th></tr></thead>
+        <tbody>
+          <tr><td>Estimates</td><td>Single-point ("6 weeks")</td><td>Range or point-plus-buffer ("6 weeks, 1-week contingency")</td></tr>
+          <tr><td>Critical path</td><td>Not identified, or every bar looks equally important</td><td>Named explicitly and actively protected</td></tr>
+          <tr><td>RACI</td><td>Everyone is "Responsible" for everything</td><td>Exactly one Accountable per row</td></tr>
+          <tr><td>Risk</td><td>Risks listed with no owner or mitigation</td><td>Every risk owned, dated, with a mitigation and a status</td></tr>
+          <tr><td>Status</td><td>Green until it's suddenly Red</td><td>Amber appears early, with a recovery plan attached</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="pm-kpis">
+      <h2>2.12 &middot; KPIs for Project Health</h2>
+      <div class="kpi-row">
+        <div class="kpi-tile"><div class="kpi-label">SPI (Schedule)</div><div class="kpi-value">EV / PV</div><div class="kpi-delta warn">&lt; 1.0 = behind schedule</div></div>
+        <div class="kpi-tile"><div class="kpi-label">CPI (Cost)</div><div class="kpi-value">EV / AC</div><div class="kpi-delta warn">&lt; 1.0 = over budget</div></div>
+        <div class="kpi-tile"><div class="kpi-label">Milestone Hit Rate</div><div class="kpi-value">On-time %</div><div class="kpi-delta good">of gates passed on original date</div></div>
+        <div class="kpi-tile"><div class="kpi-label">RAID Aging</div><div class="kpi-value">Days Open</div><div class="kpi-delta warn">High risks open &gt; 30 days need escalation</div></div>
+      </div>
+      <p>SPI and CPI (Schedule and Cost Performance Index, from Earned Value Management) turn "are we on track" from a feeling into a number: 1.0 is exactly on plan, below 1.0 is behind/over, above 1.0 is ahead/under. See Deliverable 08 for both computed live against ClaimSight AI's actuals.</p>
+    </section>
+
+    <section id="review-lens">
+      <h2>2.13 &middot; The Architect's Review Lens</h2>
+      <p>This is the checklist the entire guide builds toward &mdash; use it every time an AI agent hands you a project plan to approve.</p>
+      <ul class="checklist">
+        <li>WBS work packages sum to exactly 100% of scope at every level</li>
+        <li>The critical path is named explicitly, not left implicit in a Gantt chart</li>
+        <li>Estimates carry a stated buffer or range, never a bare single point</li>
+        <li>Every RACI row has exactly one Accountable owner</li>
+        <li>Every RAID row has exactly one owner and at least a raised date</li>
+        <li>Milestones that function as gates have written, checkable exit criteria</li>
+        <li>The charter names which triangle constraint (scope/schedule/cost) is allowed to flex</li>
+        <li>Status RAG is measured against the original baseline, not re-baselined silently</li>
+        <li>Budget forecasts (EAC) are shown, not just spend-to-date</li>
+        <li>Sign-off is traceable to a named Preparer, Reviewer, and Approver with dates</li>
+      </ul>
+      <div class="callout critical"><span class="co-label">If a plan fails this list</span>Send it back with the specific gap named &mdash; "no Accountable owner on row 7," "no buffer on the SIT estimate" &mdash; the same way you'd request changes on a pull request. Approving a plan that fails this checklist transfers the risk to you.</div>
+    </section>
+
+    <!-- ================================================================
+         DELIVERABLE 01 — PROJECT CHARTER
+         ================================================================ -->
+    <section id="doc-charter">
+      <div class="doc" id="doc-charter-card" data-doc-code="CHR-CLM-2026-01" data-doc-title="Project Charter — ClaimSight AI">
+        <div class="doc-toolbar">
+          <span class="dt-title">CHR-CLM-2026-01.html</span>
+          <div class="dt-btns">
+            <button class="btn btn-outline" onclick="printDoc('doc-charter-card')">Print / Save as PDF</button>
+            <button class="btn btn-primary" onclick="exportDocHtml('doc-charter-card')">Download HTML</button>
+          </div>
+        </div>
+        <div class="doc-cover">
+          <img class="cover-logo" alt="Colaberry" src="" data-logo-slot />
+          <span class="cover-kicker">Project Charter</span>
+          <h2>ClaimSight AI &mdash; Claims Intake, Triage &amp; Fraud-Scoring Platform</h2>
+          <p class="cover-sub">The authorizing document: why this program exists, what it may and may not touch, who owns which decision, and where the Project Manager's authority begins and ends.</p>
+          <div class="doc-control">
+            <div><span class="dc-label">Document ID</span><span class="dc-value mono">CHR-CLM-2026-01</span></div>
+            <div><span class="dc-label">Version</span><span class="dc-value mono">1.0</span></div>
+            <div><span class="dc-label">Status</span><span class="dc-value"><span class="status-dot good"></span>Approved</span></div>
+            <div><span class="dc-label">Owner</span><span class="dc-value">Program Manager</span></div>
+            <div><span class="dc-label">Date</span><span class="dc-value mono">2026-02-02</span></div>
+          </div>
+        </div>
+        <div class="doc-body">
+
+          <h2>1&nbsp;&middot;&nbsp;Purpose &amp; Business Case</h2>
+          <p>Meridian Mutual Insurance's claims intake process runs on manual, phone- and paper-driven first-notice-of-loss (FNOL) handling layered on a 30-year-old ClaimsCore mainframe. Mean time from FNOL to adjuster assignment is 11.2 days; estimated fraud leakage is 9.4% of paid losses. Both figures are worsening as claim volume grows and are now behind three named competitors' published service-level commitments. ClaimSight AI replaces manual intake and triage with an AI-augmented platform while leaving policy administration, underwriting, and payment/disbursement on ClaimsCore, integrated rather than replaced.</p>
+
+          <h2>2&nbsp;&middot;&nbsp;Sponsor &amp; Governance</h2>
+          <table>
+            <tbody>
+              <tr><td class="mono" style="width:220px">Executive Sponsor</td><td>Denise Whitfield, EVP Claims Operations &mdash; funds the program, owns each gate go/no-go decision</td></tr>
+              <tr><td class="mono">Business Owner</td><td>Marcus Alvarez, VP Engineering &mdash; accountable that the delivered platform meets the business case</td></tr>
+              <tr><td class="mono">Program Manager</td><td>Priya Natarajan, Senior Program Manager &mdash; owns the plan, RAID log, and status reporting</td></tr>
+              <tr><td class="mono">Governance body</td><td>Claims &amp; Technology Steering Committee &mdash; approves gates, budget changes &gt; $50K, and scope changes</td></tr>
+              <tr><td class="mono">Cadence</td><td>Steering Committee meets bi-weekly; gate reviews are scheduled milestones, not calendar-driven</td></tr>
+            </tbody>
+          </table>
+
+          <h2>3&nbsp;&middot;&nbsp;Objectives &amp; Success Criteria</h2>
+          <div class="kpi-row">
+            <div class="kpi-tile"><div class="kpi-label">Cycle Time</div><div class="kpi-value">&lt; 4 hrs</div><div class="kpi-delta good">from 11.2 days, non-CAT claims, measured 90 days post go-live</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Fraud Leakage</div><div class="kpi-value">&lt; 6.5%</div><div class="kpi-delta good">from 9.4%, measured within 18 months of go-live</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Platform Availability</div><div class="kpi-value">&ge; 99.9%</div><div class="kpi-delta good">monthly, intake path</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Budget Adherence</div><div class="kpi-value">&plusmn; 10%</div><div class="kpi-delta warn">of $5.42M BAC at completion</div></div>
+          </div>
+
+          <h2 id="charter-scope">4&nbsp;&middot;&nbsp;Scope Boundaries</h2>
+          <div class="grid2">
+            <div class="card"><h4>In scope</h4><ul style="font-size:.9rem"><li>FNOL intake (web, mobile, call-center-assisted)</li><li>Event-driven triage &amp; adjuster assignment</li><li>Fraud scoring (rules + ML, build/buy hybrid)</li><li>ClaimsCore integration adapter (real-time + reconciliation)</li><li>Policyholder &amp; adjuster-facing UX</li></ul></div>
+            <div class="card"><h4>Explicitly out of scope</h4><ul style="font-size:.9rem"><li>Payment &amp; disbursement processing &mdash; stays on ClaimsCore</li><li>Underwriting &amp; policy administration</li><li>Replacing the ClaimsCore mainframe itself</li><li>Non-claims lines of business</li></ul></div>
+          </div>
+          <div class="callout warn"><span class="co-label">Why this matters to an AI-generated plan</span>An AI planning agent will happily "helpfully" expand scope to payment processing if asked to improve claim cycle time end-to-end. This boundary is written down specifically so that expansion gets caught at charter-comparison time, not at UAT.</div>
+
+          <h2>5&nbsp;&middot;&nbsp;Assumptions &amp; Constraints</h2>
+          <p>Full assumption list with owners and dates is in the RAID Log (Deliverable 04); the two load-bearing ones are: Meridian's existing AWS Enterprise Agreement pricing holds for the program duration, and ClaimsCore's nightly batch windows remain unchanged by any competing modernization effort.</p>
+
+          <h2>6&nbsp;&middot;&nbsp;High-Level Milestones</h2>
+          <table>
+            <thead><tr><th>Milestone</th><th>Target date</th><th>Gate</th></tr></thead>
+            <tbody>
+              <tr><td>Architecture &amp; Compliance Design Gate</td><td class="mono">2026-08-05</td><td><span class="badge good">Complete</span></td></tr>
+              <tr><td>Data &amp; Platform Foundation Complete</td><td class="mono">2026-09-25</td><td><span class="badge med">At risk</span></td></tr>
+              <tr><td>Legacy Integration Complete</td><td class="mono">2027-01-29</td><td><span class="badge med">At risk</span></td></tr>
+              <tr><td>Go-Live (Production Cutover)</td><td class="mono">2027-04-30</td><td><span class="badge med">At risk</span></td></tr>
+            </tbody>
+          </table>
+          <p>Full sequence, dependencies, and the named critical path are in <a href="#doc-timeline">Deliverable 03, the Milestone Timeline</a>.</p>
+
+          <h2>7&nbsp;&middot;&nbsp;Budget Summary</h2>
+          <p>Budget at Completion (BAC): <strong>$5,420,000</strong> across 14 months of build plus a 2-month hypercare/closeout tail, inclusive of a 12% management reserve. Full breakdown by work package, actuals to date, and forecast at completion are in <a href="#doc-budget">Deliverable 08, Budget/Burn</a>.</p>
+
+          <h2 id="charter-authority">8&nbsp;&middot;&nbsp;Project Manager Authority</h2>
+          <ul>
+            <li><strong>Spending authority:</strong> Priya Natarajan may approve spend up to $50,000 per change without Steering Committee approval; above that requires a gate-level or out-of-cycle Steering Committee decision.</li>
+            <li><strong>Change control:</strong> The PM may re-sequence work within a work package without a change request; re-sequencing across work packages, or any change to the critical path, requires a logged change request and Business Owner sign-off.</li>
+            <li><strong>Staffing:</strong> The PM may reallocate contractor hours within an approved work package's budget; new headcount or contractor SOWs require Business Owner approval.</li>
+            <li><strong>Escalation:</strong> Any risk that would breach the fixed triangle constraint (see &sect;9) is escalated to the Executive Sponsor within 5 business days of identification, not batched into the next scheduled status report.</li>
+          </ul>
+
+          <h2>9&nbsp;&middot;&nbsp;The Fixed Constraint</h2>
+          <p>Per the iron-triangle discipline in <a href="#triangle">Section 2.2</a>: schedule and the two business-outcome targets (cycle time, fraud leakage) are fixed &mdash; driven by a competitive and regulatory window that does not move for this program. <strong>Cost is the constraint permitted to flex first</strong>, within the 12% management reserve, before schedule or scope are touched. This is why the Status Report's Decisions Needed section proposes a budget draw before a schedule slip &mdash; the charter, not the PM's preference, sets that order.</p>
+
+          <h2>10&nbsp;&middot;&nbsp;Governance &amp; Escalation</h2>
+          <p>Gate reviews require written sign-off before the next phase's work packages begin (no "provisional start" pending paperwork). Escalations outside the bi-weekly Steering Committee cadence go directly to the Executive Sponsor; the RAID Log (Deliverable 04) is the system of record for what has been escalated and when.</p>
+        </div>
+
+        <div class="signoff">
+          <div class="signoff-grid">
+            <div class="signoff-cell"><span class="so-role">Prepared</span><div class="so-name">Priya Natarajan, Senior Program Manager</div><div class="so-line">2026-01-26</div></div>
+            <div class="signoff-cell"><span class="so-role">Reviewed</span><div class="so-name">Marcus Alvarez, VP Engineering</div><div class="so-line">2026-01-30</div></div>
+            <div class="signoff-cell"><span class="so-role">Approved</span><div class="so-name">Denise Whitfield, EVP Claims Operations</div><div class="so-line">2026-02-02</div></div>
+          </div>
+        </div>
+        <div class="doc-footer">
+          <span>Colaberry Enterprise AI Leadership Accelerator &middot; ClaimSight AI</span>
+          <span>CHR-CLM-2026-01 &middot; v1.0 &middot; Page 1 of 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         DELIVERABLE 02 — WORK BREAKDOWN STRUCTURE
+         ================================================================ -->
+    <section id="doc-wbs">
+      <div class="doc" id="doc-wbs-card" data-doc-code="WBS-CLM-2026-01" data-doc-title="Work Breakdown Structure — ClaimSight AI">
+        <div class="doc-toolbar">
+          <span class="dt-title">WBS-CLM-2026-01.html</span>
+          <div class="dt-btns">
+            <button class="btn btn-outline" onclick="printDoc('doc-wbs-card')">Print / Save as PDF</button>
+            <button class="btn btn-outline" onclick="downloadWbsCsv()">Download CSV</button>
+            <button class="btn btn-primary" onclick="exportDocHtml('doc-wbs-card')">Download HTML</button>
+          </div>
+        </div>
+        <div class="doc-cover">
+          <img class="cover-logo" alt="Colaberry" src="" data-logo-slot />
+          <span class="cover-kicker">Work Breakdown Structure</span>
+          <h2>ClaimSight AI &mdash; Scope Decomposition</h2>
+          <p class="cover-sub">Eight Level-1 work packages summing to exactly 100% of program scope, each decomposed into Level-2 packages that sum back to their parent &mdash; the accounting discipline from <a href="#wbs-teaching">Section 2.3</a> applied end to end.</p>
+          <div class="doc-control">
+            <div><span class="dc-label">Document ID</span><span class="dc-value mono">WBS-CLM-2026-01</span></div>
+            <div><span class="dc-label">Version</span><span class="dc-value mono">1.2</span></div>
+            <div><span class="dc-label">Status</span><span class="dc-value"><span class="status-dot good"></span>Baselined</span></div>
+            <div><span class="dc-label">Owner</span><span class="dc-value">Program Manager</span></div>
+            <div><span class="dc-label">Date</span><span class="dc-value mono">2026-08-12</span></div>
+          </div>
+        </div>
+        <div class="doc-body">
+
+          <h2>1&nbsp;&middot;&nbsp;WBS Tree &mdash; Level 1</h2>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 1300 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WBS tree: ClaimSight AI Program at root, eight Level 1 work packages below, critical path packages outlined in cherry red">
+              <rect x="555" y="8" width="190" height="46" rx="8" class="svg-box" style="stroke-width:2.2"/>
+              <text x="650" y="28" text-anchor="middle" class="svg-title" style="font-size:12px">ClaimSight AI Program</text>
+              <text x="650" y="44" text-anchor="middle" class="svg-sub">100% of scope</text>
+              <line x1="650" y1="54" x2="650" y2="70" class="svg-line"/>
+              <line x1="100" y1="70" x2="1199" y2="70" class="svg-line"/>
+              <line x1="100" y1="70" x2="100" y2="86" class="svg-line"/>
+              <line x1="257" y1="70" x2="257" y2="86" class="svg-line"/>
+              <line x1="414" y1="70" x2="414" y2="86" class="svg-line-crit"/>
+              <line x1="571" y1="70" x2="571" y2="86" class="svg-line-crit"/>
+              <line x1="728" y1="70" x2="728" y2="86" class="svg-line"/>
+              <line x1="885" y1="70" x2="885" y2="86" class="svg-line-crit"/>
+              <line x1="1042" y1="70" x2="1042" y2="86" class="svg-line"/>
+              <line x1="1199" y1="70" x2="1199" y2="86" class="svg-line-crit"/>
+              <g>
+                <rect x="30" y="86" width="140" height="76" rx="8" class="svg-box"/><text x="100" y="108" text-anchor="middle" class="svg-title" style="font-size:10.5px">1.0 Program</text><text x="100" y="122" text-anchor="middle" class="svg-title" style="font-size:10.5px">Mgmt &amp; Gov.</text><text x="100" y="146" text-anchor="middle" class="chart-value">8%</text>
+                <rect x="187" y="86" width="140" height="76" rx="8" class="svg-box-crit"/><text x="257" y="108" text-anchor="middle" class="svg-title" style="font-size:10.5px">2.0 Discovery /</text><text x="257" y="122" text-anchor="middle" class="svg-title" style="font-size:10.5px">Architecture</text><text x="257" y="146" text-anchor="middle" class="chart-value" style="fill:var(--cherry)">10%</text>
+                <rect x="344" y="86" width="140" height="76" rx="8" class="svg-box-crit"/><text x="414" y="108" text-anchor="middle" class="svg-title" style="font-size:10.5px">3.0 Platform</text><text x="414" y="122" text-anchor="middle" class="svg-title" style="font-size:10.5px">Foundation</text><text x="414" y="146" text-anchor="middle" class="chart-value" style="fill:var(--cherry)">15%</text>
+                <rect x="501" y="86" width="140" height="76" rx="8" class="svg-box-crit"/><text x="571" y="108" text-anchor="middle" class="svg-title" style="font-size:10.5px">4.0 Intake &amp;</text><text x="571" y="122" text-anchor="middle" class="svg-title" style="font-size:10.5px">Triage Svcs.</text><text x="571" y="146" text-anchor="middle" class="chart-value" style="fill:var(--cherry)">18%</text>
+                <rect x="658" y="86" width="140" height="76" rx="8" class="svg-box"/><text x="728" y="108" text-anchor="middle" class="svg-title" style="font-size:10.5px">5.0 Fraud</text><text x="728" y="122" text-anchor="middle" class="svg-title" style="font-size:10.5px">Scoring Svc.</text><text x="728" y="146" text-anchor="middle" class="chart-value">14%</text>
+                <rect x="815" y="86" width="140" height="76" rx="8" class="svg-box-crit"/><text x="885" y="108" text-anchor="middle" class="svg-title" style="font-size:10.5px">6.0 Legacy</text><text x="885" y="122" text-anchor="middle" class="svg-title" style="font-size:10.5px">Integration</text><text x="885" y="146" text-anchor="middle" class="chart-value" style="fill:var(--cherry)">12%</text>
+                <rect x="972" y="86" width="140" height="76" rx="8" class="svg-box"/><text x="1042" y="108" text-anchor="middle" class="svg-title" style="font-size:10.5px">7.0 Policyholder</text><text x="1042" y="122" text-anchor="middle" class="svg-title" style="font-size:10.5px">/ Adjuster UX</text><text x="1042" y="146" text-anchor="middle" class="chart-value">11%</text>
+                <rect x="1129" y="86" width="140" height="76" rx="8" class="svg-box-crit"/><text x="1199" y="108" text-anchor="middle" class="svg-title" style="font-size:10.5px">8.0 Test &amp;</text><text x="1199" y="122" text-anchor="middle" class="svg-title" style="font-size:10.5px">Cutover</text><text x="1199" y="146" text-anchor="middle" class="chart-value" style="fill:var(--cherry)">12%</text>
+              </g>
+              <text x="30" y="190" class="svg-label"><tspan style="fill:var(--cherry)">&#9632;</tspan> cherry outline = on the critical path (Deliverable 03)</text>
+              <text x="30" y="206" class="svg-label"><tspan style="fill:var(--berry)">&#9632;</tspan> berry outline = has schedule float</text>
+            </svg>
+            <div class="diagram-cap">Figure 1 &mdash; Level-1 work packages. 8% + 10% + 15% + 18% + 14% + 12% + 11% + 12% = <strong>100%</strong>.</div>
+          </div>
+
+          <h2 id="wbs-dictionary">2&nbsp;&middot;&nbsp;WBS Dictionary &mdash; Level 1 &amp; Level 2</h2>
+          <div class="tblwrap">
+          <table id="wbs-table">
+            <thead><tr><th>WBS ID</th><th>Work Package</th><th>Owner</th><th>% of Scope</th><th>Status</th><th>Deliverable / Exit Criteria</th></tr></thead>
+            <tbody>
+              <tr style="background:rgba(54,120,149,.08)"><td class="mono"><strong>1.0</strong></td><td><strong>Program Management &amp; Governance</strong></td><td>P. Natarajan</td><td class="mono"><strong>8%</strong></td><td><span class="badge info">Ongoing</span></td><td>Runs the full program duration</td></tr>
+              <tr><td class="mono">1.1</td><td>Program planning &amp; schedule baseline</td><td>P. Natarajan</td><td class="mono">2%</td><td><span class="badge good">Complete</span></td><td>Baselined schedule approved at kickoff</td></tr>
+              <tr><td class="mono">1.2</td><td>Steering committee governance &amp; gate reviews</td><td>P. Natarajan</td><td class="mono">2%</td><td><span class="badge info">Ongoing</span></td><td>Bi-weekly cadence; gate sign-off packages</td></tr>
+              <tr><td class="mono">1.3</td><td>Vendor &amp; contract management</td><td>P. Natarajan</td><td class="mono">2%</td><td><span class="badge info">Ongoing</span></td><td>Active SOWs tracked; no unsigned work started</td></tr>
+              <tr><td class="mono">1.4</td><td>Change &amp; communications management</td><td>S. Byrne</td><td class="mono">2%</td><td><span class="badge info">Ongoing</span></td><td>Adjuster communications plan executed per rollout wave</td></tr>
+
+              <tr style="background:rgba(54,120,149,.08)"><td class="mono"><strong>2.0</strong></td><td><strong>Discovery, Architecture &amp; Compliance Design</strong></td><td>J. Okafor</td><td class="mono"><strong>10%</strong></td><td><span class="badge good">Complete</span></td><td>Architecture Gate passed 2026-08-05</td></tr>
+              <tr><td class="mono">2.1</td><td>Business requirements &amp; process mapping</td><td>J. Okafor</td><td class="mono">3%</td><td><span class="badge good">Complete</span></td><td>Signed requirements traceability matrix</td></tr>
+              <tr><td class="mono">2.2</td><td>Solution Architecture Document &amp; C4 diagrams</td><td>J. Okafor</td><td class="mono">3%</td><td><span class="badge good">Complete</span></td><td>SAD approved (see companion Architecture Field Guide)</td></tr>
+              <tr><td class="mono">2.3</td><td>NFR specification &amp; compliance mapping</td><td>J. Okafor</td><td class="mono">2%</td><td><span class="badge good">Complete</span></td><td>Every NFR has a target and a measurement method</td></tr>
+              <tr><td class="mono">2.4</td><td>Architecture Decision Records &amp; trade-off analysis</td><td>J. Okafor</td><td class="mono">2%</td><td><span class="badge good">Complete</span></td><td>6 ADRs accepted, trade-off matrix scored</td></tr>
+
+              <tr style="background:rgba(251,40,50,.06)"><td class="mono"><strong>3.0</strong></td><td><strong>Data &amp; Platform Foundation</strong></td><td>K. Mensah</td><td class="mono"><strong>15%</strong></td><td><span class="badge med">At risk</span></td><td>Multi-region landing zone live, failover tested</td></tr>
+              <tr><td class="mono">3.1</td><td>AWS landing zone &amp; multi-region network</td><td>K. Mensah</td><td class="mono">4%</td><td><span class="badge med">In progress</span></td><td>us-east-1 + us-west-2 networking provisioned via IaC</td></tr>
+              <tr><td class="mono">3.2</td><td>Aurora PostgreSQL event-sourced data model</td><td>K. Mensah</td><td class="mono">4%</td><td><span class="badge med">In progress</span></td><td>Schema migrated; see Deliverable 06, Sprint 14</td></tr>
+              <tr><td class="mono">3.3</td><td>Amazon MSK event backbone &amp; schema registry</td><td>K. Mensah</td><td class="mono">4%</td><td><span class="badge info">Not started</span></td><td>Topics provisioned, compatibility rules enforced in CI</td></tr>
+              <tr><td class="mono">3.4</td><td>CI/CD pipeline &amp; IaC baseline</td><td>K. Mensah</td><td class="mono">3%</td><td><span class="badge good">Complete</span></td><td>Blue/green pipeline operational for foundation services</td></tr>
+
+              <tr style="background:rgba(251,40,50,.06)"><td class="mono"><strong>4.0</strong></td><td><strong>Claims Intake &amp; Triage Services</strong></td><td>K. Mensah</td><td class="mono"><strong>18%</strong></td><td><span class="badge info">Not started</span></td><td>FNOL intake &amp; triage code-complete, unit-tested</td></tr>
+              <tr><td class="mono">4.1</td><td>FNOL intake API &amp; idempotency layer</td><td>K. Mensah</td><td class="mono">5%</td><td><span class="badge info">Not started</span></td><td>Duplicate submission cannot create a duplicate claim</td></tr>
+              <tr><td class="mono">4.2</td><td>Event-driven triage &amp; routing service</td><td>K. Mensah</td><td class="mono">5%</td><td><span class="badge info">Not started</span></td><td>Claim routed to correct adjuster queue within SLA</td></tr>
+              <tr><td class="mono">4.3</td><td>OCR document ingestion integration</td><td>D. Ruiz</td><td class="mono">4%</td><td><span class="badge info">Not started</span></td><td>Vendor sandbox integration verified end-to-end</td></tr>
+              <tr><td class="mono">4.4</td><td>Adjuster assignment engine</td><td>K. Mensah</td><td class="mono">4%</td><td><span class="badge info">Not started</span></td><td>Load-tested at 500 concurrent adjuster sessions</td></tr>
+
+              <tr style="background:rgba(54,120,149,.08)"><td class="mono"><strong>5.0</strong></td><td><strong>Fraud Scoring Service</strong></td><td>A. Kapoor</td><td class="mono"><strong>14%</strong></td><td><span class="badge info">Not started</span></td><td>Model deployed, explainability logging verified</td></tr>
+              <tr><td class="mono">5.1</td><td>Fraud data bureau integration</td><td>A. Kapoor</td><td class="mono">3%</td><td><span class="badge info">Not started</span></td><td>Bureau API contract signed &amp; sandboxed</td></tr>
+              <tr><td class="mono">5.2</td><td>Rules engine (in-house)</td><td>A. Kapoor</td><td class="mono">4%</td><td><span class="badge info">Not started</span></td><td>Rules engine passes fraud-analyst UAT scenarios</td></tr>
+              <tr><td class="mono">5.3</td><td>SageMaker scoring model &amp; explainability logger</td><td>A. Kapoor</td><td class="mono">5%</td><td><span class="badge info">Not started</span></td><td>Every score persists features, rule hits, model version</td></tr>
+              <tr><td class="mono">5.4</td><td>Bias testing &amp; NAIC compliance harness</td><td>R. Delgado</td><td class="mono">2%</td><td><span class="badge info">Not started</span></td><td>Quarterly disparate-impact test harness operational</td></tr>
+
+              <tr style="background:rgba(251,40,50,.06)"><td class="mono"><strong>6.0</strong></td><td><strong>Legacy Integration</strong></td><td>D. Ruiz</td><td class="mono"><strong>12%</strong></td><td><span class="badge high">At risk</span></td><td>ClaimsCore adapter live, reconciliation verified</td></tr>
+              <tr><td class="mono">6.1</td><td>ClaimsCore adapter (anti-corruption layer)</td><td>D. Ruiz</td><td class="mono">4%</td><td><span class="badge high">At risk &mdash; delayed start</span></td><td>See RAID R-01 / I-01</td></tr>
+              <tr><td class="mono">6.2</td><td>Real-time MQ sync</td><td>D. Ruiz</td><td class="mono">3%</td><td><span class="badge info">Not started</span></td><td>Policy verification round-trip &lt; 2s</td></tr>
+              <tr><td class="mono">6.3</td><td>Nightly batch reconciliation job</td><td>D. Ruiz</td><td class="mono">3%</td><td><span class="badge info">Not started</span></td><td>Zero unreconciled records after 30-day soak</td></tr>
+              <tr><td class="mono">6.4</td><td>Strangler-fig cutover runbook</td><td>D. Ruiz</td><td class="mono">2%</td><td><span class="badge info">Not started</span></td><td>Runbook rehearsed in staging</td></tr>
+
+              <tr style="background:rgba(54,120,149,.08)"><td class="mono"><strong>7.0</strong></td><td><strong>Policyholder &amp; Adjuster Experience</strong></td><td>K. Mensah</td><td class="mono"><strong>11%</strong></td><td><span class="badge info">Not started</span></td><td>Portal &amp; dashboard WCAG 2.1 AA verified</td></tr>
+              <tr><td class="mono">7.1</td><td>Policyholder web/mobile FNOL portal</td><td>K. Mensah</td><td class="mono">4%</td><td><span class="badge info">Not started</span></td><td>Submits FNOL end-to-end against 4.1</td></tr>
+              <tr><td class="mono">7.2</td><td>Adjuster &amp; Ops dashboard</td><td>K. Mensah</td><td class="mono">4%</td><td><span class="badge info">Not started</span></td><td>500 concurrent sessions, no degradation</td></tr>
+              <tr><td class="mono">7.3</td><td>Accessibility (WCAG 2.1 AA) remediation</td><td>S. Byrne</td><td class="mono">3%</td><td><span class="badge info">Not started</span></td><td>Automated + manual accessibility audit passes</td></tr>
+
+              <tr style="background:rgba(251,40,50,.06)"><td class="mono"><strong>8.0</strong></td><td><strong>Test, Compliance &amp; Cutover</strong></td><td>R. Delgado</td><td class="mono"><strong>12%</strong></td><td><span class="badge info">Not started</span></td><td>Go-live executed, hypercare exited cleanly</td></tr>
+              <tr><td class="mono">8.1</td><td>System Integration Testing (SIT)</td><td>R. Delgado</td><td class="mono">3%</td><td><span class="badge info">Not started</span></td><td>Zero open Sev-1 defects</td></tr>
+              <tr><td class="mono">8.2</td><td>UAT &amp; DOI compliance sign-off</td><td>R. Delgado</td><td class="mono">3%</td><td><span class="badge info">Not started</span></td><td>Business sign-off + DOI evidence package accepted</td></tr>
+              <tr><td class="mono">8.3</td><td>Production cutover &amp; blue/green rollout</td><td>K. Mensah</td><td class="mono">3%</td><td><span class="badge info">Not started</span></td><td>Zero-downtime cutover per region wave</td></tr>
+              <tr><td class="mono">8.4</td><td>Hypercare &amp; program closeout</td><td>P. Natarajan</td><td class="mono">3%</td><td><span class="badge info">Not started</span></td><td>4-week hypercare exited, lessons-learned filed</td></tr>
+              <tr style="background:var(--surface-2)"><td class="mono"><strong>TOTAL</strong></td><td></td><td></td><td class="mono"><strong>100%</strong></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="callout tip"><span class="co-label">Reviewer's check applied</span>Every Level-1 row's Level-2 children sum back to the parent (e.g. 2%+2%+2%+2% = 8% for 1.0), and all eight Level-1 rows sum to 100%. This is exactly the check from <a href="#review-lens">Section 2.13</a> &mdash; run it on any AI-generated WBS before accepting it.</div>
+        </div>
+
+        <div class="signoff">
+          <div class="signoff-grid">
+            <div class="signoff-cell"><span class="so-role">Prepared</span><div class="so-name">Priya Natarajan, Senior Program Manager</div><div class="so-line">2026-08-10</div></div>
+            <div class="signoff-cell"><span class="so-role">Reviewed</span><div class="so-name">J. Okafor, Solution Architecture Lead</div><div class="so-line">2026-08-11</div></div>
+            <div class="signoff-cell"><span class="so-role">Approved</span><div class="so-name">Claims &amp; Technology Steering Committee</div><div class="so-line">2026-08-12</div></div>
+          </div>
+        </div>
+        <div class="doc-footer">
+          <span>Colaberry Enterprise AI Leadership Accelerator &middot; ClaimSight AI</span>
+          <span>WBS-CLM-2026-01 &middot; v1.2 &middot; Page 1 of 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         DELIVERABLE 03 — MILESTONE TIMELINE / GANTT
+         ================================================================ -->
+    <section id="doc-timeline">
+      <div class="doc" id="doc-timeline-card" data-doc-code="TML-CLM-2026-01" data-doc-title="Milestone Timeline / Gantt — ClaimSight AI">
+        <div class="doc-toolbar">
+          <span class="dt-title">TML-CLM-2026-01.html</span>
+          <div class="dt-btns">
+            <button class="btn btn-outline" onclick="printDoc('doc-timeline-card')">Print / Save as PDF</button>
+            <button class="btn btn-primary" onclick="exportDocHtml('doc-timeline-card')">Download HTML</button>
+          </div>
+        </div>
+        <div class="doc-cover">
+          <img class="cover-logo" alt="Colaberry" src="" data-logo-slot />
+          <span class="cover-kicker">Milestone Timeline / Gantt</span>
+          <h2>ClaimSight AI &mdash; Sequence, Dependencies &amp; Critical Path</h2>
+          <p class="cover-sub">Sixteen months, February 2026 through hypercare exit, with the critical path named and protected per <a href="#critical-path">Section 2.4</a> &mdash; not just a calendar with colored boxes on it.</p>
+          <div class="doc-control">
+            <div><span class="dc-label">Document ID</span><span class="dc-value mono">TML-CLM-2026-01</span></div>
+            <div><span class="dc-label">Version</span><span class="dc-value mono">2.1</span></div>
+            <div><span class="dc-label">Status</span><span class="dc-value"><span class="status-dot warn"></span>Baselined, forecast slip</span></div>
+            <div><span class="dc-label">Owner</span><span class="dc-value">Program Manager</span></div>
+            <div><span class="dc-label">Date</span><span class="dc-value mono">2026-08-21</span></div>
+          </div>
+        </div>
+        <div class="doc-body">
+
+          <h2 id="timeline-criticalpath">1&nbsp;&middot;&nbsp;Gantt &mdash; Baseline vs. Forecast</h2>
+          <p>The critical path runs <strong>2.0 Discovery/Architecture &rarr; 3.0 Platform Foundation &rarr; 4.0 Intake &amp; Triage &rarr; 6.0 Legacy Integration &rarr; 8.0 Test &amp; Cutover</strong>. 5.0 Fraud Scoring and 7.0 Policyholder/Adjuster Experience run in parallel off the Foundation with float and are not critical unless their own delay exceeds that buffer.</p>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 1200 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gantt chart of ClaimSight AI work packages from February 2026 to June 2027, critical path in cherry red, float in berry blue, forecast slip hatched in amber, today marked with a dashed line">
+              <defs>
+                <pattern id="slip-hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+                  <rect width="6" height="6" fill="var(--surface)"/>
+                  <line x1="0" y1="0" x2="0" y2="6" stroke="var(--amber)" stroke-width="2.2"/>
+                </pattern>
+              </defs>
+              <line x1="170" y1="40" x2="170" y2="478" class="chart-axis"/>
+              <line x1="170" y1="478" x2="1114" y2="478" class="chart-axis"/>
+              <line x1="524" y1="95" x2="524" y2="478" class="svg-boundary" style="stroke-dasharray:2 3; opacity:.5"/>
+              <line x1="565" y1="40" x2="565" y2="478" style="stroke:var(--cherry); stroke-width:1.4; stroke-dasharray:5 4;"/>
+              <text x="565" y="30" text-anchor="middle" class="svg-label" style="fill:var(--cherry); font-weight:700">TODAY 08/21</text>
+
+              <rect x="170" y="116" width="944" height="28" rx="5" style="fill:var(--muted); opacity:.22"/>
+              <rect x="170" y="162" width="354" height="28" rx="5" style="fill:var(--cherry)"/>
+              <rect x="524" y="208" width="88" height="28" rx="5" style="fill:var(--cherry)"/>
+              <rect x="612" y="208" width="48" height="28" style="fill:url(#slip-hatch); stroke:var(--amber); stroke-width:1.4;"/>
+              <rect x="583" y="254" width="207" height="28" rx="5" style="fill:var(--cherry)"/>
+              <rect x="583" y="300" width="207" height="28" rx="5" style="fill:var(--berry)"/>
+              <rect x="790" y="300" width="29" height="28" style="fill:none; stroke:var(--berry); stroke-width:1.4; stroke-dasharray:3 2;"/>
+              <rect x="642" y="346" width="230" height="28" rx="5" style="fill:var(--cherry)"/>
+              <rect x="872" y="346" width="36" height="28" style="fill:url(#slip-hatch); stroke:var(--amber); stroke-width:1.4;"/>
+              <rect x="583" y="392" width="295" height="28" rx="5" style="fill:var(--berry)"/>
+              <rect x="878" y="392" width="59" height="28" style="fill:none; stroke:var(--berry); stroke-width:1.4; stroke-dasharray:3 2;"/>
+              <rect x="908" y="438" width="206" height="28" rx="5" style="fill:var(--cherry)"/>
+
+              <text x="10" y="134" class="svg-label">1.0 Program Mgmt &amp; Gov.</text>
+              <text x="10" y="180" class="svg-label" style="fill:var(--cherry); font-weight:700">2.0 Discovery / Architecture</text>
+              <text x="10" y="226" class="svg-label" style="fill:var(--cherry); font-weight:700">3.0 Platform Foundation</text>
+              <text x="10" y="272" class="svg-label" style="fill:var(--cherry); font-weight:700">4.0 Intake &amp; Triage Svcs.</text>
+              <text x="10" y="318" class="svg-label">5.0 Fraud Scoring Svc.</text>
+              <text x="10" y="364" class="svg-label" style="fill:var(--cherry); font-weight:700">6.0 Legacy Integration</text>
+              <text x="10" y="410" class="svg-label">7.0 Policyholder / Adjuster UX</text>
+              <text x="10" y="456" class="svg-label" style="fill:var(--cherry); font-weight:700">8.0 Test &amp; Cutover</text>
+
+              <polygon points="524,58 534,70 524,82 514,70" style="fill:var(--leaf)"/>
+              <text x="524" y="48" text-anchor="middle" class="svg-label" style="fill:var(--leaf)">M1 Arch Gate &mdash; 08/05 &#10003;</text>
+              <circle cx="612" cy="70" r="4" style="fill:none; stroke:var(--muted); stroke-width:1.4"/>
+              <polygon points="660,58 670,70 660,82 650,70" style="fill:var(--amber)"/>
+              <text x="660" y="48" text-anchor="middle" class="svg-label" style="fill:var(--amber)">M2 Foundation &mdash; fcst 10/10 (+15d)</text>
+              <circle cx="872" cy="70" r="4" style="fill:none; stroke:var(--muted); stroke-width:1.4"/>
+              <polygon points="908,58 918,70 908,82 898,70" style="fill:var(--amber)"/>
+              <text x="908" y="90" text-anchor="middle" class="svg-label" style="fill:var(--amber)">M3 Legacy Integ. &mdash; fcst 02/16 (+18d)</text>
+              <polygon points="1055,58 1065,70 1055,82 1045,70" style="fill:var(--amber)"/>
+              <text x="1055" y="48" text-anchor="middle" class="svg-label" style="fill:var(--amber)">M4 Go-Live &mdash; 04/30, at risk</text>
+
+              <text x="170" y="492" text-anchor="middle" class="chart-label">Feb-26</text>
+              <text x="229" y="492" text-anchor="middle" class="chart-label">Mar</text>
+              <text x="288" y="492" text-anchor="middle" class="chart-label">Apr</text>
+              <text x="347" y="492" text-anchor="middle" class="chart-label">May</text>
+              <text x="406" y="492" text-anchor="middle" class="chart-label">Jun</text>
+              <text x="465" y="492" text-anchor="middle" class="chart-label">Jul</text>
+              <text x="524" y="492" text-anchor="middle" class="chart-label">Aug</text>
+              <text x="583" y="492" text-anchor="middle" class="chart-label">Sep</text>
+              <text x="642" y="492" text-anchor="middle" class="chart-label">Oct</text>
+              <text x="701" y="492" text-anchor="middle" class="chart-label">Nov</text>
+              <text x="760" y="492" text-anchor="middle" class="chart-label">Dec</text>
+              <text x="819" y="492" text-anchor="middle" class="chart-label">Jan-27</text>
+              <text x="878" y="492" text-anchor="middle" class="chart-label">Feb</text>
+              <text x="937" y="492" text-anchor="middle" class="chart-label">Mar</text>
+              <text x="996" y="492" text-anchor="middle" class="chart-label">Apr</text>
+              <text x="1055" y="492" text-anchor="middle" class="chart-label">May</text>
+              <text x="1114" y="492" text-anchor="middle" class="chart-label">Jun</text>
+
+              <rect x="170" y="504" width="12" height="10" style="fill:var(--cherry)"/><text x="188" y="513" class="svg-label">Critical path</text>
+              <rect x="290" y="504" width="12" height="10" style="fill:var(--berry)"/><text x="308" y="513" class="svg-label">Float</text>
+              <rect x="380" y="504" width="12" height="10" style="fill:url(#slip-hatch); stroke:var(--amber);"/><text x="398" y="513" class="svg-label">Forecast slip</text>
+            </svg>
+            <div class="diagram-cap">Figure 1 &mdash; Baseline vs. forecast Gantt. The Legacy Integration slip (I-01/R-01) is the single largest driver of the Go-Live risk shown at M4.</div>
+          </div>
+
+          <h2>2&nbsp;&middot;&nbsp;Dependency Network</h2>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 1180 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dependency network: Discovery feeds Platform Foundation, which fans out to Intake and Triage, Fraud Scoring, and Policyholder Experience in parallel, Intake feeds Legacy Integration, and all branches converge on Test and Cutover">
+              <defs><marker id="arrow-dep" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#6B6B6B"/></marker>
+              <marker id="arrow-dep-crit" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="var(--cherry)"/></marker></defs>
+              <rect x="20" y="160" width="140" height="60" rx="8" class="svg-box-crit"/><text x="90" y="186" text-anchor="middle" class="svg-title" style="font-size:11px">2.0 Discovery /</text><text x="90" y="202" text-anchor="middle" class="svg-title" style="font-size:11px">Architecture</text>
+              <rect x="220" y="160" width="140" height="60" rx="8" class="svg-box-crit"/><text x="290" y="186" text-anchor="middle" class="svg-title" style="font-size:11px">3.0 Platform</text><text x="290" y="202" text-anchor="middle" class="svg-title" style="font-size:11px">Foundation</text>
+              <rect x="420" y="160" width="140" height="60" rx="8" class="svg-box-crit"/><text x="490" y="186" text-anchor="middle" class="svg-title" style="font-size:11px">4.0 Intake &amp;</text><text x="490" y="202" text-anchor="middle" class="svg-title" style="font-size:11px">Triage Svcs.</text>
+              <rect x="420" y="20" width="140" height="60" rx="8" class="svg-box"/><text x="490" y="46" text-anchor="middle" class="svg-title" style="font-size:11px">5.0 Fraud</text><text x="490" y="62" text-anchor="middle" class="svg-title" style="font-size:11px">Scoring Svc.</text>
+              <rect x="420" y="300" width="140" height="60" rx="8" class="svg-box"/><text x="490" y="326" text-anchor="middle" class="svg-title" style="font-size:11px">7.0 Policyholder</text><text x="490" y="342" text-anchor="middle" class="svg-title" style="font-size:11px">/ Adjuster UX</text>
+              <rect x="640" y="160" width="140" height="60" rx="8" class="svg-box-crit"/><text x="710" y="186" text-anchor="middle" class="svg-title" style="font-size:11px">6.0 Legacy</text><text x="710" y="202" text-anchor="middle" class="svg-title" style="font-size:11px">Integration</text>
+              <rect x="900" y="160" width="140" height="60" rx="8" class="svg-box-crit"/><text x="970" y="186" text-anchor="middle" class="svg-title" style="font-size:11px">8.0 Test &amp;</text><text x="970" y="202" text-anchor="middle" class="svg-title" style="font-size:11px">Cutover</text>
+
+              <line x1="160" y1="190" x2="220" y2="190" class="svg-line-crit" marker-end="url(#arrow-dep-crit)"/>
+              <line x1="360" y1="190" x2="420" y2="190" class="svg-line-crit" marker-end="url(#arrow-dep-crit)"/>
+              <line x1="300" y1="160" x2="440" y2="80" class="svg-line" marker-end="url(#arrow-dep)"/>
+              <line x1="300" y1="220" x2="440" y2="300" class="svg-line" marker-end="url(#arrow-dep)"/>
+              <line x1="560" y1="190" x2="640" y2="190" class="svg-line-crit" marker-end="url(#arrow-dep-crit)"/>
+              <line x1="780" y1="190" x2="900" y2="190" class="svg-line-crit" marker-end="url(#arrow-dep-crit)"/>
+              <line x1="560" y1="55" x2="920" y2="165" class="svg-line" marker-end="url(#arrow-dep)"/>
+              <line x1="560" y1="335" x2="920" y2="215" class="svg-line" marker-end="url(#arrow-dep)"/>
+
+              <text x="185" y="145" class="svg-label" style="fill:var(--cherry)">critical (FS)</text>
+              <text x="380" y="120" class="svg-label">float ~5 wks</text>
+              <text x="380" y="270" class="svg-label">float ~7 wks</text>
+            </svg>
+            <div class="diagram-cap">Figure 2 &mdash; Dependency network (finish-to-start). Cherry arrows are the critical chain; berry arrows carry float and are not critical unless a branch delay exceeds its buffer.</div>
+          </div>
+
+          <h2>3&nbsp;&middot;&nbsp;Milestone Register</h2>
+          <table>
+            <thead><tr><th>ID</th><th>Milestone</th><th>Planned date</th><th>Forecast date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">M0</td><td>Program Kickoff</td><td class="mono">2026-02-02</td><td class="mono">2026-02-02</td><td><span class="badge good">Complete</span></td></tr>
+              <tr><td class="mono">M1</td><td>Architecture &amp; Compliance Design Gate</td><td class="mono">2026-08-05</td><td class="mono">2026-08-05</td><td><span class="badge good">Complete</span></td></tr>
+              <tr><td class="mono">M2</td><td>Data &amp; Platform Foundation Complete</td><td class="mono">2026-09-25</td><td class="mono">2026-10-10</td><td><span class="badge med">At risk (+15d)</span></td></tr>
+              <tr><td class="mono">M2a</td><td>Core Services Code-Complete (Intake + Fraud)</td><td class="mono">2026-12-18</td><td class="mono">2027-01-02</td><td><span class="badge med">At risk (+15d)</span></td></tr>
+              <tr><td class="mono">M3</td><td>Legacy Integration Complete</td><td class="mono">2027-01-29</td><td class="mono">2027-02-16</td><td><span class="badge high">At risk (+18d)</span></td></tr>
+              <tr><td class="mono">M4</td><td>System Integration Testing (SIT) Complete</td><td class="mono">2027-02-26</td><td class="mono">2027-03-16</td><td><span class="badge med">At risk (+18d)</span></td></tr>
+              <tr><td class="mono">M5</td><td>UAT &amp; DOI Compliance Sign-off</td><td class="mono">2027-03-26</td><td class="mono">2027-04-13</td><td><span class="badge med">At risk (+18d)</span></td></tr>
+              <tr><td class="mono">M6</td><td>Go-Live (Production Cutover)</td><td class="mono">2027-04-30</td><td class="mono">2027-05-18</td><td><span class="badge high">At risk (+18d)</span></td></tr>
+              <tr><td class="mono">M7</td><td>Hypercare Exit / Program Closeout</td><td class="mono">2027-05-28</td><td class="mono">2027-06-15</td><td><span class="badge low">Not yet baselined</span></td></tr>
+            </tbody>
+          </table>
+          <div class="callout warn"><span class="co-label">Reviewer's check applied</span>Notice the forecast column moves in lockstep from M3 onward &mdash; that's the critical path doing exactly what Section 2.4 says it does: one slip on the critical chain shifts every downstream milestone by the same amount, while M0/M1 (already complete) and the non-critical branches are unaffected.</div>
+        </div>
+
+        <div class="signoff">
+          <div class="signoff-grid">
+            <div class="signoff-cell"><span class="so-role">Prepared</span><div class="so-name">Priya Natarajan, Senior Program Manager</div><div class="so-line">2026-08-19</div></div>
+            <div class="signoff-cell"><span class="so-role">Reviewed</span><div class="so-name">K. Mensah, Platform Engineering Lead</div><div class="so-line">2026-08-20</div></div>
+            <div class="signoff-cell"><span class="so-role">Approved</span><div class="so-name">Marcus Alvarez, VP Engineering</div><div class="so-line">2026-08-21</div></div>
+          </div>
+        </div>
+        <div class="doc-footer">
+          <span>Colaberry Enterprise AI Leadership Accelerator &middot; ClaimSight AI</span>
+          <span>TML-CLM-2026-01 &middot; v2.1 &middot; Page 1 of 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         DELIVERABLE 04 — RAID LOG
+         ================================================================ -->
+    <section id="doc-raid">
+      <div class="doc" id="doc-raid-card" data-doc-code="RAID-CLM-2026-01" data-doc-title="RAID Log — ClaimSight AI">
+        <div class="doc-toolbar">
+          <span class="dt-title">RAID-CLM-2026-01.html</span>
+          <div class="dt-btns">
+            <button class="btn btn-outline" onclick="printDoc('doc-raid-card')">Print / Save as PDF</button>
+            <button class="btn btn-outline" onclick="downloadRaidCsv()">Download CSV</button>
+            <button class="btn btn-primary" onclick="exportDocHtml('doc-raid-card')">Download HTML</button>
+          </div>
+        </div>
+        <div class="doc-cover">
+          <img class="cover-logo" alt="Colaberry" src="" data-logo-slot />
+          <span class="cover-kicker">RAID Log</span>
+          <h2>ClaimSight AI &mdash; Risks, Assumptions, Issues &amp; Dependencies</h2>
+          <p class="cover-sub">Sixteen live entries. Every row carries exactly one owner and a date, per the discipline taught in <a href="#raid-teaching">Section 2.6</a>.</p>
+          <div class="doc-control">
+            <div><span class="dc-label">Document ID</span><span class="dc-value mono">RAID-CLM-2026-01</span></div>
+            <div><span class="dc-label">Version</span><span class="dc-value mono">1.9</span></div>
+            <div><span class="dc-label">Status</span><span class="dc-value"><span class="status-dot warn"></span>Live &mdash; updated bi-weekly</span></div>
+            <div><span class="dc-label">Owner</span><span class="dc-value">Program Manager</span></div>
+            <div><span class="dc-label">Date</span><span class="dc-value mono">2026-08-21</span></div>
+          </div>
+        </div>
+        <div class="doc-body">
+
+          <div class="kpi-row">
+            <div class="kpi-tile"><div class="kpi-label">Open Risks</div><div class="kpi-value">5</div><div class="kpi-delta warn">2 High severity</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Active Assumptions</div><div class="kpi-value">4</div><div class="kpi-delta good">all holding</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Open Issues</div><div class="kpi-value">1</div><div class="kpi-delta bad">escalated (I-01)</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Tracked Dependencies</div><div class="kpi-value">4</div><div class="kpi-delta warn">1 at risk (D-02)</div></div>
+          </div>
+
+          <h2>RAID Register</h2>
+          <div class="tblwrap">
+          <table id="raid-table">
+            <thead><tr><th>Type</th><th>ID</th><th>Description</th><th>Owner</th><th>Raised</th><th>Target / Due</th><th>Status</th><th>Response / Mitigation</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">Risk</td><td class="mono">R-01</td><td>Legacy integration specialist contractors starting ~3 weeks late due to a Meridian procurement delay, directly threatening the WBS 6.0 start date and the critical path.</td><td>P. Natarajan</td><td class="mono">2026-07-14</td><td class="mono">2026-09-01</td><td><span class="badge high">Mitigating</span></td><td>Expedited SOW execution requested; see Issue I-01</td></tr>
+              <tr><td class="mono">Risk</td><td class="mono">R-02</td><td>CAT-event (hurricane season) autoscaling under-provisioning could force emergency budget reallocation if a real event hits before Foundation completes.</td><td>K. Mensah</td><td class="mono">2026-06-02</td><td class="mono">2026-10-10</td><td><span class="badge high">Mitigating</span></td><td>Pre-emptive autoscale trigger from CAT feed; quarterly load test</td></tr>
+              <tr><td class="mono">Risk</td><td class="mono">R-03</td><td>Fraud-model bias finding during NAIC compliance testing could trigger 4&ndash;6 weeks of rework on WBS 5.4.</td><td>A. Kapoor</td><td class="mono">2026-05-20</td><td class="mono">2027-02-01</td><td><span class="badge med">Monitoring</span></td><td>Bias-testing funded as ongoing cost per Charter &sect;9</td></tr>
+              <tr><td class="mono">Risk</td><td class="mono">R-04</td><td>A DOI regulatory audit request for explainability evidence could land before hypercare exit and delay closeout.</td><td>R. Delgado</td><td class="mono">2026-08-10</td><td class="mono">2027-05-01</td><td><span class="badge med">Monitoring</span></td><td>Evidence package prepared ahead of go-live, not under audit pressure</td></tr>
+              <tr><td class="mono">Risk</td><td class="mono">R-05</td><td>OCR vendor contract renewal falls mid-program; renegotiation could raise post-launch run costs above budget.</td><td>P. Natarajan</td><td class="mono">2026-08-01</td><td class="mono">2027-01-15</td><td><span class="badge low">Monitoring</span></td><td>Run-cost contingency flagged to Finance ahead of renewal</td></tr>
+
+              <tr><td class="mono">Assumption</td><td class="mono">A-01</td><td>Meridian's existing AWS Enterprise Agreement pricing tier remains in effect for the full program; the $5.42M BAC is priced against it.</td><td>P. Natarajan</td><td class="mono">2026-02-02</td><td class="mono">&mdash;</td><td><span class="badge good">Holding</span></td><td>Re-priced immediately if the AWS agreement is renegotiated</td></tr>
+              <tr><td class="mono">Assumption</td><td class="mono">A-02</td><td>ClaimsCore mainframe batch windows remain at their current nightly schedule for the program duration.</td><td>D. Ruiz</td><td class="mono">2026-02-02</td><td class="mono">&mdash;</td><td><span class="badge good">Holding</span></td><td>Confirmed quarterly with the ClaimsCore Ops team</td></tr>
+              <tr><td class="mono">Assumption</td><td class="mono">A-03</td><td>Adjuster headcount and regional rollout groupings provided by Claims Ops remain stable through UAT planning.</td><td>S. Byrne</td><td class="mono">2026-03-01</td><td class="mono">&mdash;</td><td><span class="badge good">Holding</span></td><td>Re-validated at the start of WBS 8.2 planning</td></tr>
+              <tr><td class="mono">Assumption</td><td class="mono">A-04</td><td>The fraud data bureau vendor's API contract terms (rate limits, SLAs) hold at current levels through go-live.</td><td>A. Kapoor</td><td class="mono">2026-04-15</td><td class="mono">&mdash;</td><td><span class="badge good">Holding</span></td><td>Reviewed at each quarterly vendor business review</td></tr>
+
+              <tr><td class="mono">Issue</td><td class="mono">I-01</td><td>Integration specialist contractor SOW execution delayed 3 weeks by procurement, now directly impacting the WBS 6.0 start date.</td><td>P. Natarajan</td><td class="mono">2026-07-28</td><td class="mono">2026-08-25</td><td><span class="badge high">Open &mdash; escalated</span></td><td>Escalated to Steering Committee 2026-08-14; expedited legal review underway</td></tr>
+              <tr><td class="mono">Issue</td><td class="mono">I-02</td><td>OCR vendor sandbox environment access was granted 10 days late, compressing the WBS 4.3 testing window.</td><td>D. Ruiz</td><td class="mono">2026-08-04</td><td class="mono">2026-08-14</td><td><span class="badge good">Resolved</span></td><td>Access granted 2026-08-14; absorbed within WBS 4.3 float</td></tr>
+              <tr><td class="mono">Issue</td><td class="mono">I-03</td><td>Architecture Gate required one extra trade-off iteration after a Finance cost objection, adding 6 days before approval.</td><td>J. Okafor</td><td class="mono">2026-07-30</td><td class="mono">2026-08-05</td><td><span class="badge good">Resolved</span></td><td>Approved 2026-08-05; absorbed within Discovery/Architecture float</td></tr>
+
+              <tr><td class="mono">Dependency</td><td class="mono">D-01</td><td>WBS 4.0 cannot begin build in earnest until WBS 3.0 delivers the Aurora schema and MSK topics.</td><td>K. Mensah</td><td class="mono">2026-02-02</td><td class="mono">2026-09-25</td><td><span class="badge good">On track</span></td><td>Tracked via Sprint 14, Deliverable 06</td></tr>
+              <tr><td class="mono">Dependency</td><td class="mono">D-02</td><td>WBS 6.0 requires a ClaimsCore mainframe change-window approval from Meridian's legacy Ops team, external to the program.</td><td>D. Ruiz</td><td class="mono">2026-02-02</td><td class="mono">2026-10-01</td><td><span class="badge high">At risk</span></td><td>Change-window request submitted 2026-08-15; awaiting Ops confirmation</td></tr>
+              <tr><td class="mono">Dependency</td><td class="mono">D-03</td><td>WBS 8.2 DOI sign-off depends on quarterly NAIC AI Model Bulletin bias-testing results from WBS 5.4.</td><td>R. Delgado</td><td class="mono">2026-02-02</td><td class="mono">2027-03-01</td><td><span class="badge good">On track</span></td><td>Test harness build tracked under WBS 5.4</td></tr>
+              <tr><td class="mono">Dependency</td><td class="mono">D-04</td><td>Production cutover (WBS 8.3) depends on Finance approving the Q1 FY27 capital budget release for the warm-standby region.</td><td>P. Natarajan</td><td class="mono">2026-02-02</td><td class="mono">2027-03-15</td><td><span class="badge good">On track</span></td><td>Budget request pre-staged with Finance in Q4 FY26</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="callout tip"><span class="co-label">Reviewer's check applied</span>Scan the Owner column: every single row names one person, never "the team" or blank. That is the difference between a tracked risk and a paragraph that feels like risk management.</div>
+        </div>
+
+        <div class="signoff">
+          <div class="signoff-grid">
+            <div class="signoff-cell"><span class="so-role">Prepared</span><div class="so-name">Priya Natarajan, Senior Program Manager</div><div class="so-line">2026-08-21</div></div>
+            <div class="signoff-cell"><span class="so-role">Reviewed</span><div class="so-name">Marcus Alvarez, VP Engineering</div><div class="so-line">2026-08-21</div></div>
+            <div class="signoff-cell"><span class="so-role">Approved</span><div class="so-name">Claims &amp; Technology Steering Committee</div><div class="so-line">2026-08-21</div></div>
+          </div>
+        </div>
+        <div class="doc-footer">
+          <span>Colaberry Enterprise AI Leadership Accelerator &middot; ClaimSight AI</span>
+          <span>RAID-CLM-2026-01 &middot; v1.9 &middot; Page 1 of 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         DELIVERABLE 05 — RACI MATRIX
+         ================================================================ -->
+    <section id="doc-raci">
+      <div class="doc" id="doc-raci-card" data-doc-code="RACI-CLM-2026-01" data-doc-title="RACI Matrix — ClaimSight AI">
+        <div class="doc-toolbar">
+          <span class="dt-title">RACI-CLM-2026-01.html</span>
+          <div class="dt-btns">
+            <button class="btn btn-outline" onclick="printDoc('doc-raci-card')">Print / Save as PDF</button>
+            <button class="btn btn-outline" onclick="downloadRaciCsv()">Download CSV</button>
+            <button class="btn btn-primary" onclick="exportDocHtml('doc-raci-card')">Download HTML</button>
+          </div>
+        </div>
+        <div class="doc-cover">
+          <img class="cover-logo" alt="Colaberry" src="" data-logo-slot />
+          <span class="cover-kicker">RACI Matrix</span>
+          <h2>ClaimSight AI &mdash; Roles &amp; Accountability</h2>
+          <p class="cover-sub">Fifteen program activities, nine roles, exactly one Accountable owner per row &mdash; the rule from <a href="#raci-teaching">Section 2.7</a> applied without exception.</p>
+          <div class="doc-control">
+            <div><span class="dc-label">Document ID</span><span class="dc-value mono">RACI-CLM-2026-01</span></div>
+            <div><span class="dc-label">Version</span><span class="dc-value mono">1.3</span></div>
+            <div><span class="dc-label">Status</span><span class="dc-value"><span class="status-dot good"></span>Baselined</span></div>
+            <div><span class="dc-label">Owner</span><span class="dc-value">Program Manager</span></div>
+            <div><span class="dc-label">Date</span><span class="dc-value mono">2026-08-12</span></div>
+          </div>
+        </div>
+        <div class="doc-body">
+          <p>Roles: <strong>ES</strong> Executive Sponsor (Whitfield) &middot; <strong>SC</strong> Steering Committee &middot; <strong>PM</strong> Program Manager (Natarajan) &middot; <strong>SA</strong> Solution Architecture Lead (Okafor) &middot; <strong>PE</strong> Platform Engineering Lead (Mensah) &middot; <strong>DS</strong> Data Science Lead (Kapoor) &middot; <strong>IL</strong> Integration Lead (Ruiz) &middot; <strong>CQ</strong> Compliance/QA Lead (Delgado) &middot; <strong>CM</strong> Change Management Lead (Byrne).</p>
+          <div class="tblwrap">
+          <table id="raci-table">
+            <thead><tr><th>Activity</th><th>ES</th><th>SC</th><th>PM</th><th>SA</th><th>PE</th><th>DS</th><th>IL</th><th>CQ</th><th>CM</th></tr></thead>
+            <tbody>
+              <tr><td>Program charter approval</td><td><span class="raci a">A</span></td><td><span class="raci c">C</span></td><td><span class="raci r">R</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>Program budget &amp; schedule baseline</td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>Solution Architecture Document approval (Gate M1)</td><td><span class="raci i">I</span></td><td><span class="raci a">A</span></td><td><span class="raci c">C</span></td><td><span class="raci r">R</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>Data &amp; Platform Foundation build</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>Claims Intake &amp; Triage build</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>Fraud scoring model build &amp; bias testing</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>Legacy (ClaimsCore) integration build</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>Policyholder/Adjuster UX build &amp; accessibility remediation</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td></tr>
+              <tr><td>NAIC/DOI compliance mapping &amp; evidence</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>System Integration Testing (SIT)</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span></td><td><span class="raci i">I</span></td><td><span class="raci r">R</span></td><td><span class="raci i">I</span></td><td><span class="raci r">R</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>UAT &amp; DOI compliance sign-off</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci r">R</span></td></tr>
+              <tr><td>Production cutover decision (go / no-go)</td><td><span class="raci a">A</span></td><td><span class="raci c">C</span></td><td><span class="raci r">R</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td>Change management &amp; adjuster rollout communications</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci c">C</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td></tr>
+              <tr><td>RAID log maintenance &amp; risk escalation</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td></tr>
+              <tr><td>Status reporting to Steering Committee</td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci a">A</span> <span class="raci r">R</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td></tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="callout critical"><span class="co-label">Reviewer's check applied</span>Scan every row for exactly one cherry-bordered <span class="raci a" style="width:auto;display:inline-flex;padding:2px 8px">A</span> chip. Fifteen rows, fifteen single Accountables &mdash; that is the entire point of this document.</div>
+        </div>
+
+        <div class="signoff">
+          <div class="signoff-grid">
+            <div class="signoff-cell"><span class="so-role">Prepared</span><div class="so-name">Priya Natarajan, Senior Program Manager</div><div class="so-line">2026-08-10</div></div>
+            <div class="signoff-cell"><span class="so-role">Reviewed</span><div class="so-name">Marcus Alvarez, VP Engineering</div><div class="so-line">2026-08-11</div></div>
+            <div class="signoff-cell"><span class="so-role">Approved</span><div class="so-name">Claims &amp; Technology Steering Committee</div><div class="so-line">2026-08-12</div></div>
+          </div>
+        </div>
+        <div class="doc-footer">
+          <span>Colaberry Enterprise AI Leadership Accelerator &middot; ClaimSight AI</span>
+          <span>RACI-CLM-2026-01 &middot; v1.3 &middot; Page 1 of 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         DELIVERABLE 06 — SPRINT / ITERATION PLAN
+         ================================================================ -->
+    <section id="doc-sprint">
+      <div class="doc" id="doc-sprint-card" data-doc-code="SPR-CLM-2026-14" data-doc-title="Sprint 14 Plan — Platform Foundation Squad">
+        <div class="doc-toolbar">
+          <span class="dt-title">SPR-CLM-2026-14.html</span>
+          <div class="dt-btns">
+            <button class="btn btn-outline" onclick="printDoc('doc-sprint-card')">Print / Save as PDF</button>
+            <button class="btn btn-primary" onclick="exportDocHtml('doc-sprint-card')">Download HTML</button>
+          </div>
+        </div>
+        <div class="doc-cover">
+          <img class="cover-logo" alt="Colaberry" src="" data-logo-slot />
+          <span class="cover-kicker">Sprint / Iteration Plan</span>
+          <h2>Sprint 14 &mdash; Platform Foundation Squad</h2>
+          <p class="cover-sub">The next increment under WBS 3.0, Data &amp; Platform Foundation, run as a Scrum sprint inside the Hybrid delivery model from <a href="#agile-waterfall-hybrid">Section 2.8</a>. Estimated against trailing velocity, committed below that ceiling on purpose.</p>
+          <div class="doc-control">
+            <div><span class="dc-label">Document ID</span><span class="dc-value mono">SPR-CLM-2026-14</span></div>
+            <div><span class="dc-label">Version</span><span class="dc-value mono">1.0</span></div>
+            <div><span class="dc-label">Status</span><span class="dc-value"><span class="status-dot info" style="background:var(--berry)"></span>Committed</span></div>
+            <div><span class="dc-label">Owner</span><span class="dc-value">Scrum Master</span></div>
+            <div><span class="dc-label">Date</span><span class="dc-value mono">2026-08-22</span></div>
+          </div>
+        </div>
+        <div class="doc-body">
+
+          <h2>1&nbsp;&middot;&nbsp;Team &amp; Cadence</h2>
+          <table>
+            <tbody>
+              <tr><td class="mono" style="width:200px">Squad</td><td>Platform Foundation Squad &mdash; 5 engineers, 1 Scrum Master, 1 Product Owner (K. Mensah)</td></tr>
+              <tr><td class="mono">Sprint length</td><td>2 weeks</td></tr>
+              <tr><td class="mono">Sprint 14 dates</td><td class="mono">2026-08-24 &nbsp;&rarr;&nbsp; 2026-09-04</td></tr>
+              <tr><td class="mono">Trailing velocity (6-sprint avg)</td><td>32.5 points (range 30&ndash;35)</td></tr>
+              <tr><td class="mono">Sprint 14 commitment</td><td><strong>29 points committed</strong>, 3 points stretch &mdash; intentionally under the trailing average, reserving buffer for the cross-region failover drill's uncertainty (see <a href="#velocity-burndown">Section 2.9</a>)</td></tr>
+            </tbody>
+          </table>
+
+          <h2>2&nbsp;&middot;&nbsp;Sprint 13 Burndown (Reference)</h2>
+          <p>Sprint 13 closed 2026-08-21, one day ahead of the ideal pace &mdash; used below to size Sprint 14's commitment.</p>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sprint 13 burndown chart: ideal pace versus actual remaining story points over 10 working days, team finished one day early">
+              <line x1="60" y1="40" x2="60" y2="250" class="chart-axis"/>
+              <line x1="60" y1="250" x2="600" y2="250" class="chart-axis"/>
+              <line x1="60" y1="40" x2="600" y2="40" class="chart-gridline"/>
+              <line x1="60" y1="110" x2="600" y2="110" class="chart-gridline"/>
+              <line x1="60" y1="180" x2="600" y2="180" class="chart-gridline"/>
+              <text x="50" y="44" text-anchor="end" class="chart-label">30</text>
+              <text x="50" y="114" text-anchor="end" class="chart-label">20</text>
+              <text x="50" y="184" text-anchor="end" class="chart-label">10</text>
+              <text x="50" y="254" text-anchor="end" class="chart-label">0</text>
+              <polyline points="60,40 600,250" style="fill:none; stroke:var(--muted); stroke-width:1.6; stroke-dasharray:5 4;"/>
+              <polyline points="60,40 114,54 168,75 222,82 276,110 330,124 384,152 438,180 492,215 546,250 600,250" style="fill:none; stroke:var(--berry); stroke-width:2.4;"/>
+              <circle cx="546" cy="250" r="5" style="fill:var(--leaf)"/>
+              <text x="546" y="272" text-anchor="middle" class="svg-label" style="fill:var(--leaf); font-weight:700">finished day 9 of 10</text>
+              <text x="330" y="20" text-anchor="middle" class="svg-label">remaining story points, 30-point sprint</text>
+              <text x="70" y="270" class="chart-label">Day 0</text>
+              <text x="590" y="270" text-anchor="end" class="chart-label">Day 10</text>
+            </svg>
+            <div class="diagram-cap">Figure 1 &mdash; Sprint 13 burndown: actual (berry) tracked slightly behind ideal (dashed) through mid-sprint, then closed a day early.</div>
+          </div>
+
+          <h2>3&nbsp;&middot;&nbsp;Velocity Trend &mdash; Last 6 Sprints</h2>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of team velocity for sprints 8 through 13: 30, 33, 31, 35, 32, 34 points, average 32.5">
+              <line x1="30" y1="210" x2="610" y2="210" class="chart-axis"/>
+              <line x1="30" y1="47.5" x2="610" y2="47.5" style="stroke:var(--amber); stroke-width:1.4; stroke-dasharray:5 3;"/>
+              <text x="615" y="51" class="svg-label" style="fill:var(--amber)">avg 32.5</text>
+              <rect x="50" y="60" width="50" height="150" class="bar-berry"/><text x="75" y="53" text-anchor="middle" class="chart-value">30</text><text x="75" y="228" text-anchor="middle" class="chart-label">Spr 8</text>
+              <rect x="140" y="45" width="50" height="165" class="bar-berry"/><text x="165" y="38" text-anchor="middle" class="chart-value">33</text><text x="165" y="228" text-anchor="middle" class="chart-label">Spr 9</text>
+              <rect x="230" y="55" width="50" height="155" class="bar-berry"/><text x="255" y="48" text-anchor="middle" class="chart-value">31</text><text x="255" y="228" text-anchor="middle" class="chart-label">Spr 10</text>
+              <rect x="320" y="35" width="50" height="175" class="bar-berry"/><text x="345" y="28" text-anchor="middle" class="chart-value">35</text><text x="345" y="228" text-anchor="middle" class="chart-label">Spr 11</text>
+              <rect x="410" y="50" width="50" height="160" class="bar-berry"/><text x="435" y="43" text-anchor="middle" class="chart-value">32</text><text x="435" y="228" text-anchor="middle" class="chart-label">Spr 12</text>
+              <rect x="500" y="40" width="50" height="170" class="bar-leaf"/><text x="525" y="33" text-anchor="middle" class="chart-value">34</text><text x="525" y="228" text-anchor="middle" class="chart-label">Spr 13</text>
+            </svg>
+            <div class="diagram-cap">Figure 2 &mdash; Velocity is stable within a 30&ndash;35 point band; Sprint 14 is deliberately committed below it.</div>
+          </div>
+
+          <div class="callout critical"><span class="co-label">Sprint 14 Goal</span>Stand up the multi-region Aurora PostgreSQL event-sourced schema in us-east-1 and us-west-2, with automated cross-region failover tested, so the Claims Intake squad can begin schema integration in Sprint 15.</div>
+
+          <h2 id="sprint-backlog">4&nbsp;&middot;&nbsp;Sprint 14 Backlog</h2>
+          <table>
+            <thead><tr><th>ID</th><th>User Story</th><th>Estimate</th><th>Type</th><th>Owner</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">PF-141</td><td>As a platform engineer, I need the Aurora Multi-AZ cluster provisioned via Terraform so environments are reproducible.</td><td class="mono">8 pts</td><td><span class="badge must">Committed</span></td><td>K. Mensah</td></tr>
+              <tr><td class="mono">PF-142</td><td>As a data architect, I need the event-sourced append-only schema (claims_event, claims_projection) migrated.</td><td class="mono">8 pts</td><td><span class="badge must">Committed</span></td><td>Platform Squad</td></tr>
+              <tr><td class="mono">PF-143</td><td>As an SRE, I need automated failover from us-east-1 to us-west-2 tested via a chaos drill.</td><td class="mono">5 pts</td><td><span class="badge must">Committed</span></td><td>Platform Squad</td></tr>
+              <tr><td class="mono">PF-144</td><td>As a compliance officer, I need field-level encryption applied to claimant PII columns.</td><td class="mono">5 pts</td><td><span class="badge must">Committed</span></td><td>Platform Squad</td></tr>
+              <tr><td class="mono">PF-145</td><td>As a platform engineer, I need MSK schema-registry compatibility rules enforced in CI.</td><td class="mono">3 pts</td><td><span class="badge must">Committed</span></td><td>Platform Squad</td></tr>
+              <tr><td class="mono">PF-146</td><td>As a platform engineer, I need IaC drift-detection alerting wired to the observability stack.</td><td class="mono">3 pts</td><td><span class="badge should">Stretch</span></td><td>Platform Squad</td></tr>
+            </tbody>
+          </table>
+
+          <h2>5&nbsp;&middot;&nbsp;Definition of Done</h2>
+          <ul class="checklist">
+            <li>Code reviewed and merged to main by a second engineer</li>
+            <li>Unit test coverage &ge; 80% on new modules</li>
+            <li>Terraform plan reviewed and approved by a second engineer before apply</li>
+            <li>Automated security scan clean (no High/Critical findings)</li>
+            <li>Runbook updated for any new operational procedure (e.g. failover)</li>
+            <li>Demoed to the Product Owner at Sprint Review</li>
+          </ul>
+
+          <h2>6&nbsp;&middot;&nbsp;Sprint Risks</h2>
+          <p>Tied to RAID R-01/I-01 (integration contractor delay): if the specialist contractors originally slated to support PF-143's failover drill are not onboarded in time, the Scrum Master will pull a Platform Foundation engineer off PF-146 (stretch) rather than put committed scope at risk.</p>
+        </div>
+
+        <div class="signoff">
+          <div class="signoff-grid">
+            <div class="signoff-cell"><span class="so-role">Prepared</span><div class="so-name">Scrum Master, Platform Foundation Squad</div><div class="so-line">2026-08-20</div></div>
+            <div class="signoff-cell"><span class="so-role">Reviewed</span><div class="so-name">K. Mensah, Product Owner</div><div class="so-line">2026-08-21</div></div>
+            <div class="signoff-cell"><span class="so-role">Approved</span><div class="so-name">Sprint Planning Consensus (Squad)</div><div class="so-line">2026-08-22</div></div>
+          </div>
+        </div>
+        <div class="doc-footer">
+          <span>Colaberry Enterprise AI Leadership Accelerator &middot; ClaimSight AI</span>
+          <span>SPR-CLM-2026-14 &middot; v1.0 &middot; Page 1 of 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         DELIVERABLE 07 — STATUS REPORT
+         ================================================================ -->
+    <section id="doc-status">
+      <div class="doc" id="doc-status-card" data-doc-code="STA-CLM-2026-14" data-doc-title="Bi-Weekly Status Report — ClaimSight AI">
+        <div class="doc-toolbar">
+          <span class="dt-title">STA-CLM-2026-14.html</span>
+          <div class="dt-btns">
+            <button class="btn btn-outline" onclick="printDoc('doc-status-card')">Print / Save as PDF</button>
+            <button class="btn btn-primary" onclick="exportDocHtml('doc-status-card')">Download HTML</button>
+          </div>
+        </div>
+        <div class="doc-cover">
+          <img class="cover-logo" alt="Colaberry" src="" data-logo-slot />
+          <span class="cover-kicker">Status Report</span>
+          <h2>ClaimSight AI &mdash; Bi-Weekly Status</h2>
+          <p class="cover-sub">Reporting period 2026-08-08 to 2026-08-21. RAG measured against the original baseline per <a href="#status-reporting">Section 2.10</a>, not against last period's report.</p>
+          <div class="doc-control">
+            <div><span class="dc-label">Document ID</span><span class="dc-value mono">STA-CLM-2026-14</span></div>
+            <div><span class="dc-label">Version</span><span class="dc-value mono">14</span></div>
+            <div><span class="dc-label">Status</span><span class="dc-value"><span class="status-dot warn"></span>Amber</span></div>
+            <div><span class="dc-label">Owner</span><span class="dc-value">Program Manager</span></div>
+            <div><span class="dc-label">Date</span><span class="dc-value mono">2026-08-21</span></div>
+          </div>
+        </div>
+        <div class="doc-body">
+
+          <h2>1&nbsp;&middot;&nbsp;Executive Summary</h2>
+          <p>The Architecture Gate (M1) passed on time and on scope. Since then, a three-week delay in onboarding the Legacy Integration specialist contractors (I-01/R-01) has pushed the Platform Foundation and Legacy Integration milestones out, cascading an 18-day forecast slip to Go-Live. Cost is tracking 6&ndash;7% over baseline on completed and in-progress work, driven by contractor premium rates on the Foundation work package. Neither variance breaches a governance threshold on its own, but both are large enough to require a Steering Committee decision this cycle &mdash; see &sect;5, Decisions Needed.</p>
+
+          <div class="kpi-row">
+            <div class="kpi-tile"><div class="kpi-label">Overall</div><div class="kpi-value" style="color:var(--amber)">Amber</div><div class="kpi-delta warn">2nd consecutive Amber period</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Schedule (SPI)</div><div class="kpi-value" style="color:var(--amber)">0.88</div><div class="kpi-delta warn">18-day forecast slip to Go-Live</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Cost (CPI)</div><div class="kpi-value" style="color:var(--amber)">0.94</div><div class="kpi-delta warn">~$377K forecast overrun</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Scope</div><div class="kpi-value" style="color:var(--leaf)">Green</div><div class="kpi-delta good">no descoping to date</div></div>
+          </div>
+
+          <h2>2&nbsp;&middot;&nbsp;Milestone Health</h2>
+          <div class="diagram-wrap" style="max-width:480px; margin-left:0;">
+            <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Donut chart of milestone RAG status: 2 of 9 complete and green, 6 of 9 amber at risk, 1 of 9 not yet baselined">
+              <circle cx="110" cy="110" r="70" fill="none" stroke="var(--border)" stroke-width="24"/>
+              <circle cx="110" cy="110" r="70" fill="none" stroke="var(--leaf)" stroke-width="24" stroke-dasharray="97.74 342.08" stroke-dashoffset="0" transform="rotate(-90 110 110)"/>
+              <circle cx="110" cy="110" r="70" fill="none" stroke="var(--amber)" stroke-width="24" stroke-dasharray="293.21 146.61" stroke-dashoffset="-97.74" transform="rotate(-90 110 110)"/>
+              <circle cx="110" cy="110" r="70" fill="none" stroke="var(--muted)" stroke-width="24" stroke-dasharray="48.87 390.95" stroke-dashoffset="-390.95" transform="rotate(-90 110 110)"/>
+              <text x="110" y="105" text-anchor="middle" class="svg-title" style="font-size:22px">9</text>
+              <text x="110" y="124" text-anchor="middle" class="svg-sub">milestones</text>
+              <rect x="230" y="60" width="14" height="14" style="fill:var(--leaf)"/><text x="250" y="72" class="svg-label">2 Complete (Green)</text>
+              <rect x="230" y="88" width="14" height="14" style="fill:var(--amber)"/><text x="250" y="100" class="svg-label">6 At risk (Amber)</text>
+              <rect x="230" y="116" width="14" height="14" style="fill:var(--muted)"/><text x="250" y="128" class="svg-label">1 Not yet baselined</text>
+            </svg>
+            <div class="diagram-cap">Figure 1 &mdash; Milestone RAG. Full register in <a href="#doc-timeline">Deliverable 03</a>.</div>
+          </div>
+
+          <h2>3&nbsp;&middot;&nbsp;Accomplishments This Period</h2>
+          <ul>
+            <li>Architecture &amp; Compliance Design Gate (M1) approved 2026-08-05 &mdash; on scope, 6 days later than original target after one Finance-requested trade-off iteration (I-03, resolved)</li>
+            <li>OCR vendor sandbox access issue (I-02) resolved; WBS 4.3 testing window preserved within its float</li>
+            <li>WBS 1.0/3.4 CI/CD pipeline baseline completed for foundation services</li>
+            <li>Sprint 12 and 13 delivered the AWS landing zone network and the first Aurora dev environment</li>
+          </ul>
+
+          <h2>4&nbsp;&middot;&nbsp;Planned Next Period</h2>
+          <ul>
+            <li>Kick off Sprint 14 (Deliverable 06) &mdash; Aurora Multi-AZ schema and cross-region failover drill</li>
+            <li>Finalize the Legacy Integration specialist SOW (I-01) &mdash; target execution by 2026-08-25</li>
+            <li>Begin WBS 6.0 vendor onboarding pending SOW execution and ClaimsCore change-window approval (D-02)</li>
+          </ul>
+
+          <h2>5&nbsp;&middot;&nbsp;Budget Snapshot</h2>
+          <table>
+            <thead><tr><th>PV</th><th>EV</th><th>AC</th><th>CPI</th><th>SPI</th><th>EAC (forecast)</th></tr></thead>
+            <tbody><tr><td class="mono">$1.10M</td><td class="mono">$0.97M</td><td class="mono">$1.03M</td><td class="mono">0.94</td><td class="mono">0.88</td><td class="mono">$5.80M</td></tr></tbody>
+          </table>
+          <p>Full work-package breakdown and the planned/actual/forecast S-curve are in <a href="#doc-budget">Deliverable 08, Budget/Burn</a>.</p>
+
+          <h2 id="status-decisions">6&nbsp;&middot;&nbsp;Decisions Needed</h2>
+          <div class="callout critical">
+            <span class="co-label">Steering Committee decision required by 2026-08-28</span>
+            <p style="margin:.4em 0"><strong>Option 1 (recommended):</strong> Approve a $380,000 draw against the management reserve to fund two additional Legacy Integration contractors, partially crashing WBS 6.0 and recovering roughly 10 of the 18 slipped days.</p>
+            <p style="margin:.4em 0"><strong>Option 2:</strong> Accept the full 18-day slip to Go-Live (2027-04-30 &rarr; 2027-05-18) with no additional spend.</p>
+            <p style="margin:.4em 0">Per the Charter's fixed-constraint statement (&sect;9), schedule and the business-outcome targets are fixed and cost is the constraint permitted to flex first &mdash; Option 1 follows that order and is the Program Manager's recommendation.</p>
+          </div>
+        </div>
+
+        <div class="signoff">
+          <div class="signoff-grid">
+            <div class="signoff-cell"><span class="so-role">Prepared</span><div class="so-name">Priya Natarajan, Senior Program Manager</div><div class="so-line">2026-08-21</div></div>
+            <div class="signoff-cell"><span class="so-role">Reviewed</span><div class="so-name">Marcus Alvarez, VP Engineering</div><div class="so-line">2026-08-21</div></div>
+            <div class="signoff-cell"><span class="so-role">Approved</span><div class="so-name">Denise Whitfield, EVP Claims Operations</div><div class="so-line">Pending &mdash; Steering Committee, 2026-08-28</div></div>
+          </div>
+        </div>
+        <div class="doc-footer">
+          <span>Colaberry Enterprise AI Leadership Accelerator &middot; ClaimSight AI</span>
+          <span>STA-CLM-2026-14 &middot; Period 14 &middot; Page 1 of 1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         DELIVERABLE 08 — BUDGET / BURN
+         ================================================================ -->
+    <section id="doc-budget">
+      <div class="doc" id="doc-budget-card" data-doc-code="BUD-CLM-2026-01" data-doc-title="Budget / Burn — ClaimSight AI">
+        <div class="doc-toolbar">
+          <span class="dt-title">BUD-CLM-2026-01.html</span>
+          <div class="dt-btns">
+            <button class="btn btn-outline" onclick="printDoc('doc-budget-card')">Print / Save as PDF</button>
+            <button class="btn btn-outline" onclick="downloadBudgetCsv()">Download CSV</button>
+            <button class="btn btn-primary" onclick="exportDocHtml('doc-budget-card')">Download HTML</button>
+          </div>
+        </div>
+        <div class="doc-cover">
+          <img class="cover-logo" alt="Colaberry" src="" data-logo-slot />
+          <span class="cover-kicker">Budget / Burn</span>
+          <h2>ClaimSight AI &mdash; Planned vs. Actual vs. Forecast</h2>
+          <p class="cover-sub">Earned Value Management applied per <a href="#pm-kpis">Section 2.12</a>: the forecast (EAC) is shown, not just spend-to-date &mdash; a plan that hides the forecast is the good-vs-bad signal from <a href="#good-vs-bad">Section 2.11</a>.</p>
+          <div class="doc-control">
+            <div><span class="dc-label">Document ID</span><span class="dc-value mono">BUD-CLM-2026-01</span></div>
+            <div><span class="dc-label">Version</span><span class="dc-value mono">1.7</span></div>
+            <div><span class="dc-label">Status</span><span class="dc-value"><span class="status-dot warn"></span>Amber &mdash; forecast overrun</span></div>
+            <div><span class="dc-label">Owner</span><span class="dc-value">Program Manager</span></div>
+            <div><span class="dc-label">Date</span><span class="dc-value mono">2026-08-21</span></div>
+          </div>
+        </div>
+        <div class="doc-body">
+
+          <div class="kpi-row">
+            <div class="kpi-tile"><div class="kpi-label">BAC</div><div class="kpi-value">$5.42M</div><div class="kpi-delta good">Budget at Completion</div></div>
+            <div class="kpi-tile"><div class="kpi-label">AC to Date</div><div class="kpi-value">$1.03M</div><div class="kpi-delta warn">vs. $1.10M planned (PV)</div></div>
+            <div class="kpi-tile"><div class="kpi-label">CPI</div><div class="kpi-value" style="color:var(--amber)">0.94</div><div class="kpi-delta warn">6% over budget for work done</div></div>
+            <div class="kpi-tile"><div class="kpi-label">SPI</div><div class="kpi-value" style="color:var(--amber)">0.88</div><div class="kpi-delta warn">behind planned pace</div></div>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi-tile"><div class="kpi-label">EAC (Forecast)</div><div class="kpi-value" style="color:var(--cherry)">$5.80M</div><div class="kpi-delta bad">forecast at completion</div></div>
+            <div class="kpi-tile"><div class="kpi-label">VAC</div><div class="kpi-value" style="color:var(--cherry)">-$377K</div><div class="kpi-delta bad">variance at completion</div></div>
+            <div class="kpi-tile"><div class="kpi-label">ETC</div><div class="kpi-value">$4.76M</div><div class="kpi-delta warn">estimate to complete</div></div>
+            <div class="kpi-tile"><div class="kpi-label">Management Reserve</div><div class="kpi-value">12%</div><div class="kpi-delta warn">$380K draw requested</div></div>
+          </div>
+
+          <h2 id="budget-forecast">1&nbsp;&middot;&nbsp;Planned vs. Actual vs. Forecast (S-Curve)</h2>
+          <div class="diagram-wrap">
+            <svg viewBox="0 0 1180 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="S-curve chart of cumulative planned value, actual cost to date, and forecast estimate at completion from February 2026 to June 2027">
+              <line x1="170" y1="50" x2="170" y2="430" class="chart-axis"/>
+              <line x1="170" y1="430" x2="1114" y2="430" class="chart-axis"/>
+              <line x1="170" y1="50" x2="1114" y2="50" class="chart-gridline"/>
+              <line x1="170" y1="177" x2="1114" y2="177" class="chart-gridline"/>
+              <line x1="170" y1="303" x2="1114" y2="303" class="chart-gridline"/>
+              <text x="160" y="434" text-anchor="end" class="chart-label">$0</text>
+              <text x="160" y="307" text-anchor="end" class="chart-label">$2M</text>
+              <text x="160" y="181" text-anchor="end" class="chart-label">$4M</text>
+              <text x="160" y="54" text-anchor="end" class="chart-label">$6M</text>
+              <line x1="565" y1="50" x2="565" y2="430" style="stroke:var(--cherry); stroke-width:1.4; stroke-dasharray:5 4;"/>
+              <text x="565" y="42" text-anchor="middle" class="svg-label" style="fill:var(--cherry); font-weight:700">TODAY 08/21</text>
+
+              <polyline points="170,430 524,362 642,349 819,269 878,235 1114,42" style="fill:none; stroke:var(--berry); stroke-width:2.4; stroke-dasharray:7 5;"/>
+              <polyline points="170,430 524,362 565,362" style="fill:none; stroke:var(--leaf); stroke-width:2.8;"/>
+              <circle cx="565" cy="362" r="5" style="fill:var(--leaf)"/>
+              <polyline points="565,362 642,336 819,213 878,169 1114,42" style="fill:none; stroke:var(--cherry); stroke-width:2.4; stroke-dasharray:2 4;"/>
+
+              <text x="900" y="330" class="svg-label" style="fill:var(--berry)">Planned (PV)</text>
+              <text x="380" y="400" class="svg-label" style="fill:var(--leaf)">Actual (AC)</text>
+              <text x="900" y="150" class="svg-label" style="fill:var(--cherry)">Forecast (EAC)</text>
+
+              <text x="170" y="450" text-anchor="middle" class="chart-label">Feb-26</text>
+              <text x="524" y="450" text-anchor="middle" class="chart-label">Aug</text>
+              <text x="642" y="450" text-anchor="middle" class="chart-label">Oct</text>
+              <text x="819" y="450" text-anchor="middle" class="chart-label">Jan-27</text>
+              <text x="878" y="450" text-anchor="middle" class="chart-label">Feb</text>
+              <text x="1114" y="450" text-anchor="middle" class="chart-label">Jun</text>
+            </svg>
+            <div class="diagram-cap">Figure 1 &mdash; Actual cost (leaf) tracks below plan (berry, dashed) not because of savings but because less scope has been earned yet; the forecast (cherry, dashed) finishes above the planned line, showing the $377K overrun explicitly rather than hiding it.</div>
+          </div>
+
+          <h2>2&nbsp;&middot;&nbsp;Budget by Work Package</h2>
+          <div class="tblwrap">
+          <table id="budget-table">
+            <thead><tr><th>WBS ID</th><th>Work Package</th><th>Planned (BAC)</th><th>Actual to Date</th><th>Committed</th><th>Forecast (EAC)</th><th>Variance</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">1.0</td><td>Program Mgmt &amp; Governance</td><td class="mono">$433,600</td><td class="mono">$182,000</td><td class="mono">$0</td><td class="mono">$451,200</td><td class="mono" style="color:var(--cherry)">-$17,600 (-4.1%)</td></tr>
+              <tr><td class="mono">2.0</td><td>Discovery, Architecture &amp; Compliance</td><td class="mono">$542,000</td><td class="mono">$558,000</td><td class="mono">$0</td><td class="mono">$558,000</td><td class="mono" style="color:var(--cherry)">-$16,000 (-3.0%)</td></tr>
+              <tr><td class="mono">3.0</td><td>Data &amp; Platform Foundation</td><td class="mono">$813,000</td><td class="mono">$254,900</td><td class="mono">$40,000</td><td class="mono">$863,600</td><td class="mono" style="color:var(--cherry)">-$50,600 (-6.2%)</td></tr>
+              <tr><td class="mono">4.0</td><td>Claims Intake &amp; Triage Services</td><td class="mono">$975,600</td><td class="mono">$0</td><td class="mono">$150,000</td><td class="mono">$1,043,400</td><td class="mono" style="color:var(--cherry)">-$67,800 (-7.0%)</td></tr>
+              <tr><td class="mono">5.0</td><td>Fraud Scoring Service</td><td class="mono">$758,800</td><td class="mono">$25,000</td><td class="mono">$0</td><td class="mono">$836,600</td><td class="mono" style="color:var(--cherry)">-$77,800 (-10.3%)</td></tr>
+              <tr><td class="mono">6.0</td><td>Legacy Integration</td><td class="mono">$650,400</td><td class="mono">$15,000</td><td class="mono">$200,000</td><td class="mono">$710,600</td><td class="mono" style="color:var(--cherry)">-$60,200 (-9.3%)</td></tr>
+              <tr><td class="mono">7.0</td><td>Policyholder &amp; Adjuster Experience</td><td class="mono">$596,200</td><td class="mono">$0</td><td class="mono">$0</td><td class="mono">$637,600</td><td class="mono" style="color:var(--cherry)">-$41,400 (-6.9%)</td></tr>
+              <tr><td class="mono">8.0</td><td>Test, Compliance &amp; Cutover</td><td class="mono">$650,400</td><td class="mono">$0</td><td class="mono">$0</td><td class="mono">$695,600</td><td class="mono" style="color:var(--cherry)">-$45,200 (-7.0%)</td></tr>
+              <tr style="background:var(--surface-2)"><td class="mono"><strong>TOTAL</strong></td><td></td><td class="mono"><strong>$5,420,000</strong></td><td class="mono"><strong>$1,034,900</strong></td><td class="mono"><strong>$390,000</strong></td><td class="mono"><strong>$5,796,600</strong></td><td class="mono" style="color:var(--cherry)"><strong>-$376,600 (-6.9%)</strong></td></tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="callout warn"><span class="co-label">Method, stated not hidden</span>Forecast (EAC) per work package = Actual to Date + (Planned &minus; Earned Value) &divide; CPI &mdash; the standard formula that assumes the current 0.94 cost-performance index persists for remaining work. Note that 5.0 and 6.0 already show actual spend against zero earned value: money committed before scope exists is a legitimate financing decision here (vendor deposits, contractor mobilization) but it is exactly the pattern a reviewer should ask about if it appears unexplained.</div>
+
+          <h2>3&nbsp;&middot;&nbsp;Forecast Narrative</h2>
+          <p>The $376,600 forecast overrun is concentrated in Platform Foundation, Fraud Scoring, and Legacy Integration &mdash; all three carry contractor-rate premiums above the rate card assumed at charter time. The Status Report's Decisions Needed (Deliverable 07) proposes drawing $380,000 from the 12% management reserve to add capacity to Legacy Integration specifically, since it is both the largest single schedule risk and on the critical path; the reserve was sized at charter time in anticipation of exactly this kind of variance, so this draw does not require re-baselining the program.</p>
+        </div>
+
+        <div class="signoff">
+          <div class="signoff-grid">
+            <div class="signoff-cell"><span class="so-role">Prepared</span><div class="so-name">Priya Natarajan, Senior Program Manager</div><div class="so-line">2026-08-21</div></div>
+            <div class="signoff-cell"><span class="so-role">Reviewed</span><div class="so-name">Marcus Alvarez, VP Engineering</div><div class="so-line">2026-08-21</div></div>
+            <div class="signoff-cell"><span class="so-role">Approved</span><div class="so-name">Denise Whitfield, EVP Claims Operations</div><div class="so-line">Pending &mdash; Steering Committee, 2026-08-28</div></div>
+          </div>
+        </div>
+        <div class="doc-footer">
+          <span>Colaberry Enterprise AI Leadership Accelerator &middot; ClaimSight AI</span>
+          <span>BUD-CLM-2026-01 &middot; v1.7 &middot; Page 1 of 1</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="sitefoot">Colaberry Enterprise AI Leadership Accelerator &middot; Project Manager Field Guide &middot; Worked example: ClaimSight AI, Meridian Mutual Insurance (fictional) &middot; Generated by Claude Code</footer>
+  </main>
+</div>
+
+<button class="ask-fab" id="ask-fab" aria-haspopup="dialog" aria-controls="ask-panel">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  Ask the guide
+</button>
+<div class="ask-panel" id="ask-panel" role="dialog" aria-label="Ask the guide">
+  <div class="ask-panel-head">
+    <strong>Ask &mdash; offline, answers from this guide only</strong>
+    <button id="ask-close" aria-label="Close">&times;</button>
+  </div>
+  <div class="ask-panel-body" id="ask-body">
+    <div class="ask-msg from-bot"><div class="bubble">Ask me about the plan &mdash; e.g. "what's the critical path?" or "who is Accountable for UAT sign-off?". I answer only from this guide's own content, offline.</div></div>
+    <div class="ask-suggest" id="ask-suggest"></div>
+  </div>
+  <form class="ask-panel-foot" id="ask-form">
+    <input type="text" id="ask-input" placeholder="Ask a question&hellip;" autocomplete="off" />
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script id="deepdive-metadata" type="application/json">
+{
+  "guide_type": "Project Manager Field Guide",
+  "curriculum_type": "deep_dive",
+  "week": 3,
+  "discipline": "Project Manager",
+  "student_id": "jude.mofunanya",
+  "project_id": "N/A - pre-project (worked example: ClaimSight AI, P&C insurance)",
+  "repository": "github.com/Jude-Projects/AI-Project",
+  "generated_by": "Claude Code",
+  "generated_date": "2026-08-22",
+  "version": "1.0.0",
+  "build_number": "PMFG-20260822-01"
+}
+</script>
+
+<script>
+(function(){
+  "use strict";
+
+  /* THEME TOGGLE */
+  var THEME_KEY = "pmfg-theme";
+  var root = document.documentElement;
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem(THEME_KEY); } catch(e){}
+  if (savedTheme) root.setAttribute("data-theme", savedTheme);
+  document.getElementById("theme-toggle").addEventListener("click", function(){
+    var current = root.getAttribute("data-theme");
+    if (!current) {
+      current = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    var next = current === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem(THEME_KEY, next); } catch(e){}
+  });
+
+  /* LOGO SLOTS */
+  function fillLogoSlots(){
+    var master = document.querySelector(".topbar img.logo");
+    if (!master) return;
+    document.querySelectorAll("[data-logo-slot]").forEach(function(img){
+      img.src = master.src;
+    });
+  }
+  fillLogoSlots();
+
+  /* NAV: active-section highlighting */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.navlink[data-nav]'));
+  var navMap = {};
+  navLinks.forEach(function(a){ navMap[a.getAttribute('href').slice(1)] = a; });
+  var observedSections = Array.prototype.slice.call(document.querySelectorAll('main > section[id]'));
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = navMap[entry.target.id];
+        if (!link) return;
+        if (entry.isIntersecting) {
+          navLinks.forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin: "-64px 0px -70% 0px", threshold: 0 });
+    observedSections.forEach(function(s){ io.observe(s); });
+  }
+
+  /* NAV: filter box */
+  document.getElementById('nav-filter').addEventListener('input', function(e){
+    var q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll('.navgroup').forEach(function(group){
+      var anyVisible = false;
+      group.querySelectorAll('.navlink').forEach(function(link){
+        var match = !q || link.textContent.toLowerCase().indexOf(q) !== -1;
+        link.style.display = match ? '' : 'none';
+        if (match) anyVisible = true;
+      });
+      var title = group.querySelector('.navgrouptitle');
+      if (title) title.style.display = anyVisible ? '' : 'none';
+    });
+  });
+
+  /* SEARCH INDEX */
+  var INDEX_DEFS = [
+    { id: "home", title: "Welcome & how to use this guide" },
+    { id: "initiative", title: "The Example Initiative: ClaimSight AI" },
+    { id: "why", title: "2.1 Why Project Management Exists" },
+    { id: "triangle", title: "2.2 The Iron Triangle: Scope, Schedule, Cost" },
+    { id: "wbs-teaching", title: "2.3 Work Breakdown Structure" },
+    { id: "critical-path", title: "2.4 Critical Path & Float" },
+    { id: "milestones-gates", title: "2.5 Milestones & Gates" },
+    { id: "raid-teaching", title: "2.6 RAID: Risks, Assumptions, Issues, Dependencies" },
+    { id: "raci-teaching", title: "2.7 RACI: One Accountable Per Activity" },
+    { id: "agile-waterfall-hybrid", title: "2.8 Agile vs. Waterfall vs. Hybrid" },
+    { id: "velocity-burndown", title: "2.9 Velocity & Burndown" },
+    { id: "status-reporting", title: "2.10 Status Reporting & RAG Health" },
+    { id: "good-vs-bad", title: "2.11 Good vs. Bad Plans" },
+    { id: "pm-kpis", title: "2.12 KPIs for Project Health" },
+    { id: "review-lens", title: "2.13 The Architect's Review Lens" },
+    { id: "doc-charter", title: "Deliverable 01 â€” Project Charter" },
+    { id: "charter-scope", title: "Charter â€” Scope Boundaries" },
+    { id: "charter-authority", title: "Charter â€” PM Authority" },
+    { id: "doc-wbs", title: "Deliverable 02 â€” Work Breakdown Structure" },
+    { id: "wbs-dictionary", title: "WBS Dictionary (Level 2)" },
+    { id: "doc-timeline", title: "Deliverable 03 â€” Milestone Timeline / Gantt" },
+    { id: "timeline-criticalpath", title: "Timeline â€” Critical Path" },
+    { id: "doc-raid", title: "Deliverable 04 â€” RAID Log" },
+    { id: "doc-raci", title: "Deliverable 05 â€” RACI Matrix" },
+    { id: "doc-sprint", title: "Deliverable 06 â€” Sprint / Iteration Plan" },
+    { id: "sprint-backlog", title: "Sprint 14 Backlog" },
+    { id: "doc-status", title: "Deliverable 07 â€” Status Report" },
+    { id: "status-decisions", title: "Status Report â€” Decisions Needed" },
+    { id: "doc-budget", title: "Deliverable 08 â€” Budget / Burn" },
+    { id: "budget-forecast", title: "Budget â€” Forecast to Complete (EVM)" }
+  ];
+  var SEARCH_INDEX = INDEX_DEFS.map(function(def){
+    var el = document.getElementById(def.id);
+    return { id: def.id, title: def.title, text: el ? el.innerText.replace(/\s+/g, ' ').trim() : "" };
+  }).filter(function(d){ return d.text.length > 0; });
+
+  function snippetFor(text, q){
+    var lower = text.toLowerCase();
+    var idx = lower.indexOf(q.toLowerCase());
+    if (idx === -1) return text.slice(0, 130) + "â€¦";
+    var start = Math.max(0, idx - 55);
+    var end = Math.min(text.length, idx + q.length + 75);
+    var pre = start > 0 ? "â€¦" : "";
+    var post = end < text.length ? "â€¦" : "";
+    var raw = text.slice(start, end);
+    var esc = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+    return pre + esc.replace(re, '<mark>$1</mark>') + post;
+  }
+
+  function runSearch(q){
+    q = q.trim();
+    if (!q) return [];
+    var ql = q.toLowerCase();
+    var scored = SEARCH_INDEX.map(function(item){
+      var score = 0;
+      if (item.title.toLowerCase().indexOf(ql) !== -1) score += 5;
+      var textLower = item.text.toLowerCase();
+      var count = textLower.split(ql).length - 1;
+      score += Math.min(count, 5);
+      return { item: item, score: score };
+    }).filter(function(s){ return s.score > 0; })
+      .sort(function(a,b){ return b.score - a.score; })
+      .slice(0, 8);
+    return scored.map(function(s){ return s.item; });
+  }
+
+  var searchInput = document.getElementById('global-search');
+  var searchResults = document.getElementById('search-results');
+
+  function renderResults(items, q){
+    if (!items.length) {
+      searchResults.innerHTML = '<div class="sr-empty">No matches in the guide for &ldquo;' + q + '&rdquo;. Try a shorter term, or ask the Assistant.</div>';
+      searchResults.classList.add('open');
+      return;
+    }
+    searchResults.innerHTML = items.map(function(item){
+      var section = item.id.indexOf('doc-') === 0 || /^charter-|^wbs-|^timeline-|^sprint-|^status-|^budget-/.test(item.id) ? 'Deliverable' : "PM's 20%";
+      return '<a class="sr-item" href="#' + item.id + '" data-goto="' + item.id + '">' +
+        '<span class="sr-sec">' + section + '</span>' +
+        '<div class="sr-title">' + item.title + '</div>' +
+        '<div class="sr-snip">' + snippetFor(item.text, q) + '</div>' +
+        '</a>';
+    }).join('');
+    searchResults.classList.add('open');
+  }
+
+  searchInput.addEventListener('input', function(e){
+    var q = e.target.value;
+    if (!q.trim()) { searchResults.classList.remove('open'); return; }
+    renderResults(runSearch(q), q.trim());
+  });
+  searchInput.addEventListener('focus', function(){
+    if (searchInput.value.trim()) renderResults(runSearch(searchInput.value), searchInput.value.trim());
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest('.searchwrap')) searchResults.classList.remove('open');
+  });
+  searchResults.addEventListener('click', function(e){
+    var a = e.target.closest('[data-goto]');
+    if (a) { searchResults.classList.remove('open'); searchInput.value = ''; }
+  });
+
+  /* ASK ASSISTANT */
+  var FAQ_DATA = [
+    { q:"What is the critical path?", k:["critical path","longest path","drives the schedule"],
+      a:"Discovery/Architecture &rarr; Platform Foundation &rarr; Legacy Integration &rarr; Test &amp; Cutover. Fraud Scoring and the Policyholder/Adjuster Experience work packages run in parallel with float and are not critical unless their delay exceeds their buffer.", anchor:"timeline-criticalpath" },
+    { q:"What is the program budget?", k:["budget","bac","total cost","how much"],
+      a:"Budget at Completion (BAC) is $5.42M across 14 months of build plus a 2-month hypercare/closeout tail. See Deliverable 08, Budget/Burn.", anchor:"doc-budget" },
+    { q:"Is the program on schedule?", k:["on schedule","behind schedule","schedule status","spi"],
+      a:"No &mdash; SPI is 0.88, an 18-day forecast slip to Go-Live driven by a delayed start on Legacy Integration. See the Status Report's Decisions Needed section.", anchor:"status-decisions" },
+    { q:"Is the program over budget?", k:["over budget","cost status","cpi","cost overrun"],
+      a:"CPI is 0.94 and the forecast Estimate at Completion (EAC) is $5.80M against a $5.42M BAC &mdash; a forecast overrun of about $377K, mainly from legacy-integration contractor rates. See Deliverable 08.", anchor:"budget-forecast" },
+    { q:"Who is Accountable for UAT sign-off?", k:["uat","accountable","sign-off","who owns uat"],
+      a:"The Compliance/QA Lead is Accountable for UAT &amp; DOI compliance sign-off, with the Change Management Lead Responsible for executing it. See the RACI Matrix.", anchor:"doc-raci" },
+    { q:"What is a RAID log?", k:["raid log","what is raid","risks assumptions issues dependencies"],
+      a:"A single log of Risks, Assumptions, Issues, and Dependencies, each with exactly one owner and a date. See Section 2.6 and Deliverable 04.", anchor:"raid-teaching" },
+    { q:"What is the RACI rule?", k:["raci rule","one accountable","raci meaning"],
+      a:"Every activity gets exactly one Accountable owner. Responsible can be shared, Consulted and Informed can be many, but Accountable is always exactly one person &mdash; otherwise no one is really accountable.", anchor:"raci-teaching" },
+    { q:"What is the WBS and does it sum to 100%?", k:["wbs","work breakdown structure","100%","work packages"],
+      a:"Eight Level-1 work packages (Program Management, Discovery/Architecture, Platform Foundation, Intake &amp; Triage, Fraud Scoring, Legacy Integration, Policyholder/Adjuster Experience, Test &amp; Cutover) summing to exactly 100% of scope, each decomposed into Level-2 packages that sum back to their parent. See Deliverable 02.", anchor:"doc-wbs" },
+    { q:"What are the highest risks right now?", k:["top risk","biggest risk","high severity risk"],
+      a:"R-01 (legacy integration contractor delay, driving the schedule slip) and R-06/R-10 carried over from the architecture risk register (CAT-event autoscaling, explainability-logging audit exposure). See the RAID Log.", anchor:"doc-raid" },
+    { q:"What decisions are needed right now?", k:["decisions needed","what decision","need approval"],
+      a:"The Steering Committee must choose between approving an $380K contingency draw plus an 18-day slip to Go-Live, or funding two additional integration contractors to partially crash the schedule. See the Status Report.", anchor:"status-decisions" },
+    { q:"What is the next sprint working on?", k:["sprint 14","next sprint","current sprint","sprint goal"],
+      a:"Sprint 14 (2026-08-24 to 2026-09-04), the Platform Foundation Squad, standing up the multi-region Aurora event-sourced schema with a tested cross-region failover drill. See Deliverable 06.", anchor:"doc-sprint" },
+    { q:"What is velocity?", k:["velocity","story points per sprint","team velocity"],
+      a:"The average amount of work (in story points) a team completes per sprint, measured from actual completed work, not estimates &mdash; used to size how much to commit to next, never to judge individuals. See Section 2.9.", anchor:"velocity-burndown" },
+    { q:"What is a burndown chart?", k:["burndown","burndown chart"],
+      a:"A line chart of remaining work versus time within a single sprint, comparing an ideal straight-line pace against the team's actual progress. See Section 2.9 and Deliverable 06.", anchor:"velocity-burndown" },
+    { q:"What does RAG status mean?", k:["rag status","red amber green","rag meaning"],
+      a:"Red/Amber/Green health against baseline for scope, schedule, cost, and risk &mdash; Green means on track, Amber means a defined variance with an active recovery plan, Red means baseline is broken and needs an executive decision. See Section 2.10.", anchor:"status-reporting" },
+    { q:"What is the iron triangle?", k:["iron triangle","triple constraint","scope schedule cost"],
+      a:"Scope, schedule, and cost are linked: changing one forces at least one other to move, unless quality is quietly sacrificed instead. Exactly one side should be declared fixed at charter time. See Section 2.2.", anchor:"triangle" },
+    { q:"Which constraint is fixed for ClaimSight AI?", k:["fixed constraint","which side is fixed"],
+      a:"Schedule and the two business-outcome targets (cycle time, fraud leakage) are fixed by regulatory and competitive pressure; cost carries an explicit management reserve and is the constraint allowed to flex first. See the Project Charter.", anchor:"doc-charter" },
+    { q:"What is the difference between agile, waterfall, and hybrid?", k:["agile vs waterfall","hybrid","scrum vs waterfall"],
+      a:"Waterfall sequences phases with gate approvals between them; Agile delivers in short, working increments with a backlog; ClaimSight AI is Hybrid &mdash; waterfall-style gates between major phases, with Scrum sprints inside each phase's execution. See Section 2.8.", anchor:"agile-waterfall-hybrid" },
+    { q:"What is a milestone gate?", k:["gate","milestone gate","exit criteria"],
+      a:"A checkpoint with explicit, written exit criteria that must be met before the next phase can start &mdash; not just a date on a calendar. See Section 2.5.", anchor:"milestones-gates" },
+    { q:"How do I download a document?", k:["download","export","save as pdf","csv export"],
+      a:"Every deliverable has a toolbar with Print / Save as PDF and Download HTML buttons; the WBS, RAID Log, RACI Matrix, and Budget/Burn also offer Download CSV.", anchor:"doc-charter" },
+    { q:"What is the architect's review lens for a PM plan?", k:["review lens","checklist","evaluate ai plan","approve project plan"],
+      a:"A checklist for approving an AI-generated project plan: WBS sums to 100%, exactly one Accountable per RACI row, estimates carry buffer not single points, the critical path is named, gates have written exit criteria, and every RAID row has an owner and a date. See Section 2.13.", anchor:"review-lens" },
+    { q:"What industry and company is this guide built around?", k:["industry","company","meridian","insurance example"],
+      a:"Property &amp; Casualty insurance &mdash; Meridian Mutual Insurance &mdash; for the ClaimSight AI claims intake and triage initiative, the same worked example used in the Week 2 Solution Architecture Field Guide.", anchor:"initiative" }
+  ];
+
+  function matchFaq(query){
+    var ql = query.toLowerCase();
+    var best = null, bestScore = 0;
+    FAQ_DATA.forEach(function(item){
+      var score = 0;
+      item.k.forEach(function(kw){ if (ql.indexOf(kw) !== -1) score += 3; });
+      item.q.toLowerCase().split(/\W+/).forEach(function(w){
+        if (w.length > 3 && ql.indexOf(w) !== -1) score += 1;
+      });
+      if (score > bestScore) { bestScore = score; best = item; }
+    });
+    return bestScore > 0 ? best : null;
+  }
+
+  var askFab = document.getElementById('ask-fab');
+  var askPanel = document.getElementById('ask-panel');
+  var askBody = document.getElementById('ask-body');
+  var askForm = document.getElementById('ask-form');
+  var askInput = document.getElementById('ask-input');
+  var askSuggest = document.getElementById('ask-suggest');
+
+  var SUGGESTED = [0,4,9,19];
+  askSuggest.innerHTML = SUGGESTED.map(function(i){
+    return '<button type="button" data-q="' + FAQ_DATA[i].q.replace(/"/g,'&quot;') + '">' + FAQ_DATA[i].q + '</button>';
+  }).join('');
+  askSuggest.addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-q]');
+    if (!btn) return;
+    askInput.value = btn.getAttribute('data-q');
+    askForm.dispatchEvent(new Event('submit', { cancelable: true }));
+  });
+
+  function openAsk(){ askPanel.classList.add('open'); askInput.focus(); }
+  function closeAsk(){ askPanel.classList.remove('open'); }
+  askFab.addEventListener('click', function(){ askPanel.classList.contains('open') ? closeAsk() : openAsk(); });
+  document.getElementById('ask-close').addEventListener('click', closeAsk);
+
+  function addMsg(role, html){
+    var div = document.createElement('div');
+    div.className = 'ask-msg from-' + role;
+    div.innerHTML = '<div class="bubble">' + html + '</div>';
+    askBody.appendChild(div);
+    askBody.scrollTop = askBody.scrollHeight;
+  }
+
+  askForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var q = askInput.value.trim();
+    if (!q) return;
+    addMsg('user', q.replace(/&/g,'&amp;').replace(/</g,'&lt;'));
+    askInput.value = '';
+    var hit = matchFaq(q);
+    if (hit) {
+      addMsg('bot', hit.a + ' <a href="#' + hit.anchor + '" data-ask-goto="' + hit.anchor + '">Jump to section &rarr;</a>');
+    } else {
+      var fallback = runSearch(q);
+      if (fallback.length) {
+        addMsg('bot', 'I didn\'t find an exact FAQ match, but this section looks relevant: <strong>' + fallback[0].title + '</strong> â€” ' + snippetFor(fallback[0].text, q) + ' <a href="#' + fallback[0].id + '" data-ask-goto="' + fallback[0].id + '">Jump to section &rarr;</a>');
+      } else {
+        addMsg('bot', "I couldn't find that in the guide. Try the search box above, or rephrase â€” e.g. ask about a WBS ID, a RAID ID, or a milestone name.");
+      }
+    }
+  });
+  askBody.addEventListener('click', function(e){
+    var a = e.target.closest('[data-ask-goto]');
+    if (a) { setTimeout(closeAsk, 150); }
+  });
+
+  /* EXPORT: standalone HTML download per document */
+  function downloadBlob(content, filename, mime){
+    var blob = new Blob([content], { type: mime });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+  }
+  window.exportDocHtml = function(cardId){
+    var card = document.getElementById(cardId);
+    if (!card) return;
+    var clone = card.cloneNode(true);
+    var toolbar = clone.querySelector('.doc-toolbar');
+    if (toolbar) toolbar.remove();
+    var styleText = document.querySelector('head style') ? document.querySelector('head style').innerHTML : '';
+    var fontLinks = Array.prototype.slice.call(document.querySelectorAll('link[rel="preconnect"], link[rel="stylesheet"]'))
+      .map(function(l){ return l.outerHTML; }).join('\n');
+    var title = card.getAttribute('data-doc-title') || 'Colaberry Document';
+    var html = '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+      '<title>' + title + '</title>\n' + fontLinks + '\n' +
+      '<style>' + styleText + '\nbody{padding:36px 16px 60px 16px;max-width:960px;margin:0 auto;background:var(--surface-2);}\n</style>\n' +
+      '</head>\n<body>\n' + clone.outerHTML + '\n</body>\n</html>';
+    var code = card.getAttribute('data-doc-code') || 'colaberry-document';
+    downloadBlob(html, code + '.html', 'text/html;charset=utf-8;');
+  };
+
+  /* PRINT / SAVE AS PDF */
+  window.printDoc = function(cardId){
+    document.querySelectorAll('.doc').forEach(function(d){
+      d.classList.toggle('print-hide', d.id !== cardId);
+    });
+    window.print();
+  };
+  window.addEventListener('afterprint', function(){
+    document.querySelectorAll('.doc').forEach(function(d){ d.classList.remove('print-hide'); });
+  });
+
+  /* CSV EXPORT */
+  function tableToCsv(tableId, filename){
+    var table = document.getElementById(tableId);
+    if (!table) return;
+    var rows = Array.prototype.slice.call(table.querySelectorAll('tr'));
+    var lines = rows.map(function(row){
+      var cells = Array.prototype.slice.call(row.querySelectorAll('th,td'));
+      return cells.map(function(c){
+        var text = c.textContent.replace(/\s+/g, ' ').trim().replace(/"/g, '""');
+        return '"' + text + '"';
+      }).join(',');
+    });
+    downloadBlob(lines.join('\r\n'), filename, 'text/csv;charset=utf-8;');
+  }
+  window.downloadWbsCsv = function(){ tableToCsv('wbs-table', 'ClaimSightAI_WBS.csv'); };
+  window.downloadRaidCsv = function(){ tableToCsv('raid-table', 'ClaimSightAI_RAID_Log.csv'); };
+  window.downloadRaciCsv = function(){ tableToCsv('raci-table', 'ClaimSightAI_RACI_Matrix.csv'); };
+  window.downloadBudgetCsv = function(){ tableToCsv('budget-table', 'ClaimSightAI_Budget_Burn.csv'); };
+
+})();
+</script>
+</body>
+</html>
