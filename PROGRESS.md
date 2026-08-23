@@ -98,3 +98,10 @@
   - What changed: User pasted `profile.seed.json` and asked to save it in the repo. Saved as `.colaberry/profile.seed.json` (kept the exact filename given, distinct from the existing `.colaberry/profile.json`) since it's a seed/template, not a same-named replacement like the previous three portal files.
   - Verification: `python -c "json.load(...)"` — parses. Confirmed no tab currently reads `state.profile` (`data.js` loads it into app state but nothing renders it yet), so this addition doesn't affect the running site either way.
   - Notes: The seed's real schema (`disclosure`, `headline`, `summary`, `challenge`, `highlight_story_ids`, `links{repo,command_center}`, `include{...}`) doesn't match the placeholder shape I guessed for `.colaberry/profile.json` earlier this session (`portfolio{headline,summary}`, `publish{}`). Flagged to the user rather than overwriting `profile.json` unprompted, since that file is explicitly described as the user's own private, user-edited content.
+
+- [x] Replace `.colaberry/profile.json` with the seed content, remove `profile.seed.json`
+  - Date: 2026-08-23
+  - Session: CC-20260822-p4k9
+  - What changed: Per user instruction, overwrote `.colaberry/profile.json` with the real seed content (`disclosure: "private"`, `headline`/`summary`/`challenge`: `null`, empty `highlight_story_ids`/`links`/`include`), replacing my earlier guessed placeholder shape. Deleted `.colaberry/profile.seed.json` (`git rm`) now that its content lives at the canonical path.
+  - Verification: `python -c "json.load(...)"` on the new `profile.json` — parses. `git status` confirms `profile.seed.json` removed and `profile.json` modified, nothing else touched.
+  - Notes: No site code changes needed — no tab reads `state.profile` yet, so this was a pure data file swap.
