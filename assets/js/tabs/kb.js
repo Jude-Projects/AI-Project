@@ -54,7 +54,7 @@ function answerQuestion(state, question) {
   const storyHit = state.joinedStories.find((s) => q.includes(s.id.toLowerCase()));
   if (storyHit) {
     return {
-      text: `${storyHit.id} (${storyHit.title}) is in release ${storyHit.release}, due ${storyHit.due_on}, currently ${storyHit.verification.state}.`,
+      text: `${storyHit.id} (${storyHit.title}) is in release ${storyHit.release}${storyHit.due_on ? `, due ${storyHit.due_on}` : ""}, currently ${storyHit.verification.state}.`,
       cite: "Project Management",
     };
   }
@@ -67,10 +67,11 @@ function answerQuestion(state, question) {
   }
 
   if (q.includes("demo")) {
-    return {
-      text: `Demo day is ${state.plan.schedule.demo_day}. The demo-target release is ${state.plan.schedule.demo_release_key}.`,
-      cite: "Overview / Project Management",
-    };
+    const demoRelease = (state.plan.releases || []).find((r) => r.is_demo_target);
+    const text = state.plan.schedule && state.plan.schedule.demo_day
+      ? `Demo day is ${state.plan.schedule.demo_day}. The demo-target release is ${demoRelease ? demoRelease.key : "not yet marked"}.`
+      : `No calendar demo day is set yet. ${demoRelease ? `The demo-target release is ${demoRelease.key}.` : "No release is currently marked as the demo target."}`;
+    return { text, cite: "Overview / Project Management" };
   }
 
   if (q.includes("role") || q.includes("user")) {

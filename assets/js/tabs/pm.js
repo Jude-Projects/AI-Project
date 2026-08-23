@@ -1,10 +1,12 @@
 /* Project Management tab — Gantt of releases + task list. Source:
-   plan.releases[] for the bars, plan.schedule for term bounds, and per
-   story plan.due_on/due_baseline_on (the gap between them is slippage —
-   shown, never hidden) joined against progress.stories[].verification
-   for status. Sample mode fabricates a plausible mix of statuses so the
-   finished look is visible; the release bars and dates are real either
-   way, since those are plan content, not a system-produced result. */
+   plan.releases[] for the bars (week_start/week_end — this plan has no
+   calendar dates assigned yet, so the Gantt is week-relative, not
+   date-based) and per story plan.due_on/due_baseline_on when present
+   (the gap between them would be slippage — shown, never hidden),
+   joined against progress.stories[].verification for status. Sample
+   mode fabricates a plausible mix of statuses so the finished look is
+   visible; release/story content itself is real either way, since
+   that's plan content, not a system-produced result. */
 
 window.TABS = window.TABS || {};
 
@@ -25,37 +27,41 @@ const SAMPLE_STATE_BY_STORY = {
   "STORY-010": "not_started",
 };
 
-function dayMs() {
-  return 1000 * 60 * 60 * 24;
+function weekRange(releases) {
+  const starts = releases.map((r) => r.week_start).filter((n) => typeof n === "number");
+  const ends = releases.map((r) => r.week_end).filter((n) => typeof n === "number");
+  const min = starts.length ? Math.min(...starts) : 1;
+  const max = ends.length ? Math.max(...ends) : min + 1;
+  return { min, max, span: Math.max(1, max - min + 1) };
 }
 
-function ganttRange(plan) {
-  const dates = [new Date(plan.schedule.build_start), new Date(plan.schedule.demo_day)];
-  (plan.releases || []).forEach((r) => {
-    dates.push(new Date(r.starts_on), new Date(r.ends_on));
-  });
-  const min = new Date(Math.min(...dates));
-  const max = new Date(Math.max(...dates));
-  return { min, max, span: Math.max(1, (max - min) / dayMs()) };
-}
-
-function pctFromDate(range, d) {
-  return (((new Date(d)) - range.min) / dayMs() / range.span) * 100;
+function pctFromWeek(range, week, edge) {
+  const w = typeof week === "number" ? week : range.min;
+  const offset = edge === "end" ? w - range.min + 1 : w - range.min;
+  return (offset / range.span) * 100;
 }
 
 function ganttHtml(plan) {
-  const range = ganttRange(plan);
-  const rows = (plan.releases || [])
+  const releases = plan.releases || [];
+  const hasWeeks = releases.some((r) => typeof r.week_start === "number");
+  if (!hasWeeks) {
+    return `<div class="section"><h2>Releases</h2>${emptyState("No schedule yet", "This plan's releases don't carry week or calendar bounds yet.")}</div>`;
+  }
+  const range = weekRange(releases);
+  const anyDemoTarget = releases.some((r) => r.is_demo_target);
+
+  const rows = releases
     .map((r) => {
-      const left = pctFromDate(range, r.starts_on);
-      const width = Math.max(2, pctFromDate(range, r.ends_on) - left);
+      const left = pctFromWeek(range, r.week_start, "start");
+      const right = pctFromWeek(range, r.week_end, "end");
+      const width = Math.max(2, right - left);
       return `
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
         <div style="width:150px; flex-shrink:0; font-size:0.82rem; font-weight:600;">
           ${esc(r.key)} ${r.is_demo_target ? '<span class="pill ok" style="margin-left:4px;">Demo target</span>' : ""}
         </div>
         <div style="position:relative; flex:1; height:26px; background:var(--surface-alt); border-radius:4px;">
-          <div title="${esc(r.name)}: ${esc(r.starts_on)} to ${esc(r.ends_on)}"
+          <div title="${esc(r.name)}: week ${esc(r.week_start)} to week ${esc(r.week_end)}${r.goal ? ` — ${esc(r.goal)}` : ""}"
                style="position:absolute; left:${left}%; width:${width}%; top:0; bottom:0; background:${r.is_demo_target ? "var(--accent)" : "var(--grey)"}; border-radius:4px; opacity:${r.is_demo_target ? 1 : 0.55};">
           </div>
         </div>
@@ -64,22 +70,29 @@ function ganttHtml(plan) {
     })
     .join("");
 
-  const demoLeft = pctFromDate(range, plan.schedule.demo_day);
   return `
     <div class="section">
       <h2>Releases</h2>
-      <p class="card-sub">${esc(range.min.toISOString().slice(0, 10))} &rarr; ${esc(range.max.toISOString().slice(0, 10))}. Demo day ${esc(plan.schedule.demo_day)} is marked; releases after the demo-target release are the roadmap, not this term's work.</p>
+      <p class="card-sub">Week ${esc(range.min)} &rarr; week ${esc(range.max)}. No calendar dates are set for this build yet, so this is week-relative, not date-based. ${anyDemoTarget ? "Releases after the demo-target release are the roadmap, not this term's work." : "No release is currently marked as the demo target."}</p>
       <div style="position:relative;">
         ${rows}
-        <div style="position:absolute; top:0; bottom:0; left:calc(160px + ${demoLeft}% * (100% - 390px) / 100); width:2px; background:var(--danger);" title="Demo day ${esc(plan.schedule.demo_day)}"></div>
       </div>
     </div>
   `;
 }
 
+function dueLabel(dateStr) {
+  return dateStr ? esc(dateStr) : "Not yet scheduled";
+}
+
 function taskTableHtml(state, mode) {
   const isSample = mode === "sample";
-  const stories = state.joinedStories.slice().sort((a, b) => (a.due_on < b.due_on ? -1 : 1));
+  const stories = state.joinedStories.slice().sort((a, b) => {
+    if (a.due_on && b.due_on) return a.due_on < b.due_on ? -1 : 1;
+    if (a.due_on) return -1;
+    if (b.due_on) return 1;
+    return a.release < b.release ? -1 : a.release > b.release ? 1 : a.id < b.id ? -1 : 1;
+  });
   return `
     <div class="section">
       <h2>Tasks</h2>
@@ -89,14 +102,14 @@ function taskTableHtml(state, mode) {
           <tbody>
           ${stories
             .map((s) => {
-              const slipped = s.due_on !== s.due_baseline_on;
+              const slipped = s.due_on && s.due_baseline_on && s.due_on !== s.due_baseline_on;
               const stateVal = isSample ? (SAMPLE_STATE_BY_STORY[s.id] || "not_started") : s.verification.state;
               return `<tr>
                 <td><a href="#pm/${s.id}">${s.id}</a></td>
                 <td>${esc(s.title)}</td>
                 <td>${esc(s.release)}</td>
-                <td>${esc(s.due_on)}</td>
-                <td>${esc(s.due_baseline_on)}${slipped ? ` <span class="pill warn">slipped</span>` : ""}</td>
+                <td>${dueLabel(s.due_on)}</td>
+                <td>${dueLabel(s.due_baseline_on)}${slipped ? ` <span class="pill warn">slipped</span>` : ""}</td>
                 <td>${verificationPill(stateVal)}</td>
               </tr>`;
             })
@@ -128,7 +141,7 @@ function pmDetail(container, state, mode, storyId) {
   }
   const release = (state.plan.releases || []).find((r) => r.key === story.release);
   const stateVal = isSample ? (SAMPLE_STATE_BY_STORY[story.id] || "not_started") : story.verification.state;
-  const slipped = story.due_on !== story.due_baseline_on;
+  const slipped = story.due_on && story.due_baseline_on && story.due_on !== story.due_baseline_on;
 
   container.innerHTML = `
     ${sampleBanner(isSample)}
@@ -139,9 +152,9 @@ function pmDetail(container, state, mode, storyId) {
       <table style="margin-top:10px;">
         <tbody>
           <tr><th>Release</th><td>${esc(story.release)}${release ? ` — ${esc(release.name)}` : ""}</td></tr>
-          <tr><th>Owner</th><td>${esc(story.owner)}</td></tr>
-          <tr><th>Due</th><td>${esc(story.due_on)}</td></tr>
-          <tr><th>Originally due</th><td>${esc(story.due_baseline_on)} ${slipped ? `<span class="pill warn">slipped</span>` : `<span class="pill grey">no slippage</span>`}</td></tr>
+          <tr><th>Owner</th><td>${esc(story.owner_agent)}</td></tr>
+          <tr><th>Due</th><td>${dueLabel(story.due_on)}</td></tr>
+          <tr><th>Originally due</th><td>${dueLabel(story.due_baseline_on)} ${slipped ? `<span class="pill warn">slipped</span>` : (story.due_on && story.due_baseline_on ? `<span class="pill grey">no slippage</span>` : "")}</td></tr>
           <tr><th>Status</th><td>${verificationPill(stateVal)}</td></tr>
           <tr><th>Criteria</th><td>${isSample ? "—" : `${story.verification.criteria_passed || 0} of ${story.verification.criteria_total || 0}`}</td></tr>
           <tr><th>Commit</th><td>${
@@ -153,6 +166,11 @@ function pmDetail(container, state, mode, storyId) {
         </tbody>
       </table>
     </div>
+    ${
+      story.acceptance && story.acceptance.length
+        ? `<div class="section"><h2>Acceptance criteria</h2><ul>${story.acceptance.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>`
+        : ""
+    }
   `;
 }
 

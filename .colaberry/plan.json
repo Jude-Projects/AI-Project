@@ -1,78 +1,677 @@
 {
-  "schema_version": 1,
-  "project": {
-    "name": "AI Data Assistant",
-    "descriptor": "An intelligent conversational data analytics platform for non-technical and technical users to connect data sources, ask questions, and receive analytical answers."
-  },
-  "schedule": {
-    "build_start": "2026-08-29",
-    "build_end": "2026-10-01",
-    "demo_day": "2026-10-08",
-    "demo_release_key": "r1"
-  },
-  "derived": {
-    "measures": [],
-    "roles": ["Data Analyst", "user", "business user", "admin", "data engineer", "User"],
-    "guardrails": [
-      { "id": "REQ-015", "statement": "The system must encrypt data connections to SQL Server." }
-    ],
-    "systems": ["SQL Server", "Integrated Authentication", "SQL Authentication"],
-    "owners": [
-      { "role": "Data Analyst", "story_ids": ["STORY-001", "STORY-002", "STORY-006"] },
-      { "role": "Business User", "story_ids": ["STORY-003", "STORY-007", "STORY-010"] },
-      { "role": "Data Visualization Specialist", "story_ids": ["STORY-004"] },
-      { "role": "Business Analyst", "story_ids": ["STORY-005"] },
-      { "role": "System Administrator", "story_ids": ["STORY-008"] },
-      { "role": "Data Engineer", "story_ids": ["STORY-009", "STORY-014"] },
-      { "role": "User", "story_ids": ["STORY-011", "STORY-012"] },
-      { "role": "Executive", "story_ids": ["STORY-013"] }
-    ],
-    "counts": {
-      "agents_by_autonomy": {}
-    }
-  },
+  "schema_version": 2,
+  "project_name": "AI Data Assistant",
+  "descriptor": "An intelligent conversational data analytics platform for non-technical and technical users to connect data sources, ask questions, and receive analytical answers.",
   "requirements": [
-    { "id": "REQ-001", "statement": "The system must allow users to connect to SQL Server databases using secure connection settings.", "kind": "FUNC", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-001"] },
-    { "id": "REQ-002", "statement": "The system must allow users to upload and analyze CSV files.", "kind": "FUNC", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-002"] },
-    { "id": "REQ-003", "statement": "The system must provide a conversational interface for users to ask questions in natural language.", "kind": "FUNC", "priority": "must", "cluster": "conversation", "fulfilled_by": ["STORY-003"] },
-    { "id": "REQ-004", "statement": "The system must interpret user questions and suggest potential interpretations if uncertain.", "kind": "FUNC", "priority": "must", "cluster": "conversation", "fulfilled_by": ["STORY-011"] },
-    { "id": "REQ-005", "statement": "The system must analyze data to provide accurate, explainable answers to user questions.", "kind": "FUNC", "priority": "must", "cluster": "analysis", "fulfilled_by": ["STORY-012"] },
-    { "id": "REQ-006", "statement": "The system must allow users to generate visualizations of analytical results with configurable parameters.", "kind": "FUNC", "priority": "must", "cluster": "analysis", "fulfilled_by": ["STORY-004"] },
-    { "id": "REQ-007", "statement": "The system must generate reports based on analytical results.", "kind": "FUNC", "priority": "must", "cluster": "reporting", "fulfilled_by": ["STORY-006"] },
-    { "id": "REQ-008", "statement": "The system must allow users to ask follow-up questions without repeating previous context.", "kind": "FUNC", "priority": "must", "cluster": "conversation", "fulfilled_by": ["STORY-007"] },
-    { "id": "REQ-009", "statement": "The system must support user roles including Business Users, Data Analysts, Data Engineers, and Executives.", "kind": "FUNC", "priority": "must", "cluster": "roles", "fulfilled_by": ["STORY-008"] },
-    { "id": "REQ-010", "statement": "The system must provide business-friendly explanations for analytical results.", "kind": "FUNC", "priority": "must", "cluster": "analysis", "fulfilled_by": ["STORY-005"] },
-    { "id": "REQ-011", "statement": "The system must allow Data Analysts to generate SQL queries from natural language questions.", "kind": "FUNC", "priority": "must", "cluster": "analysis", "fulfilled_by": ["STORY-001"] },
-    { "id": "REQ-012", "statement": "The system must allow Data Engineers to inspect schemas and profile data.", "kind": "FUNC", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-014"] },
-    { "id": "REQ-013", "statement": "The system must provide executive summaries and KPIs for Executives.", "kind": "FUNC", "priority": "must", "cluster": "reporting", "fulfilled_by": ["STORY-013"] },
-    { "id": "REQ-014", "statement": "The system must connect to SQL Server using Windows/Integrated Authentication and SQL Authentication.", "kind": "CONSTRAINT", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-001"] },
-    { "id": "REQ-015", "statement": "The system must encrypt data connections to SQL Server.", "kind": "SAFE", "priority": "must", "cluster": "security", "fulfilled_by": ["STORY-009"] },
-    { "id": "REQ-016", "statement": "The system must detect and handle null values and duplicate records in CSV uploads.", "kind": "FUNC", "priority": "must", "cluster": "connectivity", "fulfilled_by": ["STORY-002"] },
-    { "id": "REQ-017", "statement": "The system must provide alerts and recommendations based on data analysis.", "kind": "FUNC", "priority": "should", "cluster": "analysis", "fulfilled_by": ["STORY-010"] },
-    { "id": "REQ-018", "statement": "The system must allow users to download reports and dashboards.", "kind": "FUNC", "priority": "should", "cluster": "reporting", "fulfilled_by": [] }
-  ],
-  "stories": [
-    { "id": "STORY-001", "title": "Establish Initial Data Connection and Query Execution", "narrative": "As a Data Analyst, I want to connect to a SQL Server database and execute an initial query so that I can begin working with real data.", "release": "r0", "due_on": "2026-08-29", "due_baseline_on": "2026-08-29", "owner": "Data Analyst" },
-    { "id": "STORY-002", "title": "Upload and Analyze CSV Files", "narrative": "As a Data Analyst, I want to upload a CSV file and have it analyzed so that I can work with data outside of a database.", "release": "r0", "due_on": "2026-09-01", "due_baseline_on": "2026-09-01", "owner": "Data Analyst" },
-    { "id": "STORY-003", "title": "Ask Questions in Natural Language", "narrative": "As a business user, I want to ask questions about my data in natural language so that I don't need to know SQL.", "release": "r0", "due_on": "2026-09-03", "due_baseline_on": "2026-09-03", "owner": "Business User" },
-    { "id": "STORY-004", "title": "Visualize Analytical Results", "narrative": "As a user, I want to generate visualizations of analytical results with configurable parameters so that I can see patterns in the data.", "release": "r1", "due_on": "2026-09-05", "due_baseline_on": "2026-09-05", "owner": "Data Visualization Specialist" },
-    { "id": "STORY-005", "title": "Provide Business-Friendly Explanations", "narrative": "As a business user, I want analytical results explained in plain language so that I can understand them without technical background.", "release": "r1", "due_on": "2026-09-07", "due_baseline_on": "2026-09-07", "owner": "Business Analyst" },
-    { "id": "STORY-011", "title": "Interpret User Questions and Suggest Interpretations", "narrative": "As a User, I want the system to suggest interpretations of my question when it's uncertain so that I get the answer I actually meant.", "release": "r1", "due_on": "2026-09-08", "due_baseline_on": "2026-09-08", "owner": "User" },
-    { "id": "STORY-012", "title": "Analyze Data and Provide Explainable Answers", "narrative": "As a User, I want the system to analyze data and explain how it reached its answer so that I can trust the result.", "release": "r1", "due_on": "2026-09-10", "due_baseline_on": "2026-09-10", "owner": "User" },
-    { "id": "STORY-006", "title": "Generate Reports from Analytical Results", "narrative": "As a Data Analyst, I want to generate a report from analytical results so that I can share findings with others.", "release": "r2", "due_on": "2026-09-12", "due_baseline_on": "2026-09-12", "owner": "Data Analyst" },
-    { "id": "STORY-007", "title": "Allow Follow-Up Questions", "narrative": "As a business user, I want to ask follow-up questions without repeating context so that the conversation feels natural.", "release": "r2", "due_on": "2026-09-14", "due_baseline_on": "2026-09-14", "owner": "Business User" },
-    { "id": "STORY-013", "title": "Provide Executive Summaries and KPIs", "narrative": "As a User, I want a summary of KPIs from the data so that I can make decisions quickly.", "release": "r2", "due_on": "2026-09-15", "due_baseline_on": "2026-09-15", "owner": "Executive" },
-    { "id": "STORY-014", "title": "Inspect Schemas and Profile Data", "narrative": "As a data engineer, I want to inspect schemas and profile data so that I can assess data quality before it's used.", "release": "r2", "due_on": "2026-09-17", "due_baseline_on": "2026-09-17", "owner": "Data Engineer" },
-    { "id": "STORY-008", "title": "Support Multiple User Roles", "narrative": "As an admin, I want to assign roles including Business User, Data Analyst, Data Engineer, and Executive so that access matches responsibility.", "release": "r3", "due_on": "2026-09-21", "due_baseline_on": "2026-09-21", "owner": "System Administrator" },
-    { "id": "STORY-009", "title": "Secure Data Connections", "narrative": "As a data engineer, I want data connections to SQL Server encrypted so that data in transit is protected.", "release": "r3", "due_on": "2026-09-24", "due_baseline_on": "2026-09-24", "owner": "Data Engineer" },
-    { "id": "STORY-010", "title": "Provide Alerts and Recommendations", "narrative": "As a business user, I want alerts and recommendations based on data analysis so that I can act on important changes.", "release": "r4", "due_on": "2026-10-01", "due_baseline_on": "2026-10-01", "owner": "Business User" }
+    {
+      "id": "REQ-001",
+      "kind": "FUNC",
+      "cluster": "Data Connection",
+      "priority": "must",
+      "statement": "The system must allow users to connect to SQL Server databases using secure connection settings.",
+      "fulfilled_by": [
+        "STORY-001"
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "kind": "FUNC",
+      "cluster": "Data Connection",
+      "priority": "must",
+      "statement": "The system must allow users to upload and analyze CSV files.",
+      "fulfilled_by": [
+        "STORY-002"
+      ]
+    },
+    {
+      "id": "REQ-003",
+      "kind": "FUNC",
+      "cluster": "User Interface",
+      "priority": "must",
+      "statement": "The system must provide a conversational interface for users to ask questions in natural language.",
+      "fulfilled_by": [
+        "STORY-003"
+      ]
+    },
+    {
+      "id": "REQ-004",
+      "kind": "FUNC",
+      "cluster": "Natural Language Processing",
+      "priority": "must",
+      "statement": "The system must interpret user questions and suggest potential interpretations if uncertain.",
+      "fulfilled_by": [
+        "STORY-011"
+      ]
+    },
+    {
+      "id": "REQ-005",
+      "kind": "FUNC",
+      "cluster": "Data Analysis",
+      "priority": "must",
+      "statement": "The system must analyze data to provide accurate, explainable answers to user questions.",
+      "fulfilled_by": [
+        "STORY-012"
+      ]
+    },
+    {
+      "id": "REQ-006",
+      "kind": "FUNC",
+      "cluster": "Visualization",
+      "priority": "must",
+      "statement": "The system must allow users to generate visualizations of analytical results with configurable parameters.",
+      "fulfilled_by": [
+        "STORY-004"
+      ]
+    },
+    {
+      "id": "REQ-007",
+      "kind": "FUNC",
+      "cluster": "Reporting",
+      "priority": "must",
+      "statement": "The system must generate reports based on analytical results.",
+      "fulfilled_by": [
+        "STORY-006"
+      ]
+    },
+    {
+      "id": "REQ-008",
+      "kind": "FUNC",
+      "cluster": "User Experience",
+      "priority": "must",
+      "statement": "The system must allow users to ask follow-up questions without repeating previous context.",
+      "fulfilled_by": [
+        "STORY-007"
+      ]
+    },
+    {
+      "id": "REQ-009",
+      "kind": "FUNC",
+      "cluster": "User Management",
+      "priority": "must",
+      "statement": "The system must support user roles including Business Users, Data Analysts, Data Engineers, and Executives.",
+      "fulfilled_by": [
+        "STORY-008"
+      ]
+    },
+    {
+      "id": "REQ-010",
+      "kind": "FUNC",
+      "cluster": "User Experience",
+      "priority": "must",
+      "statement": "The system must provide business-friendly explanations for analytical results.",
+      "fulfilled_by": [
+        "STORY-005"
+      ]
+    },
+    {
+      "id": "REQ-011",
+      "kind": "FUNC",
+      "cluster": "Data Analysis",
+      "priority": "must",
+      "statement": "The system must allow Data Analysts to generate SQL queries from natural language questions.",
+      "fulfilled_by": [
+        "STORY-001"
+      ]
+    },
+    {
+      "id": "REQ-012",
+      "kind": "FUNC",
+      "cluster": "Data Management",
+      "priority": "must",
+      "statement": "The system must allow Data Engineers to inspect schemas and profile data.",
+      "fulfilled_by": [
+        "STORY-014"
+      ]
+    },
+    {
+      "id": "REQ-013",
+      "kind": "FUNC",
+      "cluster": "Reporting",
+      "priority": "must",
+      "statement": "The system must provide executive summaries and KPIs for Executives.",
+      "fulfilled_by": [
+        "STORY-013"
+      ]
+    },
+    {
+      "id": "REQ-014",
+      "kind": "CONSTRAINT",
+      "cluster": "Data Connection",
+      "priority": "must",
+      "statement": "The system must connect to SQL Server using Windows/Integrated Authentication and SQL Authentication.",
+      "fulfilled_by": [
+        "STORY-001"
+      ]
+    },
+    {
+      "id": "REQ-015",
+      "kind": "SAFE",
+      "cluster": "Data Security",
+      "priority": "must",
+      "statement": "The system must encrypt data connections to SQL Server.",
+      "fulfilled_by": [
+        "STORY-001",
+        "STORY-009"
+      ]
+    },
+    {
+      "id": "REQ-016",
+      "kind": "FUNC",
+      "cluster": "Data Management",
+      "priority": "must",
+      "statement": "The system must detect and handle null values and duplicate records in CSV uploads.",
+      "fulfilled_by": [
+        "STORY-002"
+      ]
+    },
+    {
+      "id": "REQ-017",
+      "kind": "FUNC",
+      "cluster": "Data Analysis",
+      "priority": "should",
+      "statement": "The system must provide alerts and recommendations based on data analysis.",
+      "fulfilled_by": [
+        "STORY-010"
+      ]
+    },
+    {
+      "id": "REQ-018",
+      "kind": "FUNC",
+      "cluster": "Reporting",
+      "priority": "should",
+      "statement": "The system must allow users to download reports and dashboards.",
+      "fulfilled_by": []
+    }
   ],
   "releases": [
-    { "key": "r0", "name": "Initial Data Connection and Query", "starts_on": "2026-08-29", "ends_on": "2026-09-03", "story_ids": ["STORY-001", "STORY-002", "STORY-003"], "is_demo_target": false },
-    { "key": "r1", "name": "Enhanced Data Analysis and Visualization", "starts_on": "2026-09-05", "ends_on": "2026-09-10", "story_ids": ["STORY-004", "STORY-005", "STORY-011", "STORY-012"], "is_demo_target": true },
-    { "key": "r2", "name": "User Experience and Reporting", "starts_on": "2026-09-12", "ends_on": "2026-09-17", "story_ids": ["STORY-006", "STORY-007", "STORY-013", "STORY-014"], "is_demo_target": false },
-    { "key": "r3", "name": "Advanced User Roles and Security", "starts_on": "2026-09-21", "ends_on": "2026-09-24", "story_ids": ["STORY-008", "STORY-009"], "is_demo_target": false },
-    { "key": "r4", "name": "Alerts and Recommendations", "starts_on": "2026-10-01", "ends_on": "2026-10-01", "story_ids": ["STORY-010"], "is_demo_target": false }
+    {
+      "key": "r0",
+      "demo": "Connect to SQL Server and CSV, ask a question, and receive an answer with potential interpretations.",
+      "goal": "Establish secure data connections and basic query functionality.",
+      "name": "Initial Data Connection and Query",
+      "week_end": 2,
+      "week_start": 1,
+      "story_ids": [
+        "STORY-001",
+        "STORY-002",
+        "STORY-003"
+      ],
+      "starts_on": null,
+      "ends_on": null,
+      "is_demo_target": false
+    },
+    {
+      "key": "r1",
+      "demo": "Analyze data and visualize results with business-friendly explanations.",
+      "goal": "Provide accurate analysis and visualizations.",
+      "name": "Enhanced Data Analysis and Visualization",
+      "week_end": 4,
+      "week_start": 3,
+      "story_ids": [
+        "STORY-004",
+        "STORY-005",
+        "STORY-011",
+        "STORY-012"
+      ],
+      "starts_on": null,
+      "ends_on": null,
+      "is_demo_target": false
+    },
+    {
+      "key": "r2",
+      "demo": "Generate reports and allow follow-up questions without losing context.",
+      "goal": "Improve user experience with context retention and reporting capabilities.",
+      "name": "User Experience and Reporting",
+      "week_end": 6,
+      "week_start": 5,
+      "story_ids": [
+        "STORY-006",
+        "STORY-007",
+        "STORY-013",
+        "STORY-014"
+      ],
+      "starts_on": null,
+      "ends_on": null,
+      "is_demo_target": false
+    },
+    {
+      "key": "r3",
+      "demo": "Support multiple user roles and secure data connections.",
+      "goal": "Implement advanced user roles and secure data handling.",
+      "name": "Advanced User Roles and Security",
+      "week_end": 8,
+      "week_start": 7,
+      "story_ids": [
+        "STORY-008",
+        "STORY-009"
+      ],
+      "starts_on": null,
+      "ends_on": null,
+      "is_demo_target": false
+    },
+    {
+      "key": "r4",
+      "demo": "Show alerts and recommendations for data insights.",
+      "goal": "Provide alerts and recommendations based on data analysis.",
+      "name": "Alerts and Recommendations",
+      "week_end": 10,
+      "week_start": 9,
+      "story_ids": [
+        "STORY-010"
+      ],
+      "starts_on": null,
+      "ends_on": null,
+      "is_demo_target": false
+    }
   ],
-  "agents": []
+  "stories": [
+    {
+      "id": "STORY-001",
+      "title": "Establish Initial Data Connection and Query Execution",
+      "release": "r0",
+      "fulfills": [
+        "REQ-001",
+        "REQ-011",
+        "REQ-014",
+        "REQ-015"
+      ],
+      "narrative": "As a Data Analyst, I want to connect to the SQL Server Database and execute queries, so that I can retrieve and analyze data.",
+      "acceptance": [
+        "Given a valid SQL Server connection string, when I connect to the database, then I should be able to execute a basic SQL query.",
+        "Given an invalid SQL Server connection string, when I attempt to connect, then I should receive an error message indicating the connection failure.",
+        "Trust: Every query execution must be logged with the user ID and timestamp."
+      ],
+      "blocked_by": [],
+      "owner_agent": "Data Analyst",
+      "failure_paths": [
+        "Invalid connection string",
+        "Network timeout",
+        "SQL syntax error"
+      ],
+      "task_guidance": "Use the SQL Server connection string provided in the configuration file to establish a connection. Implement query execution using the SQL client library.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-002",
+      "title": "Upload and Analyze CSV Files",
+      "release": "r0",
+      "fulfills": [
+        "REQ-002",
+        "REQ-016"
+      ],
+      "narrative": "As a user, I want to upload CSV files, so that I can analyze the data contained within them.",
+      "acceptance": [
+        "Given a CSV file, when I upload it, then the system should detect columns and datatypes.",
+        "Given a CSV file with duplicates, when I upload it, then the system should identify duplicate records.",
+        "Trust: All uploads are logged with user details and file metadata."
+      ],
+      "blocked_by": [],
+      "owner_agent": "Data Analyst",
+      "failure_paths": [
+        "File format error",
+        "Missing headers",
+        "Large file size"
+      ],
+      "task_guidance": "Use Apache Commons CSV to parse and analyze CSV files, detecting duplicates and nulls.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-003",
+      "title": "Ask Questions in Natural Language",
+      "release": "r0",
+      "fulfills": [
+        "REQ-003"
+      ],
+      "narrative": "As a user, I want to ask questions in natural language, so that I can interact with the system easily.",
+      "acceptance": [
+        "Given a natural language question, when I ask it, then the system should interpret it correctly.",
+        "Given an ambiguous question, when I ask it, then the system should suggest potential interpretations.",
+        "Trust: All questions and interpretations are logged for audit."
+      ],
+      "blocked_by": [],
+      "owner_agent": "Business User",
+      "failure_paths": [
+        "Ambiguous question",
+        "Unsupported language",
+        "Timeout"
+      ],
+      "task_guidance": "Implement NLP using a pre-trained model like BERT to interpret questions.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-004",
+      "title": "Visualize Analytical Results",
+      "release": "r1",
+      "fulfills": [
+        "REQ-006"
+      ],
+      "narrative": "As a user, I want to visualize analytical results, so that I can understand the data better.",
+      "acceptance": [
+        "Given analytical results, when I request a visualization, then the system should display a chart.",
+        "Given a request for a specific chart type, when I request it, then the system should display the correct type.",
+        "Trust: All visualizations are logged with user details."
+      ],
+      "blocked_by": [
+        "STORY-003"
+      ],
+      "owner_agent": "Data Visualization Specialist",
+      "failure_paths": [
+        "Unsupported chart type",
+        "Data mismatch",
+        "Rendering error"
+      ],
+      "task_guidance": "Use D3.js to create interactive visualizations based on analytical results.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-005",
+      "title": "Provide Business-Friendly Explanations",
+      "release": "r1",
+      "fulfills": [
+        "REQ-010"
+      ],
+      "narrative": "As a business user, I want explanations in simple terms, so that I can understand the results without technical knowledge.",
+      "acceptance": [
+        "Given analytical results, when I request an explanation, then the system should provide a business-friendly summary.",
+        "Given a complex analysis, when I request an explanation, then the system should simplify the details.",
+        "Trust: All explanations are logged with user details."
+      ],
+      "blocked_by": [
+        "STORY-003"
+      ],
+      "owner_agent": "Business Analyst",
+      "failure_paths": [
+        "Complexity overload",
+        "Misinterpretation",
+        "Language barrier"
+      ],
+      "task_guidance": "Implement a summarization algorithm to convert technical results into business language.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-006",
+      "title": "Generate Reports from Analytical Results",
+      "release": "r2",
+      "fulfills": [
+        "REQ-007"
+      ],
+      "narrative": "As a user, I want to generate reports, so that I can share insights with others.",
+      "acceptance": [
+        "Given analytical results, when I request a report, then the system should generate a PDF report.",
+        "Given a request for a specific report format, when I request it, then the system should generate the correct format.",
+        "Trust: All report generations are logged with user details."
+      ],
+      "blocked_by": [
+        "STORY-004"
+      ],
+      "owner_agent": "Data Analyst",
+      "failure_paths": [
+        "Unsupported format",
+        "Data export error",
+        "Permission denied"
+      ],
+      "task_guidance": "Use Apache PDFBox to generate PDF reports from analytical data.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-007",
+      "title": "Allow Follow-Up Questions",
+      "release": "r2",
+      "fulfills": [
+        "REQ-008"
+      ],
+      "narrative": "As a user, I want to ask follow-up questions, so that I can continue my analysis without starting over.",
+      "acceptance": [
+        "Given a previous question, when I ask a follow-up, then the system should remember the context.",
+        "Given a new session, when I ask a follow-up, then the system should prompt for context.",
+        "Trust: All follow-up interactions are logged with user details."
+      ],
+      "blocked_by": [
+        "STORY-003"
+      ],
+      "owner_agent": "Business User",
+      "failure_paths": [
+        "Session timeout",
+        "Context loss",
+        "Ambiguous follow-up"
+      ],
+      "task_guidance": "Implement session management to retain context across user interactions.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-008",
+      "title": "Support Multiple User Roles",
+      "release": "r3",
+      "fulfills": [
+        "REQ-009"
+      ],
+      "narrative": "As an admin, I want to define user roles, so that users have access to appropriate features.",
+      "acceptance": [
+        "Given a user, when I assign a role, then the user should have access to role-specific features.",
+        "Given a role change, when I update it, then the user's access should update accordingly.",
+        "Trust: All role assignments are logged with admin details."
+      ],
+      "blocked_by": [
+        "STORY-006"
+      ],
+      "owner_agent": "System Administrator",
+      "failure_paths": [
+        "Role conflict",
+        "Unauthorized access",
+        "Role update failure"
+      ],
+      "task_guidance": "Implement role-based access control using Spring Security.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-009",
+      "title": "Secure Data Connections",
+      "release": "r3",
+      "fulfills": [
+        "REQ-015"
+      ],
+      "narrative": "As a data engineer, I want secure data connections, so that data integrity is maintained.",
+      "acceptance": [
+        "Given a database connection, when I configure it, then the connection should be encrypted.",
+        "Given an unencrypted connection attempt, when I detect it, then the system should block it.",
+        "Trust: All connection configurations are logged with user details."
+      ],
+      "blocked_by": [
+        "STORY-001"
+      ],
+      "owner_agent": "Data Engineer",
+      "failure_paths": [
+        "Encryption failure",
+        "Certificate error",
+        "Protocol mismatch"
+      ],
+      "task_guidance": "Ensure all database connections use SSL/TLS for encryption.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-010",
+      "title": "Provide Alerts and Recommendations",
+      "release": "r4",
+      "fulfills": [
+        "REQ-017"
+      ],
+      "narrative": "As a user, I want alerts and recommendations, so that I can act on data insights.",
+      "acceptance": [
+        "Given data insights, when I request alerts, then the system should notify me of important changes.",
+        "Given a recommendation request, when I ask for it, then the system should provide actionable advice.",
+        "Trust: All alerts and recommendations are logged with user details."
+      ],
+      "blocked_by": [
+        "STORY-009"
+      ],
+      "owner_agent": "Business User",
+      "failure_paths": [
+        "False positive",
+        "Missed alert",
+        "Recommendation error"
+      ],
+      "task_guidance": "Implement a rule-based engine to generate alerts and recommendations based on data analysis.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-011",
+      "title": "Interpret User Questions and Suggest Interpretations",
+      "release": "r1",
+      "fulfills": [
+        "REQ-004"
+      ],
+      "narrative": "As a User, I want the system to interpret my questions and suggest potential interpretations, so that I can refine my queries.",
+      "acceptance": [
+        "Given a user question, when the system interprets it, then it should suggest at least one potential interpretation.",
+        "Given an ambiguous question, when the system interprets it, then it should suggest multiple interpretations for user selection.",
+        "Trust: Every interpretation suggestion must be logged with the question and user ID."
+      ],
+      "blocked_by": [
+        "STORY-001"
+      ],
+      "owner_agent": "User",
+      "failure_paths": [
+        "Ambiguous question",
+        "Unsupported language",
+        "Interpretation timeout"
+      ],
+      "task_guidance": "Implement natural language processing to parse user questions and generate interpretations. Log each interpretation attempt.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-012",
+      "title": "Analyze Data and Provide Explainable Answers",
+      "release": "r1",
+      "fulfills": [
+        "REQ-005"
+      ],
+      "narrative": "As a User, I want the system to analyze data and provide accurate, explainable answers to my questions, so that I can understand the results.",
+      "acceptance": [
+        "Given a user question, when the system analyzes data, then it should provide an accurate answer with an explanation.",
+        "Given a complex question, when the system analyzes data, then it should provide an answer with a detailed explanation of the analysis process.",
+        "Trust: Every answer provided must be logged with the question, answer, and user ID."
+      ],
+      "blocked_by": [
+        "STORY-011"
+      ],
+      "owner_agent": "User",
+      "failure_paths": [
+        "Data inconsistency",
+        "Analysis timeout",
+        "Unsupported query type"
+      ],
+      "task_guidance": "Use data analysis algorithms to process queries and generate answers. Ensure explanations are clear and logged.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-013",
+      "title": "Provide Executive Summaries and KPIs",
+      "release": "r2",
+      "fulfills": [
+        "REQ-013"
+      ],
+      "narrative": "As an Executive, I want the system to provide executive summaries and KPIs, so that I can quickly assess business performance.",
+      "acceptance": [
+        "Given a set of data, when I request an executive summary, then the system should provide a concise summary with key KPIs.",
+        "Given incomplete data, when I request an executive summary, then the system should indicate missing data and provide available KPIs.",
+        "Trust: Every summary request must be logged with the user ID and timestamp."
+      ],
+      "blocked_by": [
+        "STORY-012"
+      ],
+      "owner_agent": "Executive",
+      "failure_paths": [
+        "Missing data",
+        "Summary generation timeout",
+        "Incorrect KPI calculation"
+      ],
+      "task_guidance": "Design executive summary templates that highlight key KPIs. Implement data aggregation and summary generation.",
+      "due_on": null,
+      "due_baseline_on": null
+    },
+    {
+      "id": "STORY-014",
+      "title": "Inspect Schemas and Profile Data",
+      "release": "r2",
+      "fulfills": [
+        "REQ-012"
+      ],
+      "narrative": "As a Data Engineer, I want to inspect schemas and profile data, so that I can ensure data quality and structure.",
+      "acceptance": [
+        "Given a database, when I inspect schemas, then I should see the structure and relationships of tables.",
+        "Given a dataset, when I profile data, then I should see data distribution and quality metrics.",
+        "Trust: Every schema inspection and data profiling must be logged with the user ID and timestamp."
+      ],
+      "blocked_by": [
+        "STORY-001"
+      ],
+      "owner_agent": "Data Engineer",
+      "failure_paths": [
+        "Schema access error",
+        "Profiling timeout",
+        "Data quality metric calculation error"
+      ],
+      "task_guidance": "Implement schema inspection tools and data profiling algorithms. Ensure all actions are logged for auditing.",
+      "due_on": null,
+      "due_baseline_on": null
+    }
+  ],
+  "agents": [],
+  "project": {
+    "name": "AI Data Assistant",
+    "descriptor": "An intelligent conversational data analytics platform for non-technical and technical users to connect data sources, ask questions, and receive analytical answers.",
+    "repo_url": null,
+    "plan_version": 1,
+    "plan_sha256": "90135a45ddc33f6c2fdb9eb8b625827e4d8f476153f45117b41fa2485759f468"
+  },
+  "schedule": null,
+  "derived": {
+    "measures": [],
+    "guardrails": [
+      {
+        "id": "REQ-015",
+        "statement": "The system must encrypt data connections to SQL Server."
+      }
+    ],
+    "systems": [
+      "SQL Server",
+      "Integrated Authentication",
+      "SQL Authentication"
+    ],
+    "roles": [
+      "Data Analyst",
+      "user",
+      "business user",
+      "admin",
+      "data engineer",
+      "User",
+      "Executive",
+      "Data Engineer"
+    ],
+    "counts": {
+      "requirements_total": 18,
+      "requirements_by_kind": {
+        "CONSTRAINT": 1,
+        "FUNC": 16,
+        "SAFE": 1
+      },
+      "stories_total": 14,
+      "releases_total": 5,
+      "agents_total": 0,
+      "failure_paths_total": 40,
+      "agents_by_autonomy": {}
+    }
+  }
 }

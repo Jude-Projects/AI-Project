@@ -16,6 +16,13 @@ const SAMPLE_TOTALS = {
 };
 
 function schedulePosition(schedule) {
+  if (!schedule || !schedule.build_start || !schedule.build_end || !schedule.demo_day) {
+    return {
+      status: "Not scheduled",
+      detail: "No calendar dates have been set for this build yet.",
+      tone: "grey",
+    };
+  }
   const now = new Date();
   const buildStart = new Date(schedule.build_start);
   const buildEnd = new Date(schedule.build_end);
@@ -62,7 +69,9 @@ window.TABS.overview = function renderOverview(container, state, mode) {
   const isSample = mode === "sample";
   const totals = isSample ? SAMPLE_TOTALS : progress.totals;
   const pos = schedulePosition(plan.schedule);
-  const demoRelease = (plan.releases || []).find((r) => r.key === plan.schedule.demo_release_key);
+  const demoRelease = (plan.releases || []).find((r) =>
+    plan.schedule && plan.schedule.demo_release_key ? r.key === plan.schedule.demo_release_key : r.is_demo_target
+  );
 
   const criteriaLabel = totals.criteria_total === null || totals.criteria_total === undefined
     ? "not yet defined"
@@ -71,8 +80,8 @@ window.TABS.overview = function renderOverview(container, state, mode) {
   container.innerHTML = `
     ${isSample ? `<div class="sample-banner">SAMPLE DATA — this page is showing fabricated numbers so you can see the shape of the dashboard. Switch to Real to see what the project has actually produced.</div>` : ""}
 
-    <h1>${plan.project.name}${isSample ? '<span class="sample-tag">Sample</span>' : ""}</h1>
-    <p class="lede">${plan.project.descriptor}</p>
+    <h1>${esc(plan.project?.name || plan.project_name)}${isSample ? '<span class="sample-tag">Sample</span>' : ""}</h1>
+    <p class="lede">${esc(plan.project?.descriptor || plan.descriptor)}</p>
 
     <div class="card-grid">
       <a class="card" href="#pm">
@@ -114,8 +123,8 @@ window.TABS.overview = function renderOverview(container, state, mode) {
 
       <a class="card" href="#pm">
         <span class="card-label">Demo target release</span>
-        <span class="card-value" style="font-size:1.2rem;">${demoRelease ? demoRelease.name : "—"}</span>
-        <span class="card-sub">Demo day ${plan.schedule.demo_day}. Releases after this one are roadmap, not this term's work.</span>
+        <span class="card-value" style="font-size:1.2rem;">${demoRelease ? esc(demoRelease.name) : "Not yet marked"}</span>
+        <span class="card-sub">${plan.schedule && plan.schedule.demo_day ? `Demo day ${esc(plan.schedule.demo_day)}.` : "No demo day set yet."} ${demoRelease ? "Releases after this one are roadmap, not this term's work." : "No release is currently flagged as the demo target."}</span>
         <span class="card-drill">Project Management &rarr;</span>
       </a>
     </div>

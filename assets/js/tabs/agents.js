@@ -1,5 +1,5 @@
 /* AI Agents tab — this plan carries no scoped agent roster yet, so the
-   roster shown here is built from who owns each story (plan.derived.owners).
+   roster shown here is built live from each story's owner_agent field.
    These are owners, not scoped AI agents, and the tab says so rather than
    presenting a job title as if it were an autonomous agent. There is no
    run history in these files — real mode says "no runs recorded", never a
@@ -22,9 +22,19 @@ function ownerStories(state, storyIds) {
   return storyIds.map((id) => findStory(state, id)).filter(Boolean);
 }
 
+function deriveOwners(state) {
+  const byRole = new Map();
+  state.joinedStories.forEach((s) => {
+    if (!s.owner_agent) return;
+    if (!byRole.has(s.owner_agent)) byRole.set(s.owner_agent, []);
+    byRole.get(s.owner_agent).push(s.id);
+  });
+  return Array.from(byRole.entries()).map(([role, story_ids]) => ({ role, story_ids }));
+}
+
 function agentsList(container, state, mode) {
   const isSample = mode === "sample";
-  const owners = state.plan.derived.owners || [];
+  const owners = deriveOwners(state);
 
   container.innerHTML = `
     ${sampleBanner(isSample, "run counts and success rates below are fabricated — no run history exists in these files.")}
@@ -52,7 +62,7 @@ function agentsList(container, state, mode) {
 function agentsDetail(container, state, mode, roleRaw) {
   const role = decodeURIComponent(roleRaw);
   const isSample = mode === "sample";
-  const owner = (state.plan.derived.owners || []).find((o) => o.role === role);
+  const owner = deriveOwners(state).find((o) => o.role === role);
   if (!owner) {
     container.innerHTML = `${breadcrumb("AI Agents", "agents", "Not found")}${emptyState("Not found", "No owner with this role exists in the plan.")}`;
     return;
