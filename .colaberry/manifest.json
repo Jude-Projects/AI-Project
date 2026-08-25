@@ -5,6 +5,42 @@
   "correlation_id": "55c7fb2e-7391-4dc7-907a-01f471df7d32",
   "files": [
     {
+      "path": ".colaberry/plan.json",
+      "sha256": "3fc5b338e712ab3b4f03e370062c2d601dab11453c06375a8bad37b7c3a30608"
+    },
+    {
+      "path": ".colaberry/profile.json",
+      "sha256": "23a23259ef9033421479380c44c0c928276bb7066f34ef0fee30bb7661a46e88"
+    },
+    {
+      "path": ".colaberry/progress.json",
+      "sha256": "f03e6a8ae11cc0293e131d2f01ed1f77f267c74843cb623b98baaf33c9c140c6"
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "b6102a9ff6d5b8393796003b60f92989cf4bfa53ffe9fa03f863685ee145a0aa"
+    },
+    {
+      "path": "artifacts/INDEX.md",
+      "sha256": "30d30d550c9d395b4c0a84a5867252a3de46039caaebccd95a52250b9aa4f7ec"
+    },
+    {
+      "path": "artifacts/week-01/ai-agent-vs-chat-tool.md",
+      "sha256": "f26018036987c422f9d6746263aa82d08c661b2d6095686370d5bc7c59f46363"
+    },
+    {
+      "path": "artifacts/week-02/skill-template.md",
+      "sha256": "5453c7e497cbf81a19ccb372728e97994a507180d78d87ed91d78aa0d3764b26"
+    },
+    {
+      "path": "artifacts/week-03/env.txt",
+      "sha256": "69aa73cf5bc3377a7d97f2e8d2bb773195815efe225af7f1be6f5b9306bbe14f"
+    },
+    {
+      "path": "artifacts/week-04/v1-0-0.md",
+      "sha256": "3d022decb9a421088888fd940210c3092f29a7d3982395ea5a675ef23ec76b09"
+    },
+    {
       "path": "docs/REQUIREMENTS.md",
       "sha256": "e189382d7fae036b43ec7bcea33eba99aefa0b100c3a7787e67da0e66b8b1eef"
     },
@@ -17,8 +53,8 @@
       "sha256": "b64c6c106609281d5706d691fdaf5f112e9c23d21fb4961187ae07fdb7640b0a"
     },
     {
-      "path": "CLAUDE.md",
-      "sha256": "b6102a9ff6d5b8393796003b60f92989cf4bfa53ffe9fa03f863685ee145a0aa"
+      "path": "docs/stories/STORY-000.md",
+      "sha256": "e4b3af5725c319f2b9b9a87840e458812bf2acf5c06cde871044599917a36afd"
     },
     {
       "path": "docs/stories/STORY-001.md",
@@ -75,22 +111,6 @@
     {
       "path": "docs/stories/STORY-014.md",
       "sha256": "97cd7054f197be8b81c0b34f6fa10f5006d922dad953b21ea3de90af8173cfa3"
-    },
-    {
-      "path": "docs/stories/STORY-000.md",
-      "sha256": "e4b3af5725c319f2b9b9a87840e458812bf2acf5c06cde871044599917a36afd"
-    },
-    {
-      "path": ".colaberry/plan.json",
-      "sha256": "3fc5b338e712ab3b4f03e370062c2d601dab11453c06375a8bad37b7c3a30608"
-    },
-    {
-      "path": ".colaberry/progress.json",
-      "sha256": "f03e6a8ae11cc0293e131d2f01ed1f77f267c74843cb623b98baaf33c9c140c6"
-    },
-    {
-      "path": ".colaberry/profile.json",
-      "sha256": "23a23259ef9033421479380c44c0c928276bb7066f34ef0fee30bb7661a46e88"
     }
   ]
 }
