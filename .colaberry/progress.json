@@ -3,13 +3,13 @@
   "project": "AI Data Assistant",
   "totals": {
     "stories_total": 15,
-    "stories_verified": 0,
+    "stories_verified": 1,
     "stories_submitted": 0,
-    "stories_in_progress": 0,
-    "stories_not_started": 15,
-    "criteria_total": 0,
-    "criteria_passed": 0,
-    "points_awarded": 0
+    "stories_in_progress": 14,
+    "stories_not_started": 0,
+    "criteria_total": 47,
+    "criteria_passed": 5,
+    "points_awarded": 53
   },
   "stories": [
     {
@@ -43,14 +43,14 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
-        "criteria_passed": 0,
-        "criteria_total": 0,
-        "verified_at": null,
-        "commit_sha": null,
-        "commit_url": null,
-        "commit_at": null,
-        "points_awarded": null,
+        "state": "verified",
+        "criteria_passed": 5,
+        "criteria_total": 5,
+        "verified_at": "2026-08-23T02:24:14.480Z",
+        "commit_sha": "7b7683e280240f53b0af03c7941ba7a41f82e0f1",
+        "commit_url": "https://github.com/Jude-Projects/AI-Project/commit/7b7683e280240f53b0af03c7941ba7a41f82e0f1",
+        "commit_at": "2026-08-23T01:49:56Z",
+        "points_awarded": 53,
         "outstanding": []
       }
     },
@@ -77,15 +77,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
-        "commit_sha": null,
-        "commit_url": null,
-        "commit_at": null,
+        "commit_sha": "1fda41708e08977e74a19f4c4d095ebbbc354ecc",
+        "commit_url": "https://github.com/Jude-Projects/AI-Project/commit/1fda41708e08977e74a19f4c4d095ebbbc354ecc",
+        "commit_at": "2026-08-23T03:47:12Z",
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a valid SQL Server connection string, when I connect to the database, then I should be able to execute a basic SQL query.",
+          "Given an invalid SQL Server connection string, when I attempt to connect, then I should receive an error message indicating the connection failure.",
+          "Trust: Every query execution must be logged with the user ID and timestamp."
+        ]
       }
     },
     {
@@ -111,15 +115,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a CSV file, when I upload it, then the system should detect columns and datatypes.",
+          "Given a CSV file with duplicates, when I upload it, then the system should identify duplicate records.",
+          "Trust: All uploads are logged with user details and file metadata."
+        ]
       }
     },
     {
@@ -145,15 +153,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a natural language question, when I ask it, then the system should interpret it correctly.",
+          "Given an ambiguous question, when I ask it, then the system should suggest potential interpretations.",
+          "Trust: All questions and interpretations are logged for audit."
+        ]
       }
     },
     {
@@ -179,15 +191,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given analytical results, when I request a visualization, then the system should display a chart.",
+          "Given a request for a specific chart type, when I request it, then the system should display the correct type.",
+          "Trust: All visualizations are logged with user details."
+        ]
       }
     },
     {
@@ -213,15 +229,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given analytical results, when I request an explanation, then the system should provide a business-friendly summary.",
+          "Given a complex analysis, when I request an explanation, then the system should simplify the details.",
+          "Trust: All explanations are logged with user details."
+        ]
       }
     },
     {
@@ -247,15 +267,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given analytical results, when I request a report, then the system should generate a PDF report.",
+          "Given a request for a specific report format, when I request it, then the system should generate the correct format.",
+          "Trust: All report generations are logged with user details."
+        ]
       }
     },
     {
@@ -281,15 +305,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a previous question, when I ask a follow-up, then the system should remember the context.",
+          "Given a new session, when I ask a follow-up, then the system should prompt for context.",
+          "Trust: All follow-up interactions are logged with user details."
+        ]
       }
     },
     {
@@ -315,15 +343,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a user, when I assign a role, then the user should have access to role-specific features.",
+          "Given a role change, when I update it, then the user's access should update accordingly.",
+          "Trust: All role assignments are logged with admin details."
+        ]
       }
     },
     {
@@ -349,15 +381,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a database connection, when I configure it, then the connection should be encrypted.",
+          "Given an unencrypted connection attempt, when I detect it, then the system should block it.",
+          "Trust: All connection configurations are logged with user details."
+        ]
       }
     },
     {
@@ -383,15 +419,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given data insights, when I request alerts, then the system should notify me of important changes.",
+          "Given a recommendation request, when I ask for it, then the system should provide actionable advice.",
+          "Trust: All alerts and recommendations are logged with user details."
+        ]
       }
     },
     {
@@ -417,15 +457,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a user question, when the system interprets it, then it should suggest at least one potential interpretation.",
+          "Given an ambiguous question, when the system interprets it, then it should suggest multiple interpretations for user selection.",
+          "Trust: Every interpretation suggestion must be logged with the question and user ID."
+        ]
       }
     },
     {
@@ -451,15 +495,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a user question, when the system analyzes data, then it should provide an accurate answer with an explanation.",
+          "Given a complex question, when the system analyzes data, then it should provide an answer with a detailed explanation of the analysis process.",
+          "Trust: Every answer provided must be logged with the question, answer, and user ID."
+        ]
       }
     },
     {
@@ -485,15 +533,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a set of data, when I request an executive summary, then the system should provide a concise summary with key KPIs.",
+          "Given incomplete data, when I request an executive summary, then the system should indicate missing data and provide available KPIs.",
+          "Trust: Every summary request must be logged with the user ID and timestamp."
+        ]
       }
     },
     {
@@ -519,15 +571,19 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
+        "state": "in_progress",
         "criteria_passed": 0,
-        "criteria_total": 0,
+        "criteria_total": 3,
         "verified_at": null,
         "commit_sha": null,
         "commit_url": null,
         "commit_at": null,
         "points_awarded": null,
-        "outstanding": []
+        "outstanding": [
+          "Given a database, when I inspect schemas, then I should see the structure and relationships of tables.",
+          "Given a dataset, when I profile data, then I should see data distribution and quality metrics.",
+          "Trust: Every schema inspection and data profiling must be logged with the user ID and timestamp."
+        ]
       }
     }
   ],
