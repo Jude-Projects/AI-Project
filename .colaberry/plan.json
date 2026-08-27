@@ -196,8 +196,8 @@
         "STORY-002",
         "STORY-003"
       ],
-      "starts_on": null,
-      "ends_on": null,
+      "starts_on": "2026-08-29",
+      "ends_on": "2026-09-03",
       "is_demo_target": false
     },
     {
@@ -213,9 +213,9 @@
         "STORY-011",
         "STORY-012"
       ],
-      "starts_on": null,
-      "ends_on": null,
-      "is_demo_target": false
+      "starts_on": "2026-09-05",
+      "ends_on": "2026-09-10",
+      "is_demo_target": true
     },
     {
       "key": "r2",
@@ -230,8 +230,8 @@
         "STORY-013",
         "STORY-014"
       ],
-      "starts_on": null,
-      "ends_on": null,
+      "starts_on": "2026-09-12",
+      "ends_on": "2026-09-17",
       "is_demo_target": false
     },
     {
@@ -245,8 +245,8 @@
         "STORY-008",
         "STORY-009"
       ],
-      "starts_on": null,
-      "ends_on": null,
+      "starts_on": "2026-09-21",
+      "ends_on": "2026-09-24",
       "is_demo_target": false
     },
     {
@@ -259,8 +259,8 @@
       "story_ids": [
         "STORY-010"
       ],
-      "starts_on": null,
-      "ends_on": null,
+      "starts_on": "2026-10-01",
+      "ends_on": "2026-10-01",
       "is_demo_target": false
     }
   ],
@@ -289,8 +289,8 @@
         "SQL syntax error"
       ],
       "task_guidance": "Use the SQL Server connection string provided in the configuration file to establish a connection. Implement query execution using the SQL client library.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-08-29",
+      "due_baseline_on": "2026-08-29"
     },
     {
       "id": "STORY-002",
@@ -314,8 +314,8 @@
         "Large file size"
       ],
       "task_guidance": "Use Apache Commons CSV to parse and analyze CSV files, detecting duplicates and nulls.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-01",
+      "due_baseline_on": "2026-09-01"
     },
     {
       "id": "STORY-003",
@@ -338,8 +338,8 @@
         "Timeout"
       ],
       "task_guidance": "Implement NLP using a pre-trained model like BERT to interpret questions.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-03",
+      "due_baseline_on": "2026-09-03"
     },
     {
       "id": "STORY-004",
@@ -364,8 +364,8 @@
         "Rendering error"
       ],
       "task_guidance": "Use D3.js to create interactive visualizations based on analytical results.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-05",
+      "due_baseline_on": "2026-09-05"
     },
     {
       "id": "STORY-005",
@@ -390,8 +390,8 @@
         "Language barrier"
       ],
       "task_guidance": "Implement a summarization algorithm to convert technical results into business language.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-07",
+      "due_baseline_on": "2026-09-07"
     },
     {
       "id": "STORY-006",
@@ -416,8 +416,8 @@
         "Permission denied"
       ],
       "task_guidance": "Use Apache PDFBox to generate PDF reports from analytical data.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-12",
+      "due_baseline_on": "2026-09-12"
     },
     {
       "id": "STORY-007",
@@ -442,8 +442,8 @@
         "Ambiguous follow-up"
       ],
       "task_guidance": "Implement session management to retain context across user interactions.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-14",
+      "due_baseline_on": "2026-09-14"
     },
     {
       "id": "STORY-008",
@@ -468,8 +468,8 @@
         "Role update failure"
       ],
       "task_guidance": "Implement role-based access control using Spring Security.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-21",
+      "due_baseline_on": "2026-09-21"
     },
     {
       "id": "STORY-009",
@@ -494,8 +494,8 @@
         "Protocol mismatch"
       ],
       "task_guidance": "Ensure all database connections use SSL/TLS for encryption.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-24",
+      "due_baseline_on": "2026-09-24"
     },
     {
       "id": "STORY-010",
@@ -520,8 +520,8 @@
         "Recommendation error"
       ],
       "task_guidance": "Implement a rule-based engine to generate alerts and recommendations based on data analysis.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-10-01",
+      "due_baseline_on": "2026-10-01"
     },
     {
       "id": "STORY-011",
@@ -546,8 +546,8 @@
         "Interpretation timeout"
       ],
       "task_guidance": "Implement natural language processing to parse user questions and generate interpretations. Log each interpretation attempt.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-08",
+      "due_baseline_on": "2026-09-08"
     },
     {
       "id": "STORY-012",
@@ -572,8 +572,8 @@
         "Unsupported query type"
       ],
       "task_guidance": "Use data analysis algorithms to process queries and generate answers. Ensure explanations are clear and logged.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-10",
+      "due_baseline_on": "2026-09-10"
     },
     {
       "id": "STORY-013",
@@ -598,8 +598,8 @@
         "Incorrect KPI calculation"
       ],
       "task_guidance": "Design executive summary templates that highlight key KPIs. Implement data aggregation and summary generation.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-15",
+      "due_baseline_on": "2026-09-15"
     },
     {
       "id": "STORY-014",
@@ -624,19 +624,62 @@
         "Data quality metric calculation error"
       ],
       "task_guidance": "Implement schema inspection tools and data profiling algorithms. Ensure all actions are logged for auditing.",
-      "due_on": null,
-      "due_baseline_on": null
+      "due_on": "2026-09-17",
+      "due_baseline_on": "2026-09-17"
     }
   ],
   "agents": [],
   "project": {
     "name": "AI Data Assistant",
     "descriptor": "An intelligent conversational data analytics platform for non-technical and technical users to connect data sources, ask questions, and receive analytical answers.",
-    "repo_url": null,
+    "repo_url": "https://github.com/Jude-Projects/AI-Project",
     "plan_version": 1,
     "plan_sha256": "90135a45ddc33f6c2fdb9eb8b625827e4d8f476153f45117b41fa2485759f468"
   },
-  "schedule": null,
+  "schedule": {
+    "build_start": "2026-08-27",
+    "build_end": "2026-10-01",
+    "demo_day": "2026-10-08",
+    "build_weeks": 5,
+    "demo_release_key": "r1",
+    "roadmap_release_keys": [
+      "r2",
+      "r3",
+      "r4"
+    ],
+    "prep": [
+      {
+        "key": "PREP-1",
+        "title": "Write the demo narrative: the problem, the one moment, the guardrail",
+        "due_on": "2026-10-02"
+      },
+      {
+        "key": "PREP-2",
+        "title": "Record a first run-through and watch it back",
+        "due_on": "2026-10-03"
+      },
+      {
+        "key": "PREP-3",
+        "title": "Build the slides — what it does, who for, the number it moves",
+        "due_on": "2026-10-05"
+      },
+      {
+        "key": "PREP-4",
+        "title": "Rehearse with one other person and take their notes",
+        "due_on": "2026-10-06"
+      },
+      {
+        "key": "PREP-5",
+        "title": "Record the final demo video",
+        "due_on": "2026-10-07"
+      },
+      {
+        "key": "PREP-6",
+        "title": "Present at Demo Day",
+        "due_on": "2026-10-08"
+      }
+    ]
+  },
   "derived": {
     "measures": [],
     "guardrails": [
