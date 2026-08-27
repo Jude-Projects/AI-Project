@@ -53,11 +53,13 @@ def test_interpret_question_raises_on_unsupported_language():
 
 
 def test_interpret_question_raises_on_timeout():
+    # Sleep comfortably longer than the patched threshold so the comparison
+    # isn't riding a razor's edge against OS scheduling/timer-resolution jitter.
     with patch(
         "question_interpreter._match_intents",
-        side_effect=lambda q: time.sleep(0.01) or ["average"],
+        side_effect=lambda q: time.sleep(0.2) or ["average"],
     ):
-        with patch("question_interpreter.QUESTION_INTERPRETATION_TIMEOUT_SECONDS", 0):
+        with patch("question_interpreter.QUESTION_INTERPRETATION_TIMEOUT_SECONDS", 0.02):
             with pytest.raises(QuestionInterpretationTimeoutError):
                 interpret_question("What is the average?", user_id="user-123")
 
