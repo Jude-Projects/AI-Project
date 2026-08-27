@@ -586,6 +586,5 @@
         ]
       }
     }
-  ],
-  "_how_to_use": "Start with every criterion false — that is the correct starting state, not an unfinished one. false means \"not claimed\": either not done, or done but not yet checked. Set one to true only after you have read the code and confirmed it is genuinely true today. Nothing is lost by leaving a line false; a story sitting at 3 of 5 reports honestly and the portal shows you which two are left. Do not retype the criterion text — flip the boolean beside it."
+  ]
 }
