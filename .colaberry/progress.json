@@ -315,21 +315,32 @@
       "criteria": [
         {
           "text": "Given analytical results, when I request a report, then the system should generate a PDF report.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a request for a specific report format, when I request it, then the system should generate the correct format.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: All report generations are logged with user details.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/report_generator.py",
+        "tests/test_report_generator.py"
+      ],
+      "tests_added": [
+        "tests/test_report_generator.py::test_generate_report_returns_pdf_with_explanation_text",
+        "tests/test_report_generator.py::test_generate_report_returns_plain_text_for_text_format",
+        "tests/test_report_generator.py::test_generate_report_uses_distinct_output_per_format",
+        "tests/test_report_generator.py::test_generate_report_raises_on_unsupported_format",
+        "tests/test_report_generator.py::test_generate_report_raises_on_data_export_error",
+        "tests/test_report_generator.py::test_generate_report_raises_on_permission_denied_writing_output",
+        "tests/test_report_generator.py::test_generate_report_logs_request_with_user_and_format"
+      ],
+      "notes": "Uses fpdf2, not Apache PDFBox as the brief named (Java-only) — confirmed with the user. Report content is entirely reused from STORY-005's explain_results(), not rebuilt. Only pdf/text formats exist; no charts from STORY-004 embedded yet.",
+      "updated_at": "2026-08-27T02:49:10.922556+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
