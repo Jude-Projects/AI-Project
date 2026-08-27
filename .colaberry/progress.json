@@ -61,21 +61,33 @@
       "criteria": [
         {
           "text": "Given a valid SQL Server connection string, when I connect to the database, then I should be able to execute a basic SQL query.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given an invalid SQL Server connection string, when I attempt to connect, then I should receive an error message indicating the connection failure.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Every query execution must be logged with the user ID and timestamp.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/sql_connection.py",
+        "tests/test_sql_connection.py"
+      ],
+      "tests_added": [
+        "tests/test_sql_connection.py::test_connect_calls_pyodbc_connect_with_connection_string",
+        "tests/test_sql_connection.py::test_connect_raises_error_with_message_on_invalid_connection_string",
+        "tests/test_sql_connection.py::test_connect_rejects_connection_string_without_encryption",
+        "tests/test_sql_connection.py::test_connect_rejects_connection_string_with_encrypt_explicitly_no",
+        "tests/test_sql_connection.py::test_connect_accepts_encrypt_case_insensitively",
+        "tests/test_sql_connection.py::test_execute_query_runs_query_and_returns_rows",
+        "tests/test_sql_connection.py::test_execute_query_raises_error_on_sql_syntax_error",
+        "tests/test_sql_connection.py::test_execute_query_logs_user_id_and_timestamp"
+      ],
+      "notes": "Verified end-to-end against a real local SQL Server 2025 instance (commit 401383d): both Windows Integrated and SQL Authentication, and Encrypt=yes enforcement. Unit tests mock pyodbc; the real-server pass confirmed both auth modes and the invalid-connection failure path.",
+      "updated_at": "2026-08-27T02:30:08.084164+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
@@ -99,21 +111,35 @@
       "criteria": [
         {
           "text": "Given a CSV file, when I upload it, then the system should detect columns and datatypes.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a CSV file with duplicates, when I upload it, then the system should identify duplicate records.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: All uploads are logged with user details and file metadata.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/csv_upload.py",
+        "tests/test_csv_upload.py"
+      ],
+      "tests_added": [
+        "tests/test_csv_upload.py::test_analyze_csv_returns_detected_columns_and_datatypes",
+        "tests/test_csv_upload.py::test_analyze_csv_falls_back_to_string_for_mixed_column",
+        "tests/test_csv_upload.py::test_analyze_csv_reports_unknown_dtype_for_all_null_column",
+        "tests/test_csv_upload.py::test_analyze_csv_identifies_duplicate_records",
+        "tests/test_csv_upload.py::test_analyze_csv_reports_no_duplicates_when_all_rows_unique",
+        "tests/test_csv_upload.py::test_analyze_csv_counts_null_values_per_column",
+        "tests/test_csv_upload.py::test_analyze_csv_raises_on_file_too_large",
+        "tests/test_csv_upload.py::test_analyze_csv_raises_on_missing_headers",
+        "tests/test_csv_upload.py::test_analyze_csv_raises_on_format_error",
+        "tests/test_csv_upload.py::test_analyze_csv_logs_upload_with_user_and_file_metadata"
+      ],
+      "notes": "Uses Python's stdlib csv module, not Apache Commons CSV as the brief named (Java-only, incompatible with this Python repo) — confirmed with the user. Only tested against synthetic fixtures, not messy real-world CSVs (quoted commas, BOM, mixed line endings).",
+      "updated_at": "2026-08-27T02:30:08.084164+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
@@ -137,21 +163,32 @@
       "criteria": [
         {
           "text": "Given a natural language question, when I ask it, then the system should interpret it correctly.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given an ambiguous question, when I ask it, then the system should suggest potential interpretations.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: All questions and interpretations are logged for audit.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/question_interpreter.py",
+        "tests/test_question_interpreter.py"
+      ],
+      "tests_added": [
+        "tests/test_question_interpreter.py::test_interpret_question_recognizes_average_intent",
+        "tests/test_question_interpreter.py::test_interpret_question_recognizes_comparison_intent",
+        "tests/test_question_interpreter.py::test_interpret_question_flags_ambiguous_question_with_all_candidates",
+        "tests/test_question_interpreter.py::test_interpret_question_flags_unrecognized_question",
+        "tests/test_question_interpreter.py::test_interpret_question_raises_on_unsupported_language",
+        "tests/test_question_interpreter.py::test_interpret_question_raises_on_timeout",
+        "tests/test_question_interpreter.py::test_interpret_question_logs_question_with_user_and_timestamp"
+      ],
+      "notes": "Uses a lightweight keyword-based intent parser, not BERT as the brief named — confirmed with the user (heavy dependency mismatch for a walking skeleton). 5-intent taxonomy is a toy list with no grounding in real user questions yet.",
+      "updated_at": "2026-08-27T02:30:08.084164+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
@@ -175,21 +212,33 @@
       "criteria": [
         {
           "text": "Given analytical results, when I request a visualization, then the system should display a chart.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a request for a specific chart type, when I request it, then the system should display the correct type.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: All visualizations are logged with user details.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/visualization.py",
+        "tests/test_visualization.py"
+      ],
+      "tests_added": [
+        "tests/test_visualization.py::test_generate_visualization_returns_bar_chart_html",
+        "tests/test_visualization.py::test_generate_visualization_returns_line_chart_html",
+        "tests/test_visualization.py::test_generate_visualization_uses_distinct_markup_per_chart_type",
+        "tests/test_visualization.py::test_generate_visualization_raises_on_unsupported_chart_type",
+        "tests/test_visualization.py::test_generate_visualization_raises_on_empty_data",
+        "tests/test_visualization.py::test_generate_visualization_raises_on_data_missing_required_keys",
+        "tests/test_visualization.py::test_generate_visualization_raises_on_rendering_error_for_unserializable_value",
+        "tests/test_visualization.py::test_generate_visualization_logs_request_with_user_and_chart_type"
+      ],
+      "notes": "Python generates a self-contained HTML string embedding real D3 v7 (CDN reference, not vendored) — confirmed with the user as a middle path since this repo has no JS/frontend toolchain. Generated HTML has not been opened in an actual browser; only markup/structure is verified, not rendering.",
+      "updated_at": "2026-08-27T02:30:08.084164+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
@@ -213,21 +262,36 @@
       "criteria": [
         {
           "text": "Given analytical results, when I request an explanation, then the system should provide a business-friendly summary.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a complex analysis, when I request an explanation, then the system should simplify the details.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: All explanations are logged with user details.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/explanation_generator.py",
+        "tests/test_explanation_generator.py"
+      ],
+      "tests_added": [
+        "tests/test_explanation_generator.py::test_explain_results_summarizes_average",
+        "tests/test_explanation_generator.py::test_explain_results_summarizes_sum",
+        "tests/test_explanation_generator.py::test_explain_results_summarizes_count",
+        "tests/test_explanation_generator.py::test_explain_results_simplifies_large_breakdown_to_top_contributors",
+        "tests/test_explanation_generator.py::test_explain_results_shows_all_items_when_breakdown_is_small",
+        "tests/test_explanation_generator.py::test_explain_results_raises_on_unrecognized_aggregation",
+        "tests/test_explanation_generator.py::test_explain_results_raises_on_missing_required_key",
+        "tests/test_explanation_generator.py::test_explain_results_raises_on_complexity_overload",
+        "tests/test_explanation_generator.py::test_explain_results_raises_on_non_ascii_metric",
+        "tests/test_explanation_generator.py::test_explain_results_raises_on_non_ascii_breakdown_label",
+        "tests/test_explanation_generator.py::test_explain_results_logs_request_with_user_metric_and_aggregation"
+      ],
+      "notes": "No prior story produces 'analytical results' data yet, so the input shape (metric/aggregation/value/breakdown) was designed for this story and may not match what a real backend eventually provides. Template wording is mechanical, not tuned for real business users.",
+      "updated_at": "2026-08-27T02:30:08.084164+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
