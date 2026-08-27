@@ -364,21 +364,31 @@
       "criteria": [
         {
           "text": "Given a previous question, when I ask a follow-up, then the system should remember the context.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a new session, when I ask a follow-up, then the system should prompt for context.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: All follow-up interactions are logged with user details.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/session_manager.py",
+        "tests/test_session_manager.py"
+      ],
+      "tests_added": [
+        "tests/test_session_manager.py::test_ask_follow_up_prompts_for_context_on_new_session",
+        "tests/test_session_manager.py::test_ask_follow_up_remembers_context_on_existing_session",
+        "tests/test_session_manager.py::test_ask_follow_up_flags_ambiguous_follow_up_without_storing_it",
+        "tests/test_session_manager.py::test_ask_follow_up_expires_stale_session_and_restarts_context",
+        "tests/test_session_manager.py::test_ask_follow_up_raises_on_context_loss",
+        "tests/test_session_manager.py::test_ask_follow_up_logs_request_with_user_session_and_question"
+      ],
+      "notes": "In-memory session store only (no persistence layer exists in this repo yet); no background expiry, checked lazily on next follow-up. Reuses STORY-003's interpret_question() for ambiguity detection rather than a second parser. 'Remembers context' means returning raw question history only — nothing yet resolves a follow-up against that history.",
+      "updated_at": "2026-08-27T03:17:40.068166+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
