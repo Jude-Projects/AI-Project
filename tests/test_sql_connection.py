@@ -82,6 +82,34 @@ def test_execute_query_runs_query_and_returns_rows():
     assert result == [(1, "a"), (2, "b")]
 
 
+def test_execute_query_with_columns_returns_column_names_and_rows():
+    mock_conn = MagicMock()
+    mock_cursor = mock_conn.cursor.return_value
+    mock_cursor.fetchall.return_value = [(1, "a"), (2, "b")]
+    mock_cursor.description = [("id", None), ("name", None)]
+
+    columns, rows = execute_query(
+        mock_conn, "SELECT id, name FROM widgets", user_id="user-123", with_columns=True
+    )
+
+    assert columns == ["id", "name"]
+    assert rows == [(1, "a"), (2, "b")]
+
+
+def test_execute_query_with_columns_handles_no_description():
+    mock_conn = MagicMock()
+    mock_cursor = mock_conn.cursor.return_value
+    mock_cursor.fetchall.return_value = []
+    mock_cursor.description = None
+
+    columns, rows = execute_query(
+        mock_conn, "SELECT 1 WHERE 1=0", user_id="user-123", with_columns=True
+    )
+
+    assert columns == []
+    assert rows == []
+
+
 def test_execute_query_raises_error_on_sql_syntax_error():
     mock_conn = MagicMock()
     mock_cursor = mock_conn.cursor.return_value

@@ -25,7 +25,9 @@ def connect(connection_string: str) -> pyodbc.Connection:
     return pyodbc.connect(connection_string)
 
 
-def execute_query(conn: pyodbc.Connection, query: str, user_id: str) -> list:
+def execute_query(
+    conn: pyodbc.Connection, query: str, user_id: str, with_columns: bool = False
+) -> list | tuple[list[str], list]:
     logger.info(
         json.dumps(
             {
@@ -38,4 +40,8 @@ def execute_query(conn: pyodbc.Connection, query: str, user_id: str) -> list:
     )
     cursor = conn.cursor()
     cursor.execute(query)
-    return cursor.fetchall()
+    rows = cursor.fetchall()
+    if with_columns:
+        columns = [col[0] for col in cursor.description] if cursor.description else []
+        return columns, rows
+    return rows
