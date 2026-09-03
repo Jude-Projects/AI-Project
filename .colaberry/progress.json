@@ -526,21 +526,32 @@
       "criteria": [
         {
           "text": "Given a user question, when the system interprets it, then it should suggest at least one potential interpretation.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given an ambiguous question, when the system interprets it, then it should suggest multiple interpretations for user selection.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Every interpretation suggestion must be logged with the question and user ID.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/question_interpreter.py",
+        "tests/test_question_interpreter.py"
+      ],
+      "tests_added": [
+        "tests/test_question_interpreter.py::test_interpret_question_recognizes_average_intent",
+        "tests/test_question_interpreter.py::test_interpret_question_recognizes_comparison_intent",
+        "tests/test_question_interpreter.py::test_interpret_question_flags_ambiguous_question_with_all_candidates",
+        "tests/test_question_interpreter.py::test_interpret_question_flags_unrecognized_question",
+        "tests/test_question_interpreter.py::test_interpret_question_raises_on_unsupported_language",
+        "tests/test_question_interpreter.py::test_interpret_question_raises_on_timeout",
+        "tests/test_question_interpreter.py::test_interpret_question_logs_question_with_user_and_timestamp"
+      ],
+      "notes": "REQ-004's acceptance criteria and failure paths (ambiguous question, unsupported language, interpretation timeout) are verbatim duplicates of REQ-003/STORY-003's, already fully implemented by src/question_interpreter.py::interpret_question() and its existing test suite. No new source file or tests were added for STORY-011 specifically — confirmed with the user that reusing the existing implementation outright (rather than writing a second, parallel one) was the correct call, consistent with this repo's reuse-don't-rebuild convention from STORY-006/007. Flagged to the user before closing this out: the brief's own \"already specified\" list named STORY-009/STORY-010 as prerequisites, but plan.json's real blocked_by is only STORY-001, and STORY-009/010 (releases r3/r4) don't exist in this repo yet.",
+      "updated_at": "2026-09-03T19:39:17.285688+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
