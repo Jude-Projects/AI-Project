@@ -675,21 +675,35 @@
       "criteria": [
         {
           "text": "Given a database, when I inspect schemas, then I should see the structure and relationships of tables.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a dataset, when I profile data, then I should see data distribution and quality metrics.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Every schema inspection and data profiling must be logged with the user ID and timestamp.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/schema_inspector.py",
+        "src/data_profiler.py",
+        "tests/test_schema_inspector.py",
+        "tests/test_data_profiler.py"
+      ],
+      "tests_added": [
+        "tests/test_schema_inspector.py::test_inspect_schema_assembles_tables_columns_and_relationships",
+        "tests/test_schema_inspector.py::test_inspect_schema_raises_on_connection_failure",
+        "tests/test_schema_inspector.py::test_inspect_schema_raises_on_query_failure",
+        "tests/test_schema_inspector.py::test_inspect_schema_logs_request_with_user_and_timestamp",
+        "tests/test_data_profiler.py::test_profile_data_computes_distribution_and_quality_metrics",
+        "tests/test_data_profiler.py::test_profile_data_raises_on_unhashable_value",
+        "tests/test_data_profiler.py::test_profile_data_raises_on_timeout",
+        "tests/test_data_profiler.py::test_profile_data_logs_request_with_user_and_timestamp"
+      ],
+      "notes": "schema_inspector.py reuses STORY-001's connect()/execute_query() unmodified (REQ-015 inherited, not reimplemented); tested only against mocked execute_query, never a real SQL Server. data_profiler.py is deliberately self-contained, not reusing csv_upload.py, since that module's public interface takes a file path rather than in-memory rows - confirmed with the user rather than refactoring a file outside this story. Numeric/string dtype split is coarse (no date/datetime detection).",
+      "updated_at": "2026-09-03T20:44:47.414817+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
