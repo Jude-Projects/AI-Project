@@ -8,11 +8,16 @@ without granting the model write access or connection control."""
 import base64
 import os
 import re
+import time
+import uuid
 from pathlib import Path
 from typing import Annotated, Literal
+from urllib.parse import urlparse
+from urllib.request import url2pathname
 
+import mcp_types
 from dotenv import load_dotenv
-from mcp.server.mcpserver import MCPServer
+from mcp.server.mcpserver import Context, MCPServer
 from mcp.server.mcpserver.exceptions import ResourceError, ToolError
 from pydantic import BaseModel, Field
 
@@ -45,6 +50,100 @@ REPORT_ERRORS = (
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 mcp = MCPServer("ai-data-assistant-sql")
+
+
+async def _on_set_logging_level(ctx, params: mcp_types.SetLevelRequestParams) -> mcp_types.EmptyResult:
+    # WHY: without registering a logging/setLevel handler here, the SDK
+    # never declares the logging capability at all, and a client has no way
+    # to know this server can send structured log notifications - every one
+    # would be silently dropped, no error raised anywhere.
+    return mcp_types.EmptyResult()
+
+
+mcp._lowlevel_server.add_request_handler(
+    "logging/setLevel", mcp_types.SetLevelRequestParams, _on_set_logging_level
+)
+
+
+def _has_live_request(ctx: Context | None) -> bool:
+    """True only for a ctx backed by a real in-flight request.
+
+    mcp.call_tool() called directly (no client session - our own tests, or
+    a nested programmatic call) hands the tool a bare Context with no
+    request context at all; ctx.log()/ctx.report_progress() raise
+    ValueError against that, not just no-op. Treated the same as "no ctx":
+    nothing to notify, so emit nothing rather than crash the tool over it.
+    """
+    return ctx is not None and ctx._request_context is not None
+
+
+async def _emit(ctx: Context | None, level: str, event: str, **fields) -> None:
+    """Send one structured log notification, if this request asked for logs.
+
+    Declaring the capability above is necessary but not sufficient: on the
+    modern MCP protocol, logging/setLevel no longer exists at all, and log
+    delivery is instead a per-request opt-in via a reserved
+    io.modelcontextprotocol/logLevel _meta key the CLIENT must set on each
+    call - the server-side capability declaration only benefits older
+    clients. ctx.log() already honors that opt-in (drops silently if the
+    caller didn't ask), so no separate check is needed here.
+    """
+    if not _has_live_request(ctx):
+        return
+    await ctx.log(level, {"event": event, **fields})
+
+
+async def _resolve_within_roots(
+    ctx: Context | None, correlation_id: str, tool: str, requested_path: str
+) -> Path:
+    """Resolve requested_path to its real filesystem path and confirm it
+    falls inside one of the client's declared roots.
+
+    ORDER MATTERS: Path.resolve() collapses ../ segments and follows
+    symlinks to their real target FIRST; only that fully-resolved path is
+    ever compared against the allowed roots. A prefix/substring check on
+    the raw, unresolved path string would be insufficient two different
+    ways: (1) it never catches a symlink whose literal path looks fine but
+    whose real target is elsewhere - a string check never touches the
+    filesystem, so it has no way to know; (2) even ignoring symlinks, a
+    naive str.startswith(root) check is fooled by sibling paths that
+    merely share a string prefix - "/data/reports-archive" starts with
+    the string "/data/reports" without being inside it at all. Comparing
+    resolved Path objects (equality, or membership in .parents) respects
+    real path-component boundaries instead of raw characters.
+    """
+    if not _has_live_request(ctx):
+        raise ToolError("Roots enforcement requires a live client connection; none is available.")
+
+    try:
+        roots_result = await ctx.session.list_roots()
+    except Exception:
+        roots_result = None  # Client doesn't support roots at all - fail closed, not open.
+
+    # str(r.uri): r.uri is a pydantic FileUrl object, not a plain string -
+    # urlparse() needs an actual str or it raises AttributeError trying to
+    # treat it as bytes. Left un-narrowed to Exception around this specific
+    # line (unlike the list_roots() call above), so a real bug here - not
+    # just "client doesn't support roots" - surfaces instead of silently
+    # producing an empty allowed list.
+    allowed_roots = (
+        [Path(url2pathname(urlparse(str(r.uri)).path)).resolve() for r in roots_result.roots]
+        if roots_result is not None
+        else []
+    )
+
+    resolved = Path(requested_path).expanduser().resolve()
+
+    for root in allowed_roots:
+        if resolved == root or root in resolved.parents:
+            return resolved
+
+    await _emit(
+        ctx, "warning", "access_denied", correlation_id=correlation_id, tool=tool,
+        reason="path_outside_allowed_roots", requested_path=requested_path,
+        resolved_path=str(resolved),
+    )
+    raise ToolError(f"Denied: {requested_path!r} resolves outside every root the client declared.")
 
 IDENTIFIER_PATTERN = re.compile(r"^[A-Za-z0-9_]+$")
 READ_ONLY_KEYWORDS = {"select", "with"}
@@ -142,10 +241,11 @@ class QueryResult(BaseModel):
 
 
 @mcp.tool()
-def run_sql_query(
+async def run_sql_query(
     query: Annotated[str, Field(min_length=1, max_length=4000)],
     user_id: Annotated[str, Field(min_length=1, max_length=200)],
     max_rows: Annotated[int, Field(ge=1, le=1000)] = 100,
+    ctx: Context | None = None,
 ) -> QueryResult:
     """Call this whenever you need real data from the connected SQL Server
     database to answer a user's question - do not guess or make up
@@ -158,24 +258,69 @@ def run_sql_query(
     successfully but matches nothing, you get an empty rows list with a
     message explaining that - that's a normal, expected outcome, not a
     failure."""
-    validated_query = _validate_read_only(query)
+    # ONE correlation id per invocation, carried on every log line below -
+    # this is what lets someone follow this specific call across every
+    # boundary it touches, not just see isolated unconnected lines.
+    correlation_id = str(uuid.uuid4())
+    await _emit(ctx, "info", "tool_started", correlation_id=correlation_id, tool="run_sql_query", user_id=user_id)
+
+    try:
+        validated_query = _validate_read_only(query)
+    except ToolError:
+        await _emit(
+            ctx, "warning", "access_denied", correlation_id=correlation_id,
+            tool="run_sql_query", reason="non_read_only_query",
+        )
+        raise
+
     conn = _get_connection()
+    start = time.monotonic()
+    await _emit(
+        ctx, "info", "external_call_started", correlation_id=correlation_id,
+        tool="run_sql_query", target="sql_server",
+    )
     try:
         columns, raw_rows = sql_connection.execute_query(
             conn, validated_query, user_id, with_columns=True
         )
-        limited_rows = raw_rows[:max_rows]
-        named_rows = [dict(zip(columns, row)) for row in limited_rows]
-        if not named_rows:
-            return QueryResult(
-                columns=columns,
-                rows=[],
-                row_count=0,
-                message="Query executed successfully but returned no rows.",
-            )
-        return QueryResult(columns=columns, rows=named_rows, row_count=len(named_rows))
+    except Exception as e:
+        await _emit(
+            ctx, "error", "tool_error", correlation_id=correlation_id,
+            tool="run_sql_query", error_class=type(e).__name__,
+        )
+        raise
     finally:
         conn.close()
+    await _emit(
+        ctx, "info", "external_call_finished", correlation_id=correlation_id,
+        tool="run_sql_query", target="sql_server",
+        duration_ms=round((time.monotonic() - start) * 1000, 1), row_count=len(raw_rows),
+    )
+
+    limited_rows = raw_rows[:max_rows]
+    total = len(limited_rows)
+    # Only report progress to a client that actually asked for it (sent a
+    # progressToken on this call) - notifying a caller that never requested
+    # progress is protocol noise it has no way to act on.
+    progress_token = (
+        ctx.request_context.meta.get("progress_token")
+        if _has_live_request(ctx) and ctx.request_context.meta
+        else None
+    )
+    named_rows = []
+    for i, row in enumerate(limited_rows, start=1):
+        named_rows.append(dict(zip(columns, row)))
+        if progress_token is not None:
+            await ctx.report_progress(i, total, f"Processing row {i} of {total}")
+
+    if not named_rows:
+        return QueryResult(
+            columns=columns,
+            rows=[],
+            row_count=0,
+            message="Query executed successfully but returned no rows.",
+        )
+    return QueryResult(columns=columns, rows=named_rows, row_count=len(named_rows))
 
 
 # Prompts can also return a list of typed Message objects (UserMessage/
@@ -222,6 +367,7 @@ class GeneratedReport(BaseModel):
     report_format: Literal["pdf", "text"]
     content_base64: str
     byte_size: int
+    written_to: str | None = None
 
 
 @mcp.resource("report://formats", mime_type="application/json")
@@ -233,10 +379,12 @@ def list_report_formats() -> list[str]:
 
 
 @mcp.tool()
-def generate_report(
+async def generate_report(
     report_format: Literal["pdf", "text"],
     results: ReportResults,
     user_id: Annotated[str, Field(min_length=1, max_length=200)],
+    output_path: Annotated[str | None, Field(default=None, max_length=1000)] = None,
+    ctx: Context | None = None,
 ) -> GeneratedReport:
     """Call this once you have an analytical result to hand the user as a
     downloadable report (REQ-007/REQ-018) rather than just a chat reply.
@@ -244,11 +392,28 @@ def generate_report(
     run_sql_query): metric is what was measured, aggregation is how
     (average/sum/count), value is the aggregate number, and breakdown is
     an optional list of {label, value} for the top contributing rows.
-    There is no file-path argument - this always returns the report's
-    bytes (base64-encoded) rather than writing to the server's disk."""
+    This always returns the report's bytes (base64-encoded). Pass
+    output_path only if the user asked for the file saved to disk - it
+    must resolve inside one of the client's declared roots or the call is
+    denied; omit it to just return the bytes without writing anything."""
+    correlation_id = str(uuid.uuid4())
+    await _emit(ctx, "info", "tool_started", correlation_id=correlation_id, tool="generate_report", user_id=user_id)
+
+    resolved_output_path: Path | None = None
+    if output_path is not None:
+        resolved_output_path = await _resolve_within_roots(
+            ctx, correlation_id, "generate_report", output_path
+        )
+
+    start = time.monotonic()
+    await _emit(
+        ctx, "info", "external_call_started", correlation_id=correlation_id,
+        tool="generate_report", target="report_generator",
+    )
     try:
         report_bytes = report_generator.generate_report(
-            report_format, results.model_dump(exclude_none=True), user_id
+            report_format, results.model_dump(exclude_none=True), user_id,
+            output_path=str(resolved_output_path) if resolved_output_path else None,
         )
     except REPORT_ERRORS as e:
         # report_generator/explanation_generator's own exceptions are plain
@@ -257,11 +422,21 @@ def generate_report(
         # (mcp/server/mcpserver/tools/base.py: "a crash: the exception's own
         # text stays on the server"). Re-raising as ToolError is what
         # actually lets the model see *why* the call failed.
+        await _emit(
+            ctx, "error", "tool_error", correlation_id=correlation_id,
+            tool="generate_report", error_class=type(e).__name__,
+        )
         raise ToolError(str(e)) from e
+    await _emit(
+        ctx, "info", "external_call_finished", correlation_id=correlation_id,
+        tool="generate_report", target="report_generator",
+        duration_ms=round((time.monotonic() - start) * 1000, 1), byte_size=len(report_bytes),
+    )
     return GeneratedReport(
         report_format=report_format,
         content_base64=base64.b64encode(report_bytes).decode("ascii"),
         byte_size=len(report_bytes),
+        written_to=str(resolved_output_path) if resolved_output_path else None,
     )
 
 

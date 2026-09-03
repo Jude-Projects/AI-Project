@@ -1,7 +1,10 @@
 import base64
 import inspect
 import json
-from unittest.mock import MagicMock, patch
+import os
+import subprocess
+from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import anyio
 import pytest
@@ -24,6 +27,17 @@ def call_tool(name, arguments):
 
 def read_resource(uri):
     return anyio.run(mcp_server.mcp.read_resource, uri)
+
+
+async def _acall(fn, **kwargs):
+    return await fn(**kwargs)
+
+
+def call_async(fn, **kwargs):
+    """Run an async tool function directly (bypassing mcp.call_tool's schema
+    layer) with keyword arguments - for tests exercising the function's own
+    logic against mocks, same as before these tools became async."""
+    return anyio.run(lambda: _acall(fn, **kwargs))
 
 
 @pytest.mark.parametrize(
@@ -77,7 +91,7 @@ def test_run_sql_query_happy_path(monkeypatch):
         "mcp_server.sql_connection.execute_query",
         return_value=(["id", "name"], [(1, "a"), (2, "b"), (3, "c")]),
     ) as mock_execute:
-        result = run_sql_query(query="SELECT id, name FROM widgets", user_id="user-123", max_rows=2)
+        result = call_async(run_sql_query, query="SELECT id, name FROM widgets", user_id="user-123", max_rows=2)
 
     mock_connect.assert_called_once_with("SERVER=test;Encrypt=yes")
     mock_execute.assert_called_once_with(
@@ -97,7 +111,7 @@ def test_run_sql_query_returns_structured_empty_result_on_no_rows(monkeypatch):
         "mcp_server.sql_connection.execute_query",
         return_value=(["id", "name"], []),
     ):
-        result = run_sql_query(query="SELECT id, name FROM widgets WHERE 1=0", user_id="user-123")
+        result = call_async(run_sql_query, query="SELECT id, name FROM widgets WHERE 1=0", user_id="user-123")
 
     assert result.columns == ["id", "name"]
     assert result.rows == []
@@ -109,7 +123,7 @@ def test_run_sql_query_rejects_write_before_touching_database(monkeypatch):
     monkeypatch.setenv("SQL_CONNECTION_STRING", "SERVER=test;Encrypt=yes")
     with patch("mcp_server.sql_connection.connect") as mock_connect:
         with pytest.raises(ToolError, match="only accepts SELECT/WITH"):
-            run_sql_query(query="DELETE FROM widgets", user_id="user-123")
+            call_async(run_sql_query, query="DELETE FROM widgets", user_id="user-123")
 
     mock_connect.assert_not_called()
 
@@ -118,7 +132,7 @@ def test_run_sql_query_requires_connection_string_env_var(monkeypatch):
     monkeypatch.delenv("SQL_CONNECTION_STRING", raising=False)
 
     with pytest.raises(ToolError, match="SQL_CONNECTION_STRING is not set"):
-        run_sql_query(query="SELECT 1", user_id="user-123")
+        call_async(run_sql_query, query="SELECT 1", user_id="user-123")
 
 
 def test_list_database_tables_maps_rows_to_named_dicts(monkeypatch):
@@ -234,5 +248,139 @@ def test_generate_report_propagates_language_barrier_error_for_non_ascii_metric(
         )
 
 
-def test_generate_report_has_no_output_path_parameter():
-    assert "output_path" not in inspect.signature(generate_report).parameters
+def _make_ctx_with_roots(root_paths):
+    """A minimal stand-in for a live-request Context: real enough for
+    _resolve_within_roots (_request_context truthy, .session.list_roots()
+    returning the given roots, .log callable) without standing up the
+    full SDK request machinery."""
+    ctx = MagicMock()
+    ctx._request_context = MagicMock()
+    roots = [MagicMock(uri=Path(p).resolve().as_uri()) for p in root_paths]
+    ctx.session.list_roots = AsyncMock(return_value=MagicMock(roots=roots))
+    ctx.log = AsyncMock()
+    return ctx
+
+
+def resolve_within_roots(ctx, correlation_id, tool, requested_path):
+    return anyio.run(
+        lambda: mcp_server._resolve_within_roots(ctx, correlation_id, tool, requested_path)
+    )
+
+
+def test_resolve_within_roots_allows_path_inside_declared_root(tmp_path):
+    ctx = _make_ctx_with_roots([tmp_path])
+
+    resolved = resolve_within_roots(ctx, "corr-1", "generate_report", str(tmp_path / "report.pdf"))
+
+    assert resolved == (tmp_path / "report.pdf").resolve()
+    ctx.log.assert_not_called()
+
+
+def test_resolve_within_roots_denies_dot_dot_traversal(tmp_path):
+    allowed_root = tmp_path / "allowed"
+    allowed_root.mkdir()
+    ctx = _make_ctx_with_roots([allowed_root])
+    escape_path = str(allowed_root / ".." / "escape.pdf")
+
+    with pytest.raises(ToolError, match="resolves outside every root"):
+        resolve_within_roots(ctx, "corr-1", "generate_report", escape_path)
+
+    ctx.log.assert_awaited_once()
+    logged_data = ctx.log.await_args.args[1]
+    assert logged_data["event"] == "access_denied"
+    assert logged_data["reason"] == "path_outside_allowed_roots"
+    assert logged_data["requested_path"] == escape_path
+
+
+def test_resolve_within_roots_denies_sibling_directory_sharing_a_string_prefix(tmp_path):
+    # The exact case a naive str.startswith(root) check gets wrong:
+    # "reports-secret" starts with the string "reports" without being
+    # inside it - a real path-component comparison must still deny this.
+    allowed_root = tmp_path / "reports"
+    allowed_root.mkdir()
+    ctx = _make_ctx_with_roots([allowed_root])
+    sibling_path = str(tmp_path / "reports-secret" / "x.pdf")
+
+    with pytest.raises(ToolError, match="resolves outside every root"):
+        resolve_within_roots(ctx, "corr-1", "generate_report", sibling_path)
+
+
+def _make_reparse_point(link: Path, target: Path) -> bool:
+    """A real directory symlink where the OS grants the privilege (needs
+    Developer Mode or elevation on Windows); otherwise a junction point
+    (no special privilege required on Windows NTFS) - Path.resolve()
+    follows either identically, and both are the same class of attack:
+    a filesystem reparse point whose literal path looks contained but
+    whose real target is not. Returns False only if neither works."""
+    try:
+        link.symlink_to(target, target_is_directory=True)
+        return True
+    except OSError:
+        pass
+    if os.name == "nt":
+        result = subprocess.run(
+            ["cmd", "/c", "mklink", "/J", str(link), str(target)],
+            capture_output=True, text=True,
+        )
+        return result.returncode == 0
+    return False
+
+
+def test_resolve_within_roots_denies_symlink_escape(tmp_path):
+    outside_dir = tmp_path / "outside"
+    outside_dir.mkdir()
+    allowed_root = tmp_path / "allowed"
+    allowed_root.mkdir()
+    link = allowed_root / "link"
+    if not _make_reparse_point(link, outside_dir):
+        pytest.skip("neither symlinks nor junctions are permitted in this environment")
+
+    ctx = _make_ctx_with_roots([allowed_root])
+    escape_path = str(link / "secret.pdf")
+
+    with pytest.raises(ToolError, match="resolves outside every root"):
+        resolve_within_roots(ctx, "corr-1", "generate_report", escape_path)
+
+
+def test_resolve_within_roots_denies_when_client_declares_no_roots(tmp_path):
+    ctx = _make_ctx_with_roots([])
+
+    with pytest.raises(ToolError, match="resolves outside every root"):
+        resolve_within_roots(ctx, "corr-1", "generate_report", str(tmp_path / "report.pdf"))
+
+
+def test_generate_report_writes_to_disk_inside_declared_root(tmp_path, monkeypatch):
+    monkeypatch.setenv("SQL_CONNECTION_STRING", "SERVER=test;Encrypt=yes")
+    ctx = _make_ctx_with_roots([tmp_path])
+    output_path = str(tmp_path / "report.txt")
+
+    result = call_async(
+        generate_report,
+        report_format="text",
+        results=mcp_server.ReportResults(metric="revenue", aggregation="sum", value=1),
+        user_id="user-123",
+        output_path=output_path,
+        ctx=ctx,
+    )
+
+    assert result.written_to == str(Path(output_path).resolve())
+    assert Path(output_path).read_bytes() == base64.b64decode(result.content_base64)
+
+
+def test_generate_report_denies_output_path_outside_declared_root(tmp_path):
+    allowed_root = tmp_path / "allowed"
+    allowed_root.mkdir()
+    ctx = _make_ctx_with_roots([allowed_root])
+    outside_path = str(tmp_path / "escape.txt")
+
+    with pytest.raises(ToolError, match="resolves outside every root"):
+        call_async(
+            generate_report,
+            report_format="text",
+            results=mcp_server.ReportResults(metric="revenue", aggregation="sum", value=1),
+            user_id="user-123",
+            output_path=outside_path,
+            ctx=ctx,
+        )
+
+    assert not Path(outside_path).exists()
