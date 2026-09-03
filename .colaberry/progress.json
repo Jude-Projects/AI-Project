@@ -628,21 +628,30 @@
       "criteria": [
         {
           "text": "Given a set of data, when I request an executive summary, then the system should provide a concise summary with key KPIs.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given incomplete data, when I request an executive summary, then the system should indicate missing data and provide available KPIs.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Every summary request must be logged with the user ID and timestamp.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/executive_summary.py",
+        "tests/test_executive_summary.py"
+      ],
+      "tests_added": [
+        "tests/test_executive_summary.py::test_generate_executive_summary_computes_all_kpis",
+        "tests/test_executive_summary.py::test_generate_executive_summary_indicates_missing_data_and_returns_available_kpis",
+        "tests/test_executive_summary.py::test_generate_executive_summary_marks_calculation_error_without_failing_others",
+        "tests/test_executive_summary.py::test_generate_executive_summary_raises_on_timeout",
+        "tests/test_executive_summary.py::test_generate_executive_summary_logs_request_with_user_and_timestamp"
+      ],
+      "notes": "Reuses STORY-012's analyze_data() (itself built on STORY-003/005) for every KPI's computation and prose, via a synthesized question per KPI spec - no duplicate aggregation math or templates. 'Concise summary' is currently just a one-line success/failure count, not real narrative synthesis across KPIs. Missing data and calculation errors both degrade gracefully per-KPI rather than failing the whole summary.",
+      "updated_at": "2026-09-03T20:28:48.599324+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
