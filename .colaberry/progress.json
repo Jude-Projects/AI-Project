@@ -510,21 +510,33 @@
       "criteria": [
         {
           "text": "Given data insights, when I request alerts, then the system should notify me of important changes.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a recommendation request, when I ask for it, then the system should provide actionable advice.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: All alerts and recommendations are logged with user details.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/alert_engine.py",
+        "tests/test_alert_engine.py"
+      ],
+      "tests_added": [
+        "tests/test_alert_engine.py::test_generate_alerts_notifies_on_important_change",
+        "tests/test_alert_engine.py::test_generate_alerts_does_not_trigger_when_condition_not_met",
+        "tests/test_alert_engine.py::test_generate_recommendation_provides_actionable_advice",
+        "tests/test_alert_engine.py::test_generate_alerts_flags_insufficient_data_to_avoid_false_positive",
+        "tests/test_alert_engine.py::test_generate_alerts_marks_broken_rule_without_missing_other_alerts",
+        "tests/test_alert_engine.py::test_generate_recommendation_raises_for_non_triggered_alert",
+        "tests/test_alert_engine.py::test_generate_recommendation_raises_for_missing_required_fields",
+        "tests/test_alert_engine.py::test_generate_alerts_logs_request_with_user_and_timestamp"
+      ],
+      "notes": "Last story in the original 15-story plan. Reuses STORY-012's analyze_data() for computing each rule's value; the brief's listed reuse targets (STORY-008 roles, STORY-009 secure connections) didn't actually fit without touching files outside this story, flagged rather than forced. Only two conditions (above/below), no compound rules; MIN_SAMPLE_SIZE=3 is a blunt fixed threshold, not real statistical significance testing; recommendations are one fixed template regardless of alert type.",
+      "updated_at": "2026-09-03T23:31:55.627365+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
