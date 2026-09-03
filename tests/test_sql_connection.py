@@ -6,7 +6,13 @@ from unittest.mock import MagicMock, patch
 import pyodbc
 import pytest
 
-from sql_connection import connect, execute_query
+from sql_connection import (
+    CertificateError,
+    EncryptionFailureError,
+    ProtocolMismatchError,
+    connect,
+    execute_query,
+)
 
 
 def test_connect_calls_pyodbc_connect_with_connection_string():
@@ -66,6 +72,71 @@ def test_connect_accepts_encrypt_case_insensitively():
         connect("SERVER=test;ENCRYPT=YES")
 
         mock_connect.assert_called_once()
+
+
+def test_connect_raises_certificate_error_on_untrusted_certificate():
+    with patch("sql_connection.pyodbc.connect") as mock_connect:
+        mock_connect.side_effect = pyodbc.Error(
+            "08001",
+            "[08001] SSL Provider: The certificate chain was issued by an "
+            "authority that is not trusted.",
+        )
+
+        with pytest.raises(CertificateError):
+            connect("SERVER=test;Encrypt=yes")
+
+
+def test_connect_raises_protocol_mismatch_error_on_protocol_version_mismatch():
+    with patch("sql_connection.pyodbc.connect") as mock_connect:
+        mock_connect.side_effect = pyodbc.Error(
+            "08001",
+            "[08001] SSL Provider: The client and server cannot communicate "
+            "because they do not possess a common SSL protocol version.",
+        )
+
+        with pytest.raises(ProtocolMismatchError):
+            connect("SERVER=test;Encrypt=yes")
+
+
+def test_connect_raises_encryption_failure_error_on_other_ssl_failure():
+    with patch("sql_connection.pyodbc.connect") as mock_connect:
+        mock_connect.side_effect = pyodbc.Error(
+            "08001",
+            "[08001] SSL Provider: A fatal error occurred while attempting "
+            "to encrypt the incoming connection.",
+        )
+
+        with pytest.raises(EncryptionFailureError):
+            connect("SERVER=test;Encrypt=yes")
+
+
+def test_connect_logs_connection_configuration_with_user_id(caplog):
+    with patch("sql_connection.pyodbc.connect") as mock_connect:
+        mock_connect.return_value = MagicMock()
+
+        with caplog.at_level(logging.INFO, logger="sql_connection"):
+            connect("SERVER=test;Encrypt=yes", user_id="user-123")
+
+    assert len(caplog.records) == 1
+    logged = json.loads(caplog.records[0].message)
+    assert logged["event"] == "connection_configured"
+    assert logged["user_id"] == "user-123"
+    assert logged["encrypted"] is True
+    # Fails loudly if "timestamp" is missing or not a real ISO-8601 datetime,
+    # rather than silently accepting any string in that field.
+    datetime.fromisoformat(logged["timestamp"])
+
+
+def test_connect_logs_blocked_unencrypted_attempt_before_raising(caplog):
+    with caplog.at_level(logging.INFO, logger="sql_connection"):
+        with pytest.raises(ValueError, match="REQ-015"):
+            connect("SERVER=test;Encrypt=no", user_id="user-123")
+
+    assert len(caplog.records) == 1
+    logged = json.loads(caplog.records[0].message)
+    assert logged["event"] == "connection_configured"
+    assert logged["user_id"] == "user-123"
+    assert logged["encrypted"] is False
 
 
 def test_execute_query_runs_query_and_returns_rows():
