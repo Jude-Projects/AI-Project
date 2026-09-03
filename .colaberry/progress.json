@@ -412,21 +412,34 @@
       "criteria": [
         {
           "text": "Given a user, when I assign a role, then the user should have access to role-specific features.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a role change, when I update it, then the user's access should update accordingly.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: All role assignments are logged with admin details.",
-          "passed": false
+          "passed": true
         }
       ],
-      "files_touched": [],
-      "tests_added": [],
-      "notes": null,
-      "updated_at": null,
+      "files_touched": [
+        "src/role_manager.py",
+        "tests/test_role_manager.py"
+      ],
+      "tests_added": [
+        "tests/test_role_manager.py::test_assign_role_grants_role_specific_features",
+        "tests/test_role_manager.py::test_assign_role_denies_features_outside_the_role",
+        "tests/test_role_manager.py::test_update_role_changes_access_accordingly",
+        "tests/test_role_manager.py::test_assign_role_raises_on_conflict_when_user_already_has_a_role",
+        "tests/test_role_manager.py::test_assign_role_raises_on_conflict_for_unrecognized_role",
+        "tests/test_role_manager.py::test_update_role_raises_on_failure_when_user_has_no_existing_role",
+        "tests/test_role_manager.py::test_update_role_raises_on_failure_for_unrecognized_role",
+        "tests/test_role_manager.py::test_check_access_raises_unauthorized_for_user_with_no_role",
+        "tests/test_role_manager.py::test_assign_role_logs_admin_user_and_role"
+      ],
+      "notes": "Spring Security (Java, web-app-oriented) doesn't fit this repo (no web layer at all); confirmed with the user to use a pure-Python in-memory RBAC module instead, no new dependency. ROLE_PERMISSIONS (role -> feature mapping) is invented, tied to this repo's actual built capabilities - REQ-009 names roles, not permissions. Roles are in-memory only (same limitation as STORY-007's sessions), and nothing else in this repo actually calls check_access() before running a feature yet - this is authorization bookkeeping, not wired into anything. user_id is an opaque caller-asserted string, not a verified identity - no real authentication is attempted.",
+      "updated_at": "2026-09-03T20:54:44.789075+00:00",
       "verification": {
         "state": "in_progress",
         "criteria_passed": 0,
